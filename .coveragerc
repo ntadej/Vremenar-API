@@ -1,0 +1,12 @@
+[run]
+branch = True
+source = src/vremenar
+
+[report]
+exclude_lines =
+    if self.debug:
+    raise NotImplementedError
+    if __name__ == .__main__.:
+ignore_errors = True
+omit =
+    tests/*
