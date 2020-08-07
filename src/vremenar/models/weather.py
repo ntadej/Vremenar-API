@@ -18,7 +18,7 @@ class WeatherInfo:
         icon: str,
         temperature: float,
         coordinate: Coordinate,
-        zoom_level: float,
+        zoom_level: Optional[float] = None,
     ) -> None:
         """Initialise weather info model."""
         self.id: str = id
@@ -29,4 +29,4 @@ class WeatherInfo:
         self.temperature: float = temperature
         self.temperature_low: Optional[float] = None
         self.coordinate: Coordinate = coordinate
-        self.zoom_level: float = zoom_level
+        self.zoom_level: Optional[float] = zoom_level
