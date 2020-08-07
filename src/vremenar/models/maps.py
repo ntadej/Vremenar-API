@@ -9,7 +9,7 @@ from ..definitions import ObservationType
 class MapType(str, Enum):
     """Map type enum."""
 
-    # Forecast = 'forecast'
+    WeatherCondition = 'condition'
     Precipitation = 'precipitation'
     CloudCoverage = 'cloud'
     WindSpeed = 'wind'
@@ -22,6 +22,7 @@ class MapRenderingType(str, Enum):
 
     Image = 'image'
     Tiles = 'tiles'
+    Icons = 'icons'
 
 
 class MapLayer:
@@ -42,6 +43,10 @@ class MapResponse:
     ) -> None:
         """Initialise map response model."""
         self.map_type: MapType = map_type
+
         self.rendering = MapRenderingType.Image if bbox else MapRenderingType.Tiles
+        if map_type == MapType.WeatherCondition:
+            self.rendering = MapRenderingType.Icons
+
         self.layers: List[MapLayer] = layers
         self.bbox: Optional[List[float]] = bbox

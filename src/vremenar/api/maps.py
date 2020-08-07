@@ -1,4 +1,4 @@
-"""Weather map API."""
+"""Weather map layers API."""
 
 from fastapi import APIRouter
 
