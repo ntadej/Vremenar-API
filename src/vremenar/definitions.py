@@ -7,6 +7,7 @@ class CountryID(str, Enum):
     """Supported countries ID enum."""
 
     Slovenia = 'si'
+    Germany = 'de'
 
 
 class ObservationType(str, Enum):

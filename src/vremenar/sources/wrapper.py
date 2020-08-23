@@ -7,6 +7,7 @@ from ..models.maps import MapLayer, MapType
 from ..models.weather import WeatherInfo
 
 from . import arso
+from . import dwd
 
 
 async def get_map_layers(
@@ -15,6 +16,8 @@ async def get_map_layers(
     """Get map layers for the chosen country."""
     if country == CountryID.Slovenia:
         return await arso.get_map_layers(map_type)
+    if country == CountryID.Germany:
+        return await dwd.get_map_layers(map_type)
 
     raise RuntimeError('Unsupported country')
 
