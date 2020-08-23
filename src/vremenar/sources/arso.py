@@ -43,7 +43,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     async with AsyncClient() as client:
         response = await client.get(url)
 
-    county_suffix = f'?county={CountryID.Slovenia}'
+    country_suffix = f'?country={CountryID.Slovenia}'
 
     layers: List[MapLayer] = []
     bbox: List[float] = []
@@ -60,18 +60,30 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
                     '/weather_map/',
                 )
                 url = url.replace('.json', '')
-            url += county_suffix
+            url += country_suffix
         else:
             url = join_url(BASEURL, layer['path'])
         time = datetime.strptime(layer['valid'], '%Y-%m-%dT%H:%M:%S%z')
         layers.append(
             MapLayer(
-                url, str(int(time.timestamp())) + '000', ObservationType.Historical
+                url,
+                str(int(time.timestamp())) + '000',
+                ObservationType.Historical
+                if layer['mode'] == 'ANL'
+                else ObservationType.Forecast,
             )
         )
 
         if not bbox and 'bbox' in layer:
             bbox = [float(b) for b in layer['bbox'].split(',')]
+
+    for i in range(1, len(layers)):
+        if layers[i].observation != layers[i - 1].observation:
+            layers[i - 1].observation = ObservationType.Recent
+            break
+
+        if i == len(layers) - 1:
+            layers[i].observation = ObservationType.Recent
 
     return layers, bbox
 
