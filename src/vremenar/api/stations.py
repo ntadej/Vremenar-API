@@ -5,8 +5,9 @@ from typing import List
 
 from .config import defaults
 from ..definitions import CountryID
+from ..models.maps import WeatherInfo
 from ..models.stations import ExtendedStationInfo, StationInfo, StationSearchModel
-from ..sources import find_station
+from ..sources import find_station, get_weather_map
 
 router = APIRouter()
 
@@ -35,3 +36,15 @@ async def find(
 ) -> List[ExtendedStationInfo]:
     """Find weather station."""
     return await find_station(country, query)
+
+
+@router.get(
+    '/stations/map/{id}',
+    tags=['stations'],
+    response_description='List of weather information',
+    response_model=List[WeatherInfo],
+    **defaults,
+)
+async def map(country: CountryID, id: str) -> List[WeatherInfo]:
+    """Get weather conditions map for a specific ID."""
+    return await get_weather_map(country, id)

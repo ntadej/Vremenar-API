@@ -1,8 +1,11 @@
 """Map models."""
 
 from enum import Enum
+from pydantic import BaseModel
 from typing import List, Optional
 
+from .stations import StationInfo
+from .weather import WeatherCondition
 from ..definitions import ObservationType
 
 
@@ -50,3 +53,15 @@ class MapResponse:
 
         self.layers: List[MapLayer] = layers
         self.bbox: Optional[List[float]] = bbox
+
+
+class WeatherInfo(BaseModel):
+    """Weather info model."""
+
+    station: StationInfo
+    condition: WeatherCondition
+
+    class Config:
+        """Weather info model config."""
+
+        title: str = 'Weather information'

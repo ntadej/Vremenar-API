@@ -7,9 +7,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
-from ..models.maps import MapLayer, MapType
-from ..models.stations import ExtendedStationInfo, StationSearchModel
-from ..models.weather import WeatherCondition, WeatherInfo
+from ..models.maps import MapLayer, MapType, WeatherInfo
+from ..models.stations import ExtendedStationInfo, StationInfo, StationSearchModel
+from ..models.weather import WeatherCondition
 from ..utils import join_url
 
 BASEURL: str = 'https://vreme.arso.gov.si'
@@ -64,12 +64,12 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
             if 'nowcast' in layer['path']:
                 url = layer['path'].replace(
                     '/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json',
-                    '/weather_map/current',
+                    '/stations/map/current',
                 )
             else:
                 url = layer['path'].replace(
                     '/uploads/probase/www/fproduct/json/sl/forecast_si_',
-                    '/weather_map/',
+                    '/stations/map/',
                 )
                 url = url.replace('.json', '')
             url += country_suffix
@@ -102,7 +102,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
 def _parse_feature(
     feature: Dict[Any, Any], observation: ObservationType
-) -> ExtendedStationInfo:
+) -> Tuple[StationInfo, WeatherCondition]:
     properties = feature['properties']
 
     feature_id = properties['id'].strip('_')
@@ -128,6 +128,10 @@ def _parse_feature(
         float(properties['zoomLevel']) if 'zoomLevel' in properties else None
     )
 
+    station = StationInfo(
+        id=feature_id, name=title, coordinate=coordinate, zoom_level=zoom_level
+    )
+
     condition = WeatherCondition(
         observation=observation,
         timestamp=str(int(time.timestamp())) + '000',
@@ -137,15 +141,7 @@ def _parse_feature(
     if temperature_low:
         condition.temperature_low = temperature_low
 
-    station = ExtendedStationInfo(
-        id=feature_id,
-        name=title,
-        coordinate=coordinate,
-        zoom_level=zoom_level,
-        current_condition=condition,
-    )
-
-    return station
+    return (station, condition)
 
 
 async def get_weather_map(id: str) -> List[WeatherInfo]:
@@ -165,10 +161,13 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
 
     conditions_list = []
     for feature in response_body['features']:
-        info = _parse_feature(feature, ObservationType.Forecast)
-        conditions_list.append(info)
+        station, condition = _parse_feature(
+            feature,
+            ObservationType.Recent if id == 'current' else ObservationType.Forecast,
+        )
+        conditions_list.append(WeatherInfo(station=station, condition=condition))
 
-    return []
+    return conditions_list
 
 
 async def find_station(query: StationSearchModel) -> List[ExtendedStationInfo]:
@@ -200,14 +199,15 @@ async def find_station(query: StationSearchModel) -> List[ExtendedStationInfo]:
     response_body = response.json()
     locations = []
     if single:
-        return [_parse_feature(response_body, ObservationType.Recent)]
+        station, condition = _parse_feature(response_body, ObservationType.Recent)
+        return [ExtendedStationInfo.from_station(station, condition)]
     else:
         if 'features' not in response_body:
             return []
 
         for feature in response_body['features']:
-            info = _parse_feature(feature, ObservationType.Recent)
-            locations.append(info)
+            station, condition = _parse_feature(feature, ObservationType.Recent)
+            locations.append(ExtendedStationInfo.from_station(station, condition))
 
         return locations
 

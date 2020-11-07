@@ -26,6 +26,24 @@ class ExtendedStationInfo(StationInfo):
 
     current_condition: WeatherCondition
 
+    @classmethod
+    def from_station(
+        cls, station: StationInfo, condition: WeatherCondition
+    ) -> 'ExtendedStationInfo':
+        """Create from station and condition."""
+        return cls(
+            id=station.id,
+            name=station.name,
+            coordinate=station.coordinate,
+            zoom_level=station.zoom_level,
+            current_condition=condition,
+        )
+
+    class Config:
+        """Extended station info model config."""
+
+        title: str = 'Weather station with current condition'
+
 
 class StationSearchModel(BaseModel):
     """Station search body model."""

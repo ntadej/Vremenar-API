@@ -3,9 +3,8 @@
 from typing import List, Tuple
 
 from ..definitions import CountryID
-from ..models.maps import MapLayer, MapType
+from ..models.maps import MapLayer, MapType, WeatherInfo
 from ..models.stations import ExtendedStationInfo, StationSearchModel
-from ..models.weather import WeatherInfo
 
 from . import arso
 from . import dwd
