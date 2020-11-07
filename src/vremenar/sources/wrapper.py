@@ -26,6 +26,8 @@ async def get_weather_map(country: CountryID, id: str) -> List[WeatherInfo]:
     """Get weather condition map for the chosen country."""
     if country == CountryID.Slovenia:
         return await arso.get_weather_map(id)
+    if country == CountryID.Germany:
+        return await dwd.get_weather_map(id)
 
     raise RuntimeError('Unsupported country')
 

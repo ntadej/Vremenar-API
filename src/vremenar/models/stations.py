@@ -1,7 +1,7 @@
 """Station models."""
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from .common import Coordinate
 from .weather import WeatherCondition
@@ -14,6 +14,7 @@ class StationInfo(BaseModel):
     name: str = Field(..., example='Bled')
     coordinate: Coordinate
     zoom_level: Optional[float] = Field(None, example=7.5)
+    metadata: Optional[Dict[str, Any]] = Field(None)
 
     class Config:
         """Station info model config."""
