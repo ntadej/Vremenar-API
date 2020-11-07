@@ -1,9 +1,10 @@
 """Weather sources wrapper."""
 
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from ..definitions import CountryID
 from ..models.maps import MapLayer, MapType
+from ..models.stations import StationSearchModel
 from ..models.weather import WeatherInfo
 
 from . import arso
@@ -30,14 +31,11 @@ async def get_weather_map(country: CountryID, id: str) -> List[WeatherInfo]:
     raise RuntimeError('Unsupported country')
 
 
-async def find_location(
-    country: CountryID,
-    string: Optional[str] = None,
-    latitude: Optional[float] = None,
-    longitude: Optional[float] = None,
+async def find_station(
+    country: CountryID, query: StationSearchModel
 ) -> List[WeatherInfo]:
     """Get weather information by coordinate or string."""
     if country == CountryID.Slovenia:
-        return await arso.find_location(string, latitude, longitude)
+        return await arso.find_station(query)
 
     raise RuntimeError('Unsupported country')

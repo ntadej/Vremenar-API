@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
 from ..models.maps import MapLayer, MapType
+from ..models.stations import StationSearchModel
 from ..models.weather import WeatherInfo
 from ..utils import join_url
 
@@ -160,25 +161,21 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     return conditions_list
 
 
-async def find_location(
-    string: Optional[str] = None,
-    latitude: Optional[float] = None,
-    longitude: Optional[float] = None,
-) -> List[WeatherInfo]:
+async def find_station(query: StationSearchModel) -> List[WeatherInfo]:
     """Get weather information by coordinate or string."""
     url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
 
-    if string and (latitude or longitude):
+    if query.string and (query.latitude or query.longitude):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail='Either search string or coordinates are required',
         )
-    elif string:
+    elif query.string:
         single = False
-        url += f'?loc={string}'
-    elif latitude is not None and longitude is not None:
+        url += f'?loc={query.string}'
+    elif query.latitude is not None and query.longitude is not None:
         single = True
-        url += f'?lat={latitude}&lon={longitude}'
+        url += f'?lat={query.latitude}&lon={query.longitude}'
     else:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -205,4 +202,4 @@ async def find_location(
         return locations
 
 
-__all__ = ['get_map_layers', 'get_weather_map', 'find_location']
+__all__ = ['get_map_layers', 'get_weather_map', 'find_station']
