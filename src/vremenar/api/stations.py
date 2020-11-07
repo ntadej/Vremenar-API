@@ -7,7 +7,7 @@ from .config import defaults
 from ..definitions import CountryID
 from ..models.maps import WeatherInfo
 from ..models.stations import ExtendedStationInfo, StationInfo, StationSearchModel
-from ..sources import find_station, get_weather_map
+from ..sources import find_station, get_weather_map, list_stations
 
 router = APIRouter()
 
@@ -21,7 +21,7 @@ router = APIRouter()
 )
 async def list(county: CountryID) -> List[StationInfo]:
     """List weather stations."""
-    return []
+    return list_stations(county)
 
 
 @router.post(

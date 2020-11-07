@@ -2,6 +2,7 @@
 
 from csv import reader
 from datetime import datetime, timedelta
+from fastapi import HTTPException, status
 from functools import lru_cache
 from httpx import AsyncClient
 from json import load
@@ -37,6 +38,11 @@ def get_dwd_stations() -> Dict[str, StationInfo]:
                 metadata={'DWD_ID': row[1]},
             )
     return stations
+
+
+def list_stations() -> List[StationInfo]:
+    """List DWD weather stations."""
+    return list(get_dwd_stations().values())
 
 
 async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]]:
@@ -141,7 +147,10 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     """Get weather map from ID."""
     path: Path = _weather_map_url(id)
     if not path:
-        raise RuntimeError('Unsupported ID')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Map ID is not recognised',
+        )
 
     print(path)
 

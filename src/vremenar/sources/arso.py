@@ -47,7 +47,10 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     """Get ARSO map layers."""
     url: str = MAP_URL.get(map_type, '')
     if not url:
-        raise RuntimeError('Unknown map type')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown map type',
+        )
 
     url = join_url(API_BASEURL, url, trailing_slash=True)
     print(url)
@@ -148,7 +151,10 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     """Get weather map from ID."""
     url: str = _weather_map_url(id)
     if not url:
-        raise RuntimeError('Unsupported ID')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Map ID is not recognised',
+        )
 
     print(url)
 
