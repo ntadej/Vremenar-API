@@ -56,9 +56,9 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         url += country_suffix
         layers.append(
             MapLayer(
-                url,
-                str(int(datetime.now().timestamp())) + '000',
-                ObservationType.Recent,
+                url=url,
+                timestamp=str(int(datetime.now().timestamp())) + '000',
+                observation=ObservationType.Recent,
             )
         )
         return layers, []
@@ -97,9 +97,11 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
         layers.append(
             MapLayer(
-                url,
-                str(int(time.timestamp())) + '000',
-                ObservationType.Historical if i != 0 else ObservationType.Recent,
+                url=url,
+                timestamp=str(int(time.timestamp())) + '000',
+                observation=ObservationType.Historical
+                if i != 0
+                else ObservationType.Recent,
             )
         )
     # forecast
@@ -109,7 +111,11 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         time += timedelta(seconds=utc_delta)
         url = f'{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
         layers.append(
-            MapLayer(url, str(int(time.timestamp())) + '000', ObservationType.Forecast)
+            MapLayer(
+                url=url,
+                timestamp=str(int(time.timestamp())) + '000',
+                observation=ObservationType.Forecast,
+            )
         )
 
     return layers, []

@@ -1,7 +1,7 @@
 """Map models."""
 
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
 from .stations import StationInfo
@@ -28,31 +28,44 @@ class MapRenderingType(str, Enum):
     Icons = 'icons'
 
 
-class MapLayer:
+class MapLayer(BaseModel):
     """Map layer model."""
 
-    def __init__(self, url: str, time: str, observation: ObservationType) -> None:
-        """Initialise map layer model."""
-        self.observation: ObservationType = observation
-        self.url: str = url
-        self.timestamp: str = time
+    observation: ObservationType = Field(..., example=ObservationType.Recent)
+    url: str = Field(..., example='/stations/map/current?country=si')
+    timestamp: str = Field(..., example='1604779200000')
+
+    class Config:
+        """Map layer model config."""
+
+        title: str = 'Map layer'
 
 
-class MapResponse:
-    """Map response model."""
+class MapLayersList(BaseModel):
+    """Map layers list model."""
 
-    def __init__(
-        self, map_type: MapType, bbox: List[float], layers: List[MapLayer]
-    ) -> None:
+    map_type: MapType = Field(..., example=MapType.Precipitation)
+    rendering: MapRenderingType = Field(..., example=MapRenderingType.Image)
+    layers: List[MapLayer]
+    bbox: Optional[List[float]] = Field(None, example=[44.67, 12.1, 47.42, 17.44])
+
+    @classmethod
+    def init(
+        cls, map_type: MapType, bbox: List[float], layers: List[MapLayer]
+    ) -> 'MapLayersList':
         """Initialise map response model."""
-        self.map_type: MapType = map_type
-
-        self.rendering = MapRenderingType.Image if bbox else MapRenderingType.Tiles
+        rendering: MapRenderingType = (
+            MapRenderingType.Image if bbox else MapRenderingType.Tiles
+        )
         if map_type == MapType.WeatherCondition:
-            self.rendering = MapRenderingType.Icons
+            rendering = MapRenderingType.Icons
 
-        self.layers: List[MapLayer] = layers
-        self.bbox: Optional[List[float]] = bbox
+        return cls(map_type=map_type, rendering=rendering, layers=layers, bbox=bbox)
+
+    class Config:
+        """Map layers list model config."""
+
+        title: str = 'Map layers list'
 
 
 class WeatherInfo(BaseModel):

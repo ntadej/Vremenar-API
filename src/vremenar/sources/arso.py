@@ -81,9 +81,9 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         time = datetime.strptime(layer['valid'], '%Y-%m-%dT%H:%M:%S%z')
         layers.append(
             MapLayer(
-                url,
-                str(int(time.timestamp())) + '000',
-                ObservationType.Historical
+                url=url,
+                timestamp=str(int(time.timestamp())) + '000',
+                observation=ObservationType.Historical
                 if layer['mode'] == 'ANL'
                 else ObservationType.Forecast,
             )
