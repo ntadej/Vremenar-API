@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 from ..definitions import CountryID
 from ..models.maps import MapLayer, MapType
-from ..models.stations import StationSearchModel
+from ..models.stations import ExtendedStationInfo, StationSearchModel
 from ..models.weather import WeatherInfo
 
 from . import arso
@@ -33,7 +33,7 @@ async def get_weather_map(country: CountryID, id: str) -> List[WeatherInfo]:
 
 async def find_station(
     country: CountryID, query: StationSearchModel
-) -> List[WeatherInfo]:
+) -> List[ExtendedStationInfo]:
     """Get weather information by coordinate or string."""
     if country == CountryID.Slovenia:
         return await arso.find_station(query)

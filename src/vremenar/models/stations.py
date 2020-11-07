@@ -1,35 +1,40 @@
 """Station models."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 from .common import Coordinate
+from .weather import WeatherCondition
 
 
-class StationInfo:
+class StationInfo(BaseModel):
     """Station info model."""
 
-    def __init__(
-        self,
-        id: str,
-        title: str,
-        coordinate: Coordinate,
-        location_type: Optional[str] = None,
-        admin_level: Optional[int] = None,
-        zoom_level: Optional[float] = None,
-    ) -> None:
-        """Initialise station info model."""
-        self.id: str = id
-        self.title: str = title
-        self.coordinate: Coordinate = coordinate
-        self.location_type: Optional[str] = location_type
-        self.admin_level: Optional[int] = admin_level
-        self.zoom_level: Optional[float] = zoom_level
+    id: str = Field(..., title='Identifier', example='METEO-0038')
+    name: str = Field(..., example='Bled')
+    coordinate: Coordinate
+    zoom_level: Optional[float] = Field(None, example=7.5)
+
+    class Config:
+        """Station info model config."""
+
+        title: str = 'Weather station information'
+
+
+class ExtendedStationInfo(StationInfo):
+    """Extended station info model."""
+
+    current_condition: WeatherCondition
 
 
 class StationSearchModel(BaseModel):
     """Station search body model."""
 
-    string: Optional[str] = None
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    string: Optional[str] = Field(None, example='Bled')
+    latitude: Optional[float] = Field(None)
+    longitude: Optional[float] = Field(None)
+
+    class Config:
+        """Station search body config."""
+
+        title: str = 'Station search body'

@@ -1,10 +1,10 @@
 """Common models and data structures."""
 
+from pydantic import BaseModel, Field
 
-class Coordinate:
+
+class Coordinate(BaseModel):
     """Coordinate model."""
 
-    def __init__(self, latitude: float, longitude: float):
-        """Initialise coordinate model."""
-        self.latitude: float = latitude
-        self.longitude: float = longitude
+    latitude: float = Field(..., example=46.364444)
+    longitude: float = Field(..., example=14.094722)

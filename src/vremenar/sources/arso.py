@@ -8,8 +8,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
 from ..models.maps import MapLayer, MapType
-from ..models.stations import StationSearchModel
-from ..models.weather import WeatherInfo
+from ..models.stations import ExtendedStationInfo, StationSearchModel
+from ..models.weather import WeatherCondition, WeatherInfo
 from ..utils import join_url
 
 BASEURL: str = 'https://vreme.arso.gov.si'
@@ -23,6 +23,17 @@ MAP_URL = {
     MapType.Temperature: '/inca_t2m_data/',
     MapType.HailProbability: '/inca_hail_data/',
 }
+
+
+def _zoom_level_conversion(zoom_level: Optional[float]) -> Optional[float]:
+    if zoom_level is not None:
+        zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
+        zoom_level /= 6
+        zoom_epsilon = 0.25
+        zoom_level *= 11 - 7.5 - zoom_epsilon
+        zoom_level = 11 - zoom_level - zoom_epsilon
+        return zoom_level
+    return None
 
 
 def _weather_map_url(id: str) -> str:
@@ -89,13 +100,14 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     return layers, bbox
 
 
-def _parse_feature(feature: Dict[Any, Any]) -> WeatherInfo:
+def _parse_feature(
+    feature: Dict[Any, Any], observation: ObservationType
+) -> ExtendedStationInfo:
     properties = feature['properties']
 
-    feature_id = properties['id']
+    feature_id = properties['id'].strip('_')
     title = properties['title']
     timeline = properties['days'][0]['timeline'][0]
-    observation = ObservationType.Forecast
     time = datetime.strptime(timeline['valid'], '%Y-%m-%dT%H:%M:%S%z')
     icon = timeline['clouds_icon_wwsyn_icon']
 
@@ -108,34 +120,32 @@ def _parse_feature(feature: Dict[Any, Any]) -> WeatherInfo:
 
     geometry = feature['geometry']
     coordinate = Coordinate(
-        float(geometry['coordinates'][1]), float(geometry['coordinates'][0])
+        latitude=float(geometry['coordinates'][1]),
+        longitude=float(geometry['coordinates'][0]),
     )
 
-    if 'zoomLevel' in properties:
-        zoom_level: Optional[float] = float(properties['zoomLevel'])
-        if zoom_level is not None:
-            zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
-            zoom_level /= 6
-            zoom_epsilon = 0.25
-            zoom_level *= 11 - 7.5 - zoom_epsilon
-            zoom_level = 11 - zoom_level - zoom_epsilon
-    else:
-        zoom_level = None
+    zoom_level = _zoom_level_conversion(
+        float(properties['zoomLevel']) if 'zoomLevel' in properties else None
+    )
 
-    info = WeatherInfo(
-        feature_id,
-        observation,
-        str(int(time.timestamp())) + '000',
-        title,
-        icon,
-        temperature,
-        coordinate,
-        zoom_level,
+    condition = WeatherCondition(
+        observation=observation,
+        timestamp=str(int(time.timestamp())) + '000',
+        icon=icon,
+        temperature=temperature,
     )
     if temperature_low:
-        info.temperature_low = temperature_low
+        condition.temperature_low = temperature_low
 
-    return info
+    station = ExtendedStationInfo(
+        id=feature_id,
+        name=title,
+        coordinate=coordinate,
+        zoom_level=zoom_level,
+        current_condition=condition,
+    )
+
+    return station
 
 
 async def get_weather_map(id: str) -> List[WeatherInfo]:
@@ -155,13 +165,13 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
 
     conditions_list = []
     for feature in response_body['features']:
-        info = _parse_feature(feature)
+        info = _parse_feature(feature, ObservationType.Forecast)
         conditions_list.append(info)
 
-    return conditions_list
+    return []
 
 
-async def find_station(query: StationSearchModel) -> List[WeatherInfo]:
+async def find_station(query: StationSearchModel) -> List[ExtendedStationInfo]:
     """Get weather information by coordinate or string."""
     url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
 
@@ -190,13 +200,13 @@ async def find_station(query: StationSearchModel) -> List[WeatherInfo]:
     response_body = response.json()
     locations = []
     if single:
-        return [_parse_feature(response_body)]
+        return [_parse_feature(response_body, ObservationType.Recent)]
     else:
         if 'features' not in response_body:
             return []
 
         for feature in response_body['features']:
-            info = _parse_feature(feature)
+            info = _parse_feature(feature, ObservationType.Recent)
             locations.append(info)
 
         return locations
