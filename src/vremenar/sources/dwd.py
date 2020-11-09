@@ -122,10 +122,17 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
 
 def _weather_map_url(id: str) -> Path:
-    if id == 'current':
-        return CACHE_PATH / 'MOSMIX:2020-11-01T17:00:00.json'
+    paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
+    now = datetime.utcnow()
+    for path in paths:
+        date = datetime.strptime(path.name, 'MOSMIX:%Y-%m-%dT%H:%M:%S.json')
+        delta = (date - now).total_seconds()
 
-    return CACHE_PATH / 'MOSMIX:2020-11-01T17:00:00.json'
+        if delta < 0:
+            continue
+
+        return path
+    return paths[0]
 
 
 def _parse_record(
