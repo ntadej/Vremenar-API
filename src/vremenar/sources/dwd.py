@@ -23,9 +23,9 @@ MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&re
 @lru_cache
 def get_dwd_stations() -> Dict[str, StationInfo]:
     """Get a dictionary of supported DWD stations."""
-    path: Path = Path.cwd() / '.cache'
+    path: Path = Path.cwd() / 'data/stations/DWD.csv'
     stations: Dict[str, StationInfo] = {}
-    with open(path / 'dwd_stations.csv', newline='') as csvfile:
+    with open(path, newline='') as csvfile:
         csv = reader(csvfile, dialect='excel')
         next(csv)  # Skip header row.
         for row in csv:
