@@ -11,9 +11,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
-from ..models.maps import MapLayer, MapType, WeatherInfo
+from ..models.maps import MapLayer, MapType
 from ..models.stations import StationInfo
-from ..models.weather import WeatherCondition
+from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'

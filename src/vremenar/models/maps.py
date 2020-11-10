@@ -4,8 +4,6 @@ from enum import Enum
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
-from .stations import StationInfo
-from .weather import WeatherCondition
 from ..definitions import ObservationType
 
 
@@ -66,15 +64,3 @@ class MapLayersList(BaseModel):
         """Map layers list model config."""
 
         title: str = 'Map layers list'
-
-
-class WeatherInfo(BaseModel):
-    """Weather info model."""
-
-    station: StationInfo
-    condition: WeatherCondition
-
-    class Config:
-        """Weather info model config."""
-
-        title: str = 'Weather information'

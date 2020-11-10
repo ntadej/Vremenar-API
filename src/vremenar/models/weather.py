@@ -3,6 +3,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+from .stations import StationInfo
 from ..definitions import ObservationType
 
 
@@ -19,3 +20,15 @@ class WeatherCondition(BaseModel):
         """Weather condition model config."""
 
         title: str = 'Weather condition'
+
+
+class WeatherInfo(BaseModel):
+    """Weather info model."""
+
+    station: StationInfo
+    condition: WeatherCondition
+
+    class Config:
+        """Weather info model config."""
+
+        title: str = 'Weather information'

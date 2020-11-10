@@ -4,7 +4,6 @@ from pydantic import BaseModel, Field
 from typing import Any, Dict, Optional
 
 from .common import Coordinate
-from .weather import WeatherCondition
 
 
 class StationInfo(BaseModel):
@@ -20,30 +19,6 @@ class StationInfo(BaseModel):
         """Station info model config."""
 
         title: str = 'Weather station information'
-
-
-class ExtendedStationInfo(StationInfo):
-    """Extended station info model."""
-
-    current_condition: WeatherCondition
-
-    @classmethod
-    def from_station(
-        cls, station: StationInfo, condition: WeatherCondition
-    ) -> 'ExtendedStationInfo':
-        """Create from station and condition."""
-        return cls(
-            id=station.id,
-            name=station.name,
-            coordinate=station.coordinate,
-            zoom_level=station.zoom_level,
-            current_condition=condition,
-        )
-
-    class Config:
-        """Extended station info model config."""
-
-        title: str = 'Weather station with current condition'
 
 
 class StationSearchModel(BaseModel):

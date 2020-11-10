@@ -10,9 +10,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
-from ..models.maps import MapLayer, MapType, WeatherInfo
-from ..models.stations import ExtendedStationInfo, StationInfo, StationSearchModel
-from ..models.weather import WeatherCondition
+from ..models.maps import MapLayer, MapType
+from ..models.stations import StationInfo, StationSearchModel
+from ..models.weather import WeatherCondition, WeatherInfo
 from ..utils import join_url
 
 BASEURL: str = 'https://vreme.arso.gov.si'
@@ -134,22 +134,12 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
 
 def _parse_feature(
-    feature: Dict[Any, Any], observation: ObservationType
-) -> Tuple[StationInfo, WeatherCondition]:
+    feature: Dict[Any, Any], observation: ObservationType, station_only: bool = False
+) -> Tuple[StationInfo, Optional[WeatherCondition]]:
     properties = feature['properties']
 
     feature_id = properties['id'].strip('_')
     title = properties['title']
-    timeline = properties['days'][0]['timeline'][0]
-    time = datetime.strptime(timeline['valid'], '%Y-%m-%dT%H:%M:%S%z')
-    icon = timeline['clouds_icon_wwsyn_icon']
-
-    if 'txsyn' in timeline:
-        temperature: float = float(timeline['txsyn'])
-        temperature_low: Optional[float] = float(timeline['tnsyn'])
-    else:
-        temperature = float(timeline['t'])
-        temperature_low = None
 
     geometry = feature['geometry']
     coordinate = Coordinate(
@@ -165,6 +155,20 @@ def _parse_feature(
         id=feature_id, name=title, coordinate=coordinate, zoom_level=zoom_level
     )
 
+    if station_only:
+        return station, None
+
+    timeline = properties['days'][0]['timeline'][0]
+    time = datetime.strptime(timeline['valid'], '%Y-%m-%dT%H:%M:%S%z')
+    icon = timeline['clouds_icon_wwsyn_icon']
+
+    if 'txsyn' in timeline:
+        temperature: float = float(timeline['txsyn'])
+        temperature_low: Optional[float] = float(timeline['tnsyn'])
+    else:
+        temperature = float(timeline['t'])
+        temperature_low = None
+
     condition = WeatherCondition(
         observation=observation,
         timestamp=str(int(time.timestamp())) + '000',
@@ -174,7 +178,7 @@ def _parse_feature(
     if temperature_low:
         condition.temperature_low = temperature_low
 
-    return (station, condition)
+    return station, condition
 
 
 async def get_weather_map(id: str) -> List[WeatherInfo]:
@@ -206,8 +210,8 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     return conditions_list
 
 
-async def find_station(query: StationSearchModel) -> List[ExtendedStationInfo]:
-    """Get weather information by coordinate or string."""
+async def find_station(query: StationSearchModel) -> List[StationInfo]:
+    """Find station by coordinate or string."""
     url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
 
     if query.string and (query.latitude or query.longitude):
@@ -235,17 +239,60 @@ async def find_station(query: StationSearchModel) -> List[ExtendedStationInfo]:
     response_body = response.json()
     locations = []
     if single:
-        station, condition = _parse_feature(response_body, ObservationType.Recent)
-        return [ExtendedStationInfo.from_station(station, condition)]
+        station, _ = _parse_feature(response_body, ObservationType.Recent, True)
+        return [station]
     else:
         if 'features' not in response_body:
             return []
 
         for feature in response_body['features']:
-            station, condition = _parse_feature(feature, ObservationType.Recent)
-            locations.append(ExtendedStationInfo.from_station(station, condition))
+            station, _ = _parse_feature(feature, ObservationType.Recent, True)
+            locations.append(station)
 
         return locations
 
 
-__all__ = ['get_map_layers', 'get_weather_map', 'find_station']
+async def current_station_condition(station_id: str) -> WeatherInfo:
+    """Get current station weather condition."""
+    stations = get_arso_stations()
+    station: Optional[StationInfo] = stations.get(station_id, None)
+    if not station:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
+
+    url = (
+        join_url(API_BASEURL, 'locations', trailing_slash=True) + f'?loc={station.name}'
+    )
+
+    print(url)
+
+    async with AsyncClient() as client:
+        response = await client.get(url)
+
+    response_body = response.json()
+    if 'features' not in response_body:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
+
+    for feature in response_body['features']:
+        station, condition = _parse_feature(feature, ObservationType.Recent)
+        info = WeatherInfo(station=station, condition=condition)
+        print(info)
+        return info
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unknown station',
+    )
+
+
+__all__ = [
+    'current_station_condition',
+    'find_station',
+    'get_map_layers',
+    'get_weather_map',
+]
