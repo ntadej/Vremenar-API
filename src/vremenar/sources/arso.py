@@ -2,7 +2,10 @@
 
 from datetime import datetime
 from fastapi import HTTPException, status
+from functools import lru_cache
 from httpx import AsyncClient
+from json import load
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..definitions import CountryID, ObservationType
@@ -41,6 +44,33 @@ def _weather_map_url(id: str) -> str:
         return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json'
     else:
         return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{id}.json'
+
+
+@lru_cache
+def get_arso_stations() -> Dict[str, StationInfo]:
+    """Get a dictionary of supported ARSO stations."""
+    path: Path = Path.cwd() / 'data/stations/ARSO.json'
+    stations: Dict[str, StationInfo] = {}
+    with open(path, 'r') as file:
+        data = load(file)
+        for station in data:
+            station_id: str = station['id'].strip('_')
+            stations[station_id] = StationInfo(
+                id=station_id,
+                name=station['title'],
+                coordinate=Coordinate(
+                    latitude=station['latitude'], longitude=station['longitude']
+                ),
+                zoom_level=_zoom_level_conversion(
+                    float(station['zoomLevel']) if 'zoomLevel' in station else None
+                ),
+            )
+    return stations
+
+
+def list_stations() -> List[StationInfo]:
+    """List ARSO weather stations."""
+    return list(get_arso_stations().values())
 
 
 async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]]:

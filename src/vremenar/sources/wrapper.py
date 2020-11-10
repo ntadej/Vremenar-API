@@ -41,6 +41,8 @@ async def get_weather_map(country: CountryID, id: str) -> List[WeatherInfo]:
 
 def list_stations(country: CountryID) -> List[StationInfo]:
     """List weather stations for the chosen country."""
+    if country == CountryID.Slovenia:
+        return arso.list_stations()
     if country == CountryID.Germany:
         return dwd.list_stations()
 
