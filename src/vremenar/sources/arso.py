@@ -280,9 +280,7 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
 
     for feature in response_body['features']:
         station, condition = _parse_feature(feature, ObservationType.Recent)
-        info = WeatherInfo(station=station, condition=condition)
-        print(info)
-        return info
+        return WeatherInfo(station=station, condition=condition)
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,

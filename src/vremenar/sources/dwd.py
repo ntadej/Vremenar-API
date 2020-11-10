@@ -12,11 +12,13 @@ from typing import Any, Dict, List, Optional, Tuple
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
 from ..models.maps import MapLayer, MapType
-from ..models.stations import StationInfo
+from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
+from ..utils import join_url
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
+BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
 
 
@@ -183,4 +185,110 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     return conditions_list
 
 
-__all__ = ['get_map_layers', 'get_weather_map']
+def _parse_source(source: Dict[str, Any]) -> StationInfo:
+    stations = get_dwd_stations()
+    source_id = source['wmo_station_id']
+    if source_id in stations:
+        temp_station = stations[source_id]
+        return StationInfo(
+            id=temp_station.id,
+            name=temp_station.name,
+            coordinate=temp_station.coordinate,
+        )
+
+    return StationInfo(
+        id=source_id,
+        name=source['station_name'],
+        coordinate=Coordinate(latitude=source['lat'], longitude=source['lon']),
+    )
+
+
+async def find_station(query: StationSearchModel) -> List[StationInfo]:
+    """Find station by coordinate or string."""
+    url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
+
+    if query.string:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail='Only coordinates are required',
+        )
+    elif query.latitude is not None and query.longitude is not None:
+        url += f'?lat={query.latitude}&lon={query.longitude}'
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail='Only coordinates are required',
+        )
+
+    print(url)
+
+    async with AsyncClient() as client:
+        response = await client.get(url)
+
+    response_body = response.json()
+    if 'sources' not in response_body:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
+
+    locations = []
+    for source in response_body['sources']:
+        locations.append(_parse_source(source))
+
+    return locations
+
+
+async def current_station_condition(station_id: str) -> WeatherInfo:
+    """Get current station weather condition."""
+    stations = get_dwd_stations()
+    station: Optional[StationInfo] = stations.get(station_id, None)
+    # TODO: enable validation once all stations are in
+    # if not station:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail='Unknown station',
+    #     )
+
+    url: str = (
+        join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
+        + f'?wmo_station_id={station_id}'
+    )
+
+    print(url)
+
+    async with AsyncClient() as client:
+        response = await client.get(url)
+
+    response_body = response.json()
+    if 'sources' not in response_body:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
+
+    station = None
+    for source in response_body['sources']:
+        station = _parse_source(source)
+        break
+
+    weather = response_body['weather']
+
+    time = datetime.strptime(weather['timestamp'], '%Y-%m-%dT%H:%M:%S%z')
+
+    condition = WeatherCondition(
+        observation=ObservationType.Recent,
+        timestamp=str(int(time.timestamp())) + '000',
+        icon='clear',  # TODO: icon
+        temperature=weather['temperature'],
+    )
+
+    return WeatherInfo(station=station, condition=condition)
+
+
+__all__ = [
+    'current_station_condition',
+    'find_station',
+    'get_map_layers',
+    'get_weather_map',
+]

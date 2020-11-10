@@ -59,6 +59,8 @@ async def find_station(
     """Find weather station by coordinate or string."""
     if country == CountryID.Slovenia:
         return await arso.find_station(query)
+    if country == CountryID.Germany:
+        return await dwd.find_station(query)
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -70,6 +72,8 @@ async def current_station_condition(country: CountryID, station_id: str) -> Weat
     """Get current station weather condition."""
     if country == CountryID.Slovenia:
         return await arso.current_station_condition(station_id)
+    if country == CountryID.Germany:
+        return await dwd.current_station_condition(station_id)
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
