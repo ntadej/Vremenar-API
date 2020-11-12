@@ -13,7 +13,7 @@ from ..models.common import Coordinate
 from ..models.maps import MapLayer, MapType
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
-from ..utils import join_url
+from ..utils import join_url, logger
 
 BASEURL: str = 'https://vreme.arso.gov.si'
 API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
@@ -83,7 +83,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         )
 
     url = join_url(API_BASEURL, url, trailing_slash=True)
-    print(url)
+    logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)
@@ -190,7 +190,7 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
             detail='Map ID is not recognised',
         )
 
-    print(url)
+    logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)
@@ -231,7 +231,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             detail='Either search string or coordinates are required',
         )
 
-    print(url)
+    logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)
@@ -266,7 +266,7 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
         join_url(API_BASEURL, 'locations', trailing_slash=True) + f'?loc={station.name}'
     )
 
-    print(url)
+    logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)

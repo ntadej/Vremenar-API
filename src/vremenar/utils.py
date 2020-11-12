@@ -1,5 +1,10 @@
 """Helper utilities."""
 
+from logging import Logger, getLogger
+
+
+logger: Logger = getLogger('uvicorn.error')
+
 
 def join_url(*args: str, trailing_slash: bool = False) -> str:
     """Join url."""

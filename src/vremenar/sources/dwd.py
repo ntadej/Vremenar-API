@@ -15,7 +15,7 @@ from ..models.maps import MapLayer, MapType
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
-from ..utils import join_url
+from ..utils import join_url, logger
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
 BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
@@ -82,13 +82,13 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     test_time = current_time.isoformat()
     test_url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
 
-    print(test_url)
+    logger.debug('DWD Map URL: %s', test_url)
 
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
     if 'InvalidDimensionValue' in response.text:
-        print('Current map not available yet')
+        logger.info('Current map not available yet')
         current_time -= timedelta(minutes=5)
 
     # historical data + recent
@@ -167,7 +167,7 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
             detail='Map ID is not recognised',
         )
 
-    print(path)
+    logger.debug('DWD cache location: %s', path)
 
     with open(path, 'r') as file:
         records = load(file)
@@ -220,7 +220,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             detail='Only coordinates are required',
         )
 
-    print(url)
+    logger.debug('Brightsky URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)
@@ -255,7 +255,7 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
         + f'?wmo_station_id={station_id}'
     )
 
-    print(url)
+    logger.debug('Brightsky URL: %s', url)
 
     async with AsyncClient() as client:
         response = await client.get(url)
