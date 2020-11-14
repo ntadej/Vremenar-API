@@ -23,7 +23,7 @@ tags_metadata = [
     },
 ]
 
-app = FastAPI(
+app: FastAPI = FastAPI(
     title='Vremenar API',
     description='Weather API powering Vremenar application',
     openapi_tags=tags_metadata,
@@ -32,3 +32,5 @@ app.add_middleware(GZipMiddleware)
 app.include_router(version)
 app.include_router(stations)
 app.include_router(maps)
+
+__all__ = ['app']

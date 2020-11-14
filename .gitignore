@@ -7,4 +7,5 @@
 *.code-workspace
 __pycache__
 /*.sh
+/htmlcov
 /playground

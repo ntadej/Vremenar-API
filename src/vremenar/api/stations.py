@@ -25,9 +25,9 @@ router = APIRouter()
     response_model=List[StationInfo],
     **defaults,
 )
-async def list(county: CountryID) -> List[StationInfo]:
+async def list(country: CountryID) -> List[StationInfo]:
     """List weather stations."""
-    return list_stations(county)
+    return list_stations(country)
 
 
 @router.post(
