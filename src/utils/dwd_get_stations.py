@@ -17,7 +17,7 @@ if not file_name:
 
 print(file_name)
 
-with open(file_name, 'r') as file:
+with open(file_name) as file:
     data = load(file)
 
 stations = {}

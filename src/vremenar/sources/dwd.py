@@ -169,7 +169,7 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
 
     logger.debug('DWD cache location: %s', path)
 
-    with open(path, 'r') as file:
+    with open(path) as file:
         records = load(file)
 
     conditions_list = []

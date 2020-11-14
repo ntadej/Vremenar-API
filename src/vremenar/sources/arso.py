@@ -51,7 +51,7 @@ def get_arso_stations() -> Dict[str, StationInfo]:
     """Get a dictionary of supported ARSO stations."""
     path: Path = Path.cwd() / 'data/stations/ARSO.json'
     stations: Dict[str, StationInfo] = {}
-    with open(path, 'r') as file:
+    with open(path) as file:
         data = load(file)
         for station in data:
             station_id: str = station['id'].strip('_')

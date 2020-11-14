@@ -16,7 +16,7 @@ allowed_types = ['city', 'town', 'village']
 verbose = False
 
 # load stations list
-with open(DWD_CACHE_DIR / 'stations_list.json', 'r') as file:
+with open(DWD_CACHE_DIR / 'stations_list.json') as file:
     stations_list = load(file)
 
 with open(DWD_CACHE_DIR / 'stations.csv', 'w', newline='') as file_out:
@@ -50,7 +50,7 @@ with open(DWD_CACHE_DIR / 'stations.csv', 'w', newline='') as file_out:
                 print()
             continue
 
-        with open(reverse_details, 'r') as file:
+        with open(reverse_details) as file:
             reverse_info = load(file)
 
         address = None
@@ -84,7 +84,7 @@ with open(DWD_CACHE_DIR / 'stations.csv', 'w', newline='') as file_out:
         if verbose:
             print(address)
 
-        stype = address['place_type'] if address['place_type'] else a['type']
+        stype = address['place_type'] if address['place_type'] else address['type']
         stations[station_id] = {
             'name': address['localname'],
             'dwd_name': station['name'],

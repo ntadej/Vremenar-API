@@ -14,7 +14,7 @@ OSM_URL = 'https://nominatim.openstreetmap.org'
 OSM_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Load stations list
-with open(DWD_CACHE_DIR / 'stations_list.json', 'r') as file:
+with open(DWD_CACHE_DIR / 'stations_list.json') as file:
     stations = load(file)
 
 # Loop over stations
@@ -41,7 +41,7 @@ for station_id, station in stations.items():
         print(f'{reverse_cache} written')
     else:
         print(f'{reverse_cache} exists')
-        with open(reverse_cache, 'r') as file:
+        with open(reverse_cache) as file:
             reverse_result = load(file)
 
     if 'error' in reverse_result:
