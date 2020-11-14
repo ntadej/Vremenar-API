@@ -1,7 +1,7 @@
 """DWD weather source."""
 
 from csv import reader
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from functools import lru_cache
 from httpx import AsyncClient
@@ -15,7 +15,7 @@ from ..models.maps import MapLayer, MapType
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
-from ..utils import join_url, logger
+from ..utils import day_or_night, join_url, logger, parse_time, to_timestamp
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
 BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
@@ -42,6 +42,75 @@ def _zoom_level_conversion(location_type: str, admin_level: float) -> float:
         return 7.8
 
     return 7.5
+
+
+def _get_icon(station: StationInfo, weather: Dict[str, Any], time: datetime) -> str:
+    # SOURCE:
+    # conditions: dry, fog, rain, sleet, snow, hail, thunderstorm, null
+    #
+    # ICONS:
+    # time: day/night
+    # base: FG, clear, overcast, partCloudy, prevCloudy
+    # intensity: light, mod, heavy
+    # modifiers: DZ (drizzle), FG (fog), RA (rain), RASN (rain+snow), SN (snow),
+    #            SHGR (hail shower), SHRA (rain shower),
+    #            SHRASN (rain+snow shower), SHSN (snow shower),
+    #            TS (thunderstorm), TSGR(hail thunderstorm), TSRA (rain thunderstorm),
+    #            TSRASN(rain+snow thunderstorm), TSSN (snow thunderstorm)
+    #
+    # CRITERIA:
+    # rain:
+    #   light - when the precipitation rate is < 2.5 mm per hour
+    #   moderate - when the precipitation rate is between 2.5 mm and 10 mm per hour
+    #   heavy - when the precipitation rate is > 10 mm per hour
+    # sky:
+    #   clear - 0 to 1/8
+    #   partly cloudy - 1/8 to
+    #   mostly cloudy -
+    #   overcast -
+
+    time_of_day = day_or_night(station.coordinate, time)
+    base_icon = 'clear'
+    condition = None
+    if weather['condition'] == 'fog':  # TODO: intensity
+        base_icon = 'FG'
+    else:
+        cloud_cover_fraction = weather['cloud_cover'] / 100
+        if 1 / 8 <= cloud_cover_fraction < 4 / 8:
+            base_icon = 'partCloudy'
+        elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
+            base_icon = 'prevCloudy'
+        else:
+            base_icon = 'overcast'
+
+    precipitation_intensity = (
+        weather['precipitation_60']
+        if 'precipitation_60' in weather
+        else weather['precipitation']
+    )
+    if precipitation_intensity > 0:  # TODO: snow intensity
+        if precipitation_intensity > 10:
+            intensity = 'heavy'
+        elif precipitation_intensity > 2.5:
+            intensity = 'mod'
+        else:
+            intensity = 'light'
+
+        if weather['condition'] in ['hail', 'sleet']:
+            precipitation_type = 'SHGR'
+        elif weather['condition'] == 'thunderstorm':
+            precipitation_type = 'TSRA'
+        elif weather['condition'] == 'snow':
+            precipitation_type = 'SN'
+        else:
+            precipitation_type = 'RA'
+
+        condition = f'{intensity}{precipitation_type}'
+
+    if condition:
+        return f'{base_icon}_{condition}_{time_of_day}'
+
+    return f'{base_icon}_{time_of_day}'
 
 
 @lru_cache
@@ -81,7 +150,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         layers.append(
             MapLayer(
                 url=url,
-                timestamp=str(int(datetime.now().timestamp())) + '000',
+                timestamp=to_timestamp(datetime.now()),
                 observation=ObservationType.Recent,
             )
         )
@@ -122,7 +191,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         layers.append(
             MapLayer(
                 url=url,
-                timestamp=str(int(time.timestamp())) + '000',
+                timestamp=to_timestamp(time),
                 observation=ObservationType.Historical
                 if i != 0
                 else ObservationType.Recent,
@@ -137,7 +206,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         layers.append(
             MapLayer(
                 url=url,
-                timestamp=str(int(time.timestamp())) + '000',
+                timestamp=to_timestamp(time),
                 observation=ObservationType.Forecast,
             )
         )
@@ -148,8 +217,10 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 def _weather_map_url(id: str) -> Path:
     paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
     now = datetime.utcnow()
+    now = now.replace(tzinfo=timezone.utc)
     for path in paths:
-        date = datetime.strptime(path.name, 'MOSMIX:%Y-%m-%dT%H:%M:%S.json')
+        name = path.name.replace('MOSMIX:', '').strip('.json')
+        date = parse_time(name)
         delta = (date - now).total_seconds()
 
         if delta < 0:
@@ -173,7 +244,7 @@ def _parse_record(
     condition = WeatherCondition(
         observation=observation,
         timestamp=record['timestamp'],
-        icon='clear',  # TODO: icon
+        icon=_get_icon(station, record, parse_time(record['time'])),
         temperature=kelvin_to_celsius(record['temperature']),
     )
 
@@ -289,19 +360,24 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
             detail='Unknown station',
         )
 
-    station = None
     for source in response_body['sources']:
         station = _parse_source(source)
         break
 
+    if not station:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
+
     weather = response_body['weather']
 
-    time = datetime.strptime(weather['timestamp'], '%Y-%m-%dT%H:%M:%S%z')
+    time = parse_time(weather['timestamp'])
 
     condition = WeatherCondition(
         observation=ObservationType.Recent,
-        timestamp=str(int(time.timestamp())) + '000',
-        icon='clear',  # TODO: icon
+        timestamp=to_timestamp(time),
+        icon=_get_icon(station, weather, time),
         temperature=weather['temperature'],
     )
 

@@ -1,6 +1,5 @@
 """ARSO weather source."""
 
-from datetime import datetime
 from fastapi import HTTPException, status
 from functools import lru_cache
 from httpx import AsyncClient
@@ -13,7 +12,7 @@ from ..models.common import Coordinate
 from ..models.maps import MapLayer, MapType
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
-from ..utils import join_url, logger
+from ..utils import join_url, logger, parse_time, to_timestamp
 
 BASEURL: str = 'https://vreme.arso.gov.si'
 API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
@@ -108,11 +107,11 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
             url += country_suffix
         else:
             url = join_url(BASEURL, layer['path'])
-        time = datetime.strptime(layer['valid'], '%Y-%m-%dT%H:%M:%S%z')
+        time = parse_time(layer['valid'])
         layers.append(
             MapLayer(
                 url=url,
-                timestamp=str(int(time.timestamp())) + '000',
+                timestamp=to_timestamp(time),
                 observation=ObservationType.Historical
                 if layer['mode'] == 'ANL'
                 else ObservationType.Forecast,
@@ -159,7 +158,7 @@ def _parse_feature(
         return station, None
 
     timeline = properties['days'][0]['timeline'][0]
-    time = datetime.strptime(timeline['valid'], '%Y-%m-%dT%H:%M:%S%z')
+    time = parse_time(timeline['valid'])
     icon = timeline['clouds_icon_wwsyn_icon']
 
     if 'txsyn' in timeline:
@@ -171,7 +170,7 @@ def _parse_feature(
 
     condition = WeatherCondition(
         observation=observation,
-        timestamp=str(int(time.timestamp())) + '000',
+        timestamp=to_timestamp(time),
         icon=icon,
         temperature=temperature,
     )

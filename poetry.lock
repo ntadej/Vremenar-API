@@ -7,6 +7,17 @@ python-versions = "*"
 version = "1.4.4"
 
 [[package]]
+category = "main"
+description = "Calculations for the position of the sun and moon."
+name = "astral"
+optional = false
+python-versions = ">=3.6"
+version = "2.2"
+
+[package.dependencies]
+pytz = "*"
+
+[[package]]
 category = "dev"
 description = "Atomic file writes."
 marker = "sys_platform == \"win32\""
@@ -461,6 +472,14 @@ checkqa_mypy = ["mypy (0.780)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
+category = "main"
+description = "World timezone definitions, modern and historical"
+name = "pytz"
+optional = false
+python-versions = "*"
+version = "2020.4"
+
+[[package]]
 category = "dev"
 description = "A tool to automatically upgrade syntax for newer versions."
 name = "pyupgrade"
@@ -635,7 +654,7 @@ docs = ["proselint (>=0.10.2)", "sphinx (>=3)", "sphinx-argparse (>=0.2.5)", "sp
 testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", "pytest (>=4)", "pytest-env (>=0.6.2)", "pytest-freezegun (>=0.4.1)", "pytest-mock (>=2)", "pytest-randomly (>=1)", "pytest-timeout (>=1)", "pytest-xdist (>=1.31.0)", "packaging (>=20.0)", "xonsh (>=0.9.16)"]
 
 [metadata]
-content-hash = "d761b9cacbf5ae76517853da1f21f46f147cf4e5d42d3f9887b981d59ff13f36"
+content-hash = "661fdb0747437be99b8e5098034719ba7d880ad1d707f2c105a5944fe7d2aa03"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -643,6 +662,10 @@ python-versions = "^3.8"
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
+]
+astral = [
+    {file = "astral-2.2-py2.py3-none-any.whl", hash = "sha256:b9ef70faf32e81a8ba174d21e8f29dc0b53b409ef035f27e0749ddc13cb5982a"},
+    {file = "astral-2.2.tar.gz", hash = "sha256:e41d9967d5c48be421346552f0f4dedad43ff39a83574f5ff2ad32b6627b6fbe"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -866,6 +889,10 @@ pyparsing = [
 pytest = [
     {file = "pytest-6.1.2-py3-none-any.whl", hash = "sha256:4288fed0d9153d9646bfcdf0c0428197dba1ecb27a33bb6e031d002fa88653fe"},
     {file = "pytest-6.1.2.tar.gz", hash = "sha256:c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e"},
+]
+pytz = [
+    {file = "pytz-2020.4-py2.py3-none-any.whl", hash = "sha256:5c55e189b682d420be27c6995ba6edce0c0a77dd67bfbe2ae6607134d5851ffd"},
+    {file = "pytz-2020.4.tar.gz", hash = "sha256:3e6b7dd2d1e0a59084bcee14a17af60c5c562cdc16d828e8eba2e683d3a7e268"},
 ]
 pyupgrade = [
     {file = "pyupgrade-2.7.4-py2.py3-none-any.whl", hash = "sha256:ab2f47377e977bec8dd41db634fde35bce78fedd2be0e8b189fe687f23fb1d85"},

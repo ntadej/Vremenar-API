@@ -10,9 +10,10 @@ DWD_CACHE_DIR: Path = Path.cwd() / '.cache/dwd'
 
 def dwd_mosmix_cleanup() -> None:
     """Cleanup DWD MOSMIX data."""
-    now = datetime.now()
+    now = datetime.utcnow()
     for path in DWD_CACHE_DIR.glob('MOSMIX*.json'):
-        date = datetime.strptime(path.name, 'MOSMIX:%Y-%m-%dT%H:%M:%S.json')
+        name = path.name.replace('MOSMIX:', '').strip('.json')
+        date = datetime.strptime(name, '%Y-%m-%dT%H:%M:%SZ')
         delta = date - now
 
         if delta.days < -1:

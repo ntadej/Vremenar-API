@@ -132,7 +132,7 @@ class MOSMIXParserFast(Parser):  # type: ignore
 
 def dwd_out(date: datetime) -> str:
     """Get MOSMIX cache file name."""
-    return date.strftime('MOSMIX:%Y-%m-%dT%H:%M:%S')
+    return date.strftime('MOSMIX:%Y-%m-%dT%H:%M:%S') + 'Z'
 
 
 def dwd_open_file(source: str) -> TextIO:
@@ -156,6 +156,7 @@ def dwd_mosmix() -> None:
     # parser.download()  # Not necessary if you supply a local path
     for record in parser.parse():
         source: str = dwd_out(record['timestamp'])
+        record['time'] = record['timestamp'].strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
         record['timestamp'] = str(int(record['timestamp'].timestamp())) + '000'
         if source not in data:
             data[source] = dwd_open_file(source)

@@ -6,6 +6,7 @@ authors = ["Tadej Novak <tadej@tano.si>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+astral = "^2.2"
 fastapi = "^0.61.1"
 gunicorn = "^20.0.4"
 httpx = "^0.16.1"
