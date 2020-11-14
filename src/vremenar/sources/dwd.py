@@ -143,17 +143,59 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     layers: List[MapLayer] = []
 
     if map_type == MapType.WeatherCondition:
+        now = datetime.now(tz=timezone.utc)
+        now = now.replace(minute=0, second=0)
+
         country_suffix = f'?country={CountryID.Germany}'
 
-        url = '/stations/map/current'
-        url += country_suffix
+        # TODO: proper current
         layers.append(
             MapLayer(
-                url=url,
-                timestamp=to_timestamp(datetime.now()),
+                url=f'/stations/map/current{country_suffix}',
+                timestamp=to_timestamp(now),
                 observation=ObservationType.Recent,
             )
         )
+
+        # Forecast
+        soon = now + timedelta(hours=2)
+        soon_string = soon.strftime('%Y-%m-%dT%H:%M:%SZ')
+        layers.append(
+            MapLayer(
+                url=f'/stations/map/{soon_string}{country_suffix}',
+                timestamp=to_timestamp(soon),
+                observation=ObservationType.Forecast,
+            )
+        )
+
+        # Today
+        start = now.replace(hour=0)
+        for i in range(1, 4):
+            time = start + timedelta(hours=i * 6)
+            if time <= soon:
+                continue
+            time_string = time.strftime('%Y-%m-%dT%H:%M:%SZ')
+            layers.append(
+                MapLayer(
+                    url=f'/stations/map/{time_string}{country_suffix}',
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Forecast,
+                )
+            )
+
+        # 7 days
+        start = now + timedelta(hours=24 - now.hour)
+        for i in range(28):
+            time = start + timedelta(hours=i * 6)
+            time_string = time.strftime('%Y-%m-%dT%H:%M:%SZ')
+            layers.append(
+                MapLayer(
+                    url=f'/stations/map/{time_string}{country_suffix}',
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Forecast,
+                )
+            )
+
         return layers, []
 
     if map_type != MapType.Precipitation:
@@ -214,20 +256,24 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     return layers, []
 
 
-def _weather_map_url(id: str) -> Path:
+def _weather_map_url(id: str) -> Optional[Path]:
     paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
     now = datetime.utcnow()
     now = now.replace(tzinfo=timezone.utc)
     for path in paths:
-        name = path.name.replace('MOSMIX:', '').strip('.json')
-        date = parse_time(name)
-        delta = (date - now).total_seconds()
+        if id == 'current':
+            name = path.name.replace('MOSMIX:', '').strip('.json')
+            date = parse_time(name)
+            delta = (date - now).total_seconds()
 
-        if delta < 0:
-            continue
+            if delta < 0:
+                continue
 
-        return path
-    return paths[0]
+            return path
+        else:
+            if path.name == f'MOSMIX:{id}.json':
+                return path
+    return None
 
 
 def _parse_record(
@@ -253,7 +299,7 @@ def _parse_record(
 
 async def get_weather_map(id: str) -> List[WeatherInfo]:
     """Get weather map from ID."""
-    path: Path = _weather_map_url(id)
+    path: Optional[Path] = _weather_map_url(id)
     if not path:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

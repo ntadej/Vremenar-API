@@ -42,6 +42,7 @@ def dwd_current() -> None:
         parser = CurrentObservationsParser(url=url)
         parser.download()
         for record in parser.parse(lat=NaN, lon=NaN, height=NaN, station_name=''):
+            record['time'] = record['timestamp'].strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
             record['timestamp'] = str(int(record['timestamp'].timestamp())) + '000'
             records.append(record)
             break
