@@ -22,6 +22,28 @@ BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
 
 
+def _zoom_level_conversion(location_type: str, admin_level: float) -> float:
+    # location_type: {'city', 'town', 'village', 'suburb', 'hamlet', 'isolated',
+    #                 'airport', 'special' }
+    # admin_level: {'4', '6', '8', '9', '10'}
+
+    if admin_level >= 10:
+        return 10.35
+    elif admin_level >= 9:
+        return 9.9
+    elif admin_level >= 8:
+        if location_type in ['town']:
+            return 8.5
+        elif location_type in ['village', 'suburb']:
+            return 9.1
+        else:
+            return 9.5
+    elif admin_level >= 6:
+        return 7.8
+
+    return 7.5
+
+
 @lru_cache
 def get_dwd_stations() -> Dict[str, StationInfo]:
     """Get a dictionary of supported DWD stations."""
@@ -36,7 +58,7 @@ def get_dwd_stations() -> Dict[str, StationInfo]:
                 id=station_id,
                 name=row[3],
                 coordinate=Coordinate(latitude=row[4], longitude=row[5]),
-                zoom_level=None,  # TODO: zoom level (6, 7)
+                zoom_level=_zoom_level_conversion(row[6], float(row[7])),
                 metadata={'DWD_ID': row[1]},
             )
     return stations

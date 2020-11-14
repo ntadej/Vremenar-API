@@ -41,7 +41,7 @@ N2622,,PREROW A. DARSS,Prerow,54.45,12.57,village,8
 A338,,BREKENDORFER MOOR,Brekendorf,54.42,9.6,village,8
 EW009,,Goosefeld,Goosefeld,54.42,9.82,village,8
 P0346,,GETTORF,Gettorf,54.42,9.98,town,8
-N2457,,BERGEN/RUEGEN,Bergen auf Rügen,54.42,13.43,town,8
+N2457,,BERGEN/RUEGEN,Bergen auf Rügen,54.42,13.43,town,9
 A345,1813,GROSS WITTENSEE,Groß Wittensee,54.4,9.77,village,8
 P0200,,LABOE,Laboe,54.4,10.25,village,8
 P0351,,SCHOENBERG,Schönberg,54.4,10.37,town,8
@@ -67,7 +67,6 @@ P0416,,RIBNITZ-DAMGARTEN,Ribnitz-Damgarten,54.27,12.47,town,8
 N2626,,GRAAL-MUERITZ,Graal-Müritz,54.25,12.27,town,8
 B158,6199,STEINHAGEN-NEGAST,Steinhagen-Negast,54.25,13.05,village,8
 10097,1759,GREIFSWALDER OIE,Leuchturm Greifswalder Oie,54.25,13.92,special,10
-P0144,,SCHUELP,Schülp,54.23,8.92,village,8
 P0353,,WESSELBUREN,Wesselburen,54.22,8.92,town,8
 K1445,,HEIDE/HOLSTEIN,Weddingstedt,54.22,9.1,village,9
 10015,2115,HELGOLAND,Helgoland,54.18,7.9,village,8
@@ -75,7 +74,6 @@ K1445,,HEIDE/HOLSTEIN,Weddingstedt,54.22,9.1,village,9
 A512,,HEIDE,Heide,54.17,9.07,town,8
 A536,5057,HAALE,Haale,54.17,9.55,village,8
 10150,6163,DOERNICK,Dörnick,54.17,10.35,village,8
-P0152,,PLOEN,Plön,54.17,10.38,town,8
 P0348,,MALENTE,Bad Malente-Gremsmühlen,54.17,10.55,town,9
 K3822,,EUTIN,Eutin,54.13,10.58,town,8
 B203,6101,BASTORF-KAEGSDORF (S,Bastorf-Kägsdorf,54.13,11.67,hamlet,10
@@ -128,12 +126,11 @@ N2839,,WISMAR,Wismar,53.88,11.43,town,8
 10131,891,CUXHAVEN,Cuxhaven,53.87,8.7,town,8
 N8690,,BROKDORF,Brokdorf,53.87,9.33,village,8
 N2781,,BUETZOW-WOLKEN,Bützow-Wolken,53.85,12.02,town,9
-N2386,,ANKLAM,Anklam,53.85,13.68,town,8
 E082,1451,FREIBURG/ELBE,Freiburg (Elbe),53.83,9.25,town,8
-P0350,,REINFELD,Reinfeld (Holstein),53.83,10.48,town,8
+P0350,,REINFELD,Reinfeld (Holstein),53.83,10.48,town,9
 B511,1769,GREVESMUEHLEN,Grevesmühlen,53.83,11.17,town,8
 B488,167,ANKLAM,Anklam,53.83,13.68,town,8
-N7012,,BAD OLDESLOE,Bad Oldesloe,53.82,10.4,town,8
+N7012,,BAD OLDESLOE,Bad Oldesloe,53.82,10.4,town,9
 10156,3086,LUEBECK,Lübeck,53.82,10.7,city,6
 B531,312,BAUMGARTEN,Baumgarten,53.82,11.88,village,8
 B544,1888,PARUM,Parum,53.82,12.12,hamlet,10
@@ -142,7 +139,6 @@ B525,2272,VENTSCHOW,Ventschow,53.78,11.57,village,8
 E031,6091,SPIEKEROOG (SWN),Spiekeroog,53.77,7.67,village,8
 10136,3639,NORDHOLZ,Nordholz,53.77,8.67,village,9
 B556,5009,TETEROW,Teterow,53.77,12.55,town,8
-10177,,TETEROW,Teterow,53.77,12.62,town,8
 10193,5142,UECKERMUENDE,Ueckermünde,53.75,14.07,town,8
 E5344,,BALTRUM,Baltrum,53.73,7.38,village,8
 10146,4039,QUICKBORN,Quickborn,53.73,9.88,town,8
@@ -150,7 +146,7 @@ E5344,,BALTRUM,Baltrum,53.73,7.38,village,8
 B587,4080,RATHEBUR,Rathebur,53.73,13.78,hamlet,10
 10113,3631,NORDERNEY,Norderney,53.72,7.15,town,8
 E091,1056,DROCHTERSEN,Drochtersen,53.72,9.38,village,8
-E095,6108,RUTHENSTROM,Drochtersen,53.72,9.42,village,8
+E095,6108,RUTHENSTROM,Ruthenstrom,53.72,9.42,special,10
 EW024,,Wangerland,Harlesiel,53.7,7.83,village,8
 E067,2844,"LANGEN-HOLSSEL, KREI",Holßel,53.7,8.63,village,9
 E078,4841,"STEINAU,KR.CUXHAVEN",Steinau,53.7,8.88,village,9
@@ -158,7 +154,6 @@ N1040,,HEMMOOR,Hemmoor,53.7,9.15,town,8
 N7029,,RATZEBURG,Ratzeburg,53.7,10.77,town,8
 P0199,,UETERSEN,Uetersen,53.68,9.65,town,8
 A940,5058,SPRENGE,Sprenge,53.68,10.37,village,8
-N2228,,FRIEDLAND,Friedland,53.68,13.57,town,8
 P0488,,BERGSTEDT,Hamburg Bergstedt,53.67,10.12,suburb,10
 E025,1030,DORNUM,Dornum,53.65,7.43,village,8
 E043,6157,WANGERLAND-HOOKSIEL,Wangerland-Hooksiel,53.65,8.08,village,9
