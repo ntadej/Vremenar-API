@@ -47,21 +47,18 @@ def _zoom_level_conversion(location_type: str, admin_level: float) -> float:
     # location_type: {'city', 'town', 'village', 'suburb', 'hamlet', 'isolated',
     #                 'airport', 'special' }
     # admin_level: {'4', '6', '8', '9', '10'}
-
     if admin_level >= 10:
         return 10.35
-    elif admin_level >= 9:
+    if admin_level >= 9:
         return 9.9
-    elif admin_level >= 8:
+    if admin_level >= 8:
         if location_type in ['town']:
             return 8.5
-        elif location_type in ['village', 'suburb']:
+        if location_type in ['village', 'suburb']:
             return 9.1
-        else:
-            return 9.5
-    elif admin_level >= 6:
+        return 9.5
+    if admin_level >= 6:
         return 7.8
-
     return 7.5
 
 
@@ -315,12 +312,12 @@ def get_all_map_legends() -> List[MapLegend]:
     return [get_map_legend(t.map_type) for t in supported if t.has_legend]
 
 
-def _weather_map_url(id: str) -> Optional[Path]:
+def _weather_map_url(map_id: str) -> Optional[Path]:
     paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
     now = datetime.utcnow()
     now = now.replace(tzinfo=timezone.utc)
     for path in paths:
-        if id == 'current':
+        if map_id == 'current':
             name = path.name.replace('MOSMIX:', '').strip('.json')
             date = parse_time(name)
             delta = (date - now).total_seconds()
@@ -329,9 +326,9 @@ def _weather_map_url(id: str) -> Optional[Path]:
                 continue
 
             return path
-        else:
-            if path.name == f'MOSMIX:{id}.json':
-                return path
+
+        if path.name == f'MOSMIX:{map_id}.json':
+            return path
     return None
 
 
@@ -356,9 +353,9 @@ def _parse_record(
     return (station, condition)
 
 
-async def get_weather_map(id: str) -> List[WeatherInfo]:
+async def get_weather_map(map_id: str) -> List[WeatherInfo]:
     """Get weather map from ID."""
-    path: Optional[Path] = _weather_map_url(id)
+    path: Optional[Path] = _weather_map_url(map_id)
     if not path:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -374,7 +371,7 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     for record in records:
         station, condition = _parse_record(
             record,
-            ObservationType.Recent if id == 'current' else ObservationType.Forecast,
+            ObservationType.Recent if map_id == 'current' else ObservationType.Forecast,
         )
         if not station:
             continue
@@ -410,7 +407,8 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail='Only coordinates are required',
         )
-    elif query.latitude is not None and query.longitude is not None:
+
+    if query.latitude is not None and query.longitude is not None:
         url += f'?lat={query.latitude}&lon={query.longitude}'
     else:
         raise HTTPException(

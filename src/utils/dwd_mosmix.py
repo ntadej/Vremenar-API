@@ -71,7 +71,6 @@ class MOSMIXParserFast(Parser):  # type: ignore
                     records = self._parse_station(elem, timestamps, source)
                     elem.clear()
                     yield from self._sanitize_records(records)
-        pass
 
     def _parse_station(
         self, station_elem: Element, timestamps: List[datetime], source: str

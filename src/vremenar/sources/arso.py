@@ -77,11 +77,11 @@ def _zoom_level_conversion(zoom_level: Optional[float]) -> Optional[float]:
     return None
 
 
-def _weather_map_url(id: str) -> str:
-    if id == 'current':
+def _weather_map_url(map_id: str) -> str:
+    if map_id == 'current':
         return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json'
-    else:
-        return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{id}.json'
+
+    return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json'
 
 
 @lru_cache
@@ -330,9 +330,9 @@ def _parse_feature(
     return station, condition
 
 
-async def get_weather_map(id: str) -> List[WeatherInfo]:
+async def get_weather_map(map_id: str) -> List[WeatherInfo]:
     """Get weather map from ID."""
-    url: str = _weather_map_url(id)
+    url: str = _weather_map_url(map_id)
     if not url:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -352,7 +352,7 @@ async def get_weather_map(id: str) -> List[WeatherInfo]:
     for feature in response_body['features']:
         station, condition = _parse_feature(
             feature,
-            ObservationType.Recent if id == 'current' else ObservationType.Forecast,
+            ObservationType.Recent if map_id == 'current' else ObservationType.Forecast,
         )
         conditions_list.append(WeatherInfo(station=station, condition=condition))
 
@@ -368,7 +368,8 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail='Either search string or coordinates are required',
         )
-    elif query.string:
+
+    if query.string:
         single = False
         url += f'?loc={query.string}'
     elif query.latitude is not None and query.longitude is not None:
@@ -386,19 +387,20 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
         response = await client.get(url)
 
     response_body = response.json()
-    locations = []
+
     if single:
         station, _ = _parse_feature(response_body, ObservationType.Recent, True)
         return [station]
-    else:
-        if 'features' not in response_body:
-            return []
 
-        for feature in response_body['features']:
-            station, _ = _parse_feature(feature, ObservationType.Recent, True)
-            locations.append(station)
+    if 'features' not in response_body:
+        return []
 
-        return locations
+    locations = []
+    for feature in response_body['features']:
+        station, _ = _parse_feature(feature, ObservationType.Recent, True)
+        locations.append(station)
+
+    return locations
 
 
 async def current_station_condition(station_id: str) -> WeatherInfo:

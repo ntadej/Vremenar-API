@@ -66,12 +66,12 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     )
 
 
-async def get_weather_map(country: CountryID, id: str) -> List[WeatherInfo]:
+async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfo]:
     """Get weather condition map for the chosen country."""
     if country == CountryID.Slovenia:
-        return await arso.get_weather_map(id)
+        return await arso.get_weather_map(map_id)
     if country == CountryID.Germany:
-        return await dwd.get_weather_map(id)
+        return await dwd.get_weather_map(map_id)
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
