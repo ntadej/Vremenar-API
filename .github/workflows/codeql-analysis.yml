@@ -43,17 +43,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .venv
-        key: ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
+        key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
         restore-keys: |
-          ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-
-
-    - name: Install dependencies
-      run: |
-        poetry install
-        # Set the `CODEQL-PYTHON` environment variable to the Python executable
-        # that includes the dependencies
-        source .venv/bin/activate
-        echo "CODEQL_PYTHON=$(which python)" >> $GITHUB_ENV
+          ${{ runner.os }}-venv-
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
