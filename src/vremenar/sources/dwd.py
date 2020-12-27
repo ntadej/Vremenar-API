@@ -11,7 +11,14 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
-from ..models.maps import MapLayer, MapType
+from ..models.maps import (
+    MapLayer,
+    MapLegend,
+    MapLegendItem,
+    MapRenderingType,
+    MapType,
+    SupportedMapType,
+)
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
@@ -20,6 +27,20 @@ from ..utils import day_or_night, join_url, logger, parse_time, to_timestamp
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
 BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
+
+
+def get_supported_map_types() -> List[SupportedMapType]:
+    """Get DWD supported map types."""
+    return [
+        SupportedMapType(
+            map_type=MapType.WeatherCondition, rendering_type=MapRenderingType.Icons
+        ),
+        SupportedMapType(
+            map_type=MapType.Precipitation,
+            rendering_type=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+    ]
 
 
 def _zoom_level_conversion(location_type: str, admin_level: float) -> float:
@@ -254,6 +275,44 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
         )
 
     return layers, []
+
+
+def get_map_legend(map_type: MapType) -> MapLegend:
+    """Get DWD map legend."""
+    if map_type == MapType.Precipitation:
+        items = []
+        items.append(MapLegendItem(value='', color='transparent', placeholder=True))
+        items.append(MapLegendItem(value='0', color='transparent'))
+        items.append(MapLegendItem(value='7', color='#97F9FC'))
+        items.append(MapLegendItem(value='9.5', color='#6CF8FC'))
+        items.append(MapLegendItem(value='12', color='#58CBCA'))
+        items.append(MapLegendItem(value='14.5', color='#489A36'))
+        items.append(MapLegendItem(value='19', color='#5CBF1C'))
+        items.append(MapLegendItem(value='23.5', color='#99CD1B'))
+        items.append(MapLegendItem(value='28', color='#CCE628'))
+        items.append(MapLegendItem(value='32.5', color='#FDF734'))
+        items.append(MapLegendItem(value='37', color='#F9C432'))
+        items.append(MapLegendItem(value='41.5', color='#F28831'))
+        items.append(MapLegendItem(value='46', color='#ED462F'))
+        items.append(MapLegendItem(value='50.5', color='#B53322'))
+        items.append(MapLegendItem(value='55', color='#4A4CFB'))
+        items.append(MapLegendItem(value='60', color='#173ACA'))
+        items.append(MapLegendItem(value='65', color='#9B3C99'))
+        items.append(MapLegendItem(value='75', color='#EA64FE'))
+        items.append(MapLegendItem(value='85', color='#000000'))
+        items.append(MapLegendItem(value='dBZ', color='transparent', placeholder=True))
+        return MapLegend(map_type=map_type, items=items)
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unsupported or unknown map type',
+    )
+
+
+def get_all_map_legends() -> List[MapLegend]:
+    """Get all DWD map legends."""
+    supported = get_supported_map_types()
+    return [get_map_legend(t.map_type) for t in supported if t.has_legend]
 
 
 def _weather_map_url(id: str) -> Optional[Path]:

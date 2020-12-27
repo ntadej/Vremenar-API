@@ -26,6 +26,14 @@ class MapRenderingType(str, Enum):
     Icons = 'icons'
 
 
+class SupportedMapType(BaseModel):
+    """Supported map type model."""
+
+    map_type: MapType = Field(..., example=MapType.Precipitation)
+    rendering_type: MapRenderingType = Field(..., example=MapRenderingType.Tiles)
+    has_legend: Optional[bool] = Field(None, example=False)
+
+
 class MapLayer(BaseModel):
     """Map layer model."""
 
@@ -64,3 +72,29 @@ class MapLayersList(BaseModel):
         """Map layers list model config."""
 
         title: str = 'Map layers list'
+
+
+class MapLegendItem(BaseModel):
+    """Map legend item model."""
+
+    value: str = Field(..., example='30')
+    color: str = Field(..., example='#2fef28')
+    placeholder: Optional[bool] = Field(None, example=False)
+    translatable: Optional[bool] = Field(None, example=False)
+
+    class Config:
+        """Map legend item model config."""
+
+        title: str = 'Map legend item'
+
+
+class MapLegend(BaseModel):
+    """Map legend model."""
+
+    map_type: MapType = Field(..., example=MapType.Precipitation)
+    items: List[MapLegendItem]
+
+    class Config:
+        """Map legend model config."""
+
+        title: str = 'Map legend'

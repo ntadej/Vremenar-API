@@ -4,12 +4,25 @@ from fastapi import HTTPException, status
 from typing import List, Tuple
 
 from ..definitions import CountryID
-from ..models.maps import MapLayer, MapType
+from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherInfo
 
 from . import arso
 from . import dwd
+
+
+def get_all_supported_map_types(country: CountryID) -> List[SupportedMapType]:
+    """Get supported map types for the chosen country."""
+    if country == CountryID.Slovenia:
+        return arso.get_supported_map_types()
+    if country == CountryID.Germany:
+        return dwd.get_supported_map_types()
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unsupported country',
+    )
 
 
 async def get_map_layers(
@@ -20,6 +33,32 @@ async def get_map_layers(
         return await arso.get_map_layers(map_type)
     if country == CountryID.Germany:
         return await dwd.get_map_layers(map_type)
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unsupported country',
+    )
+
+
+def get_all_map_legends(country: CountryID) -> List[MapLegend]:
+    """Get all map legends for the chosen country."""
+    if country == CountryID.Slovenia:
+        return arso.get_all_map_legends()
+    if country == CountryID.Germany:
+        return dwd.get_all_map_legends()
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unsupported country',
+    )
+
+
+def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
+    """Get map legend by type for the chosen country."""
+    if country == CountryID.Slovenia:
+        return arso.get_map_legend(map_type)
+    if country == CountryID.Germany:
+        return dwd.get_map_legend(map_type)
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,

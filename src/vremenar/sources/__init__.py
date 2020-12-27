@@ -3,7 +3,10 @@
 from .wrapper import (
     current_station_condition,
     find_station,
+    get_all_map_legends,
+    get_all_supported_map_types,
     get_map_layers,
+    get_map_legend,
     get_weather_map,
     list_stations,
 )
@@ -11,7 +14,10 @@ from .wrapper import (
 __all__ = [
     'current_station_condition',
     'find_station',
+    'get_all_map_legends',
+    'get_all_supported_map_types',
     'get_map_layers',
+    'get_map_legend',
     'get_weather_map',
     'list_stations',
 ]
