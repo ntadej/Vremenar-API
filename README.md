@@ -1,9 +1,50 @@
 # Vremenar API
 
-[![Homepage][web-img]][web] [![Latest release][release-img]][release] [![License][license-img]][license]
-[![Continuous Integration][ci-img]][ci] [![Black][black-img]][black] [![codecov.io][codecov-img]][codecov]
+[![Homepage][web-img]][web] [![Latest release][release-img]][release]
+[![License][license-img]][license] [![Black][black-img]][black]
+[![Continuous Integration][ci-img]][ci]
+[![codecov.io][codecov-img]][codecov] [![CodeFactor][codefactor-img]][codefactor]
 
-## Development
+A simple API server for [ARSO](https://meteo.arso.gov.si)
+and [DWD](https://dwd.de/EN/) weather data.
+
+## Installation and running
+
+### Python Poetry
+
+This project uses [Python Poetry](https://python-poetry.org) to track dependencies. For basic setup run
+
+```shell
+poetry install
+```
+
+### Production running
+
+Gunicorn is recommended and tested in production workflows.
+An example command is:
+
+```shell
+poetry run gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker
+```
+
+It is recommended to run the API behind a caching server such
+as `varnish` as none of the requests are cached by default.
+
+### Development running
+
+Uvicorn can be used directly for development:
+
+```shell
+poetry run uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug
+```
+
+### Data cache
+
+Raw DWD data is cached separately due to size. Helper utilities are provided
+in `src/utils/scripts`. They can be run in a `cron` job with the working
+directory the root folder of this repository.
+
+## Contributing
 
 ### pre-commit
 
@@ -33,9 +74,11 @@ Free Software Foundation and appearing in the file [LICENSE.md](LICENSE.md).
 [ci]: https://github.com/ntadej/Vremenar-API/actions
 [black]: https://github.com/psf/black
 [codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=master
+[codefactor]: https://www.codefactor.io/repository/github/ntadej/vremenar-api
 [web-img]: https://img.shields.io/badge/web-vremenar.tano.si-yellow.svg
 [release-img]: https://img.shields.io/github/release/ntadej/Vremenar-API.svg
 [license-img]: https://img.shields.io/github/license/ntadej/Vremenar-API.svg
 [ci-img]: https://github.com/ntadej/Vremenar-API/workflows/Continuous%20Integration/badge.svg
 [black-img]: https://img.shields.io/badge/code%20style-black-000000.svg
 [codecov-img]: https://codecov.io/github/ntadej/Vremenar-API/coverage.svg?branch=master
+[codefactor-img]: https://www.codefactor.io/repository/github/ntadej/vremenar-api/badge
