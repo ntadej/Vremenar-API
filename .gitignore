@@ -7,5 +7,6 @@
 *.code-workspace
 __pycache__
 /*.sh
-/htmlcov
+/coverage
+/coverage.xml
 /playground

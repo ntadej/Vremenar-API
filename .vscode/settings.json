@@ -7,9 +7,7 @@
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
     "python.linting.mypyArgs": [
-        "--implicit-reexport",
-        "--show-column-numbers",
-        "--strict"
+        "--show-column-numbers"
     ],
     "cSpell.enabled": false
 }
