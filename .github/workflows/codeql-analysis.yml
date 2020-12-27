@@ -26,6 +26,30 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Setup Poetry
+      uses: abatilo/actions-poetry@v2.1.0
+
+    - name: Config Poetry
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+        
+    - name: Set up cache
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-
+
+    - name: Install dependencies
+      run: |
+        poetry install
+        # Set the `CODEQL-PYTHON` environment variable to the Python executable
+        # that includes the dependencies
+        source .venv/bin/activate
+        echo "CODEQL_PYTHON=$(which python)" >> $GITHUB_ENV
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
