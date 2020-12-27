@@ -1,0 +1,60 @@
+name: Continuous Integration
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.8, 3.9]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+
+      - name: Config Poetry
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - name: Setup utils
+        run: |
+          pushd src/utils
+          poetry install
+          popd
+
+      - name: Run utils
+        run: |
+          source src/utils/.venv/bin/activate
+
+          mkdir -p .cache/brightsky
+          pushd .cache/brightsky
+          wget https://opendata.dwd.de/weather/local_forecasts/mos/MOSMIX_S/all_stations/kml/MOSMIX_S_LATEST_240.kmz 2>&1
+          7z x MOSMIX_S_LATEST_240.kmz
+          rm MOSMIX_S_LATEST_240.kmz
+          mv MOSMIX* MOSMIX_S_LATEST_240.kml
+          popd
+
+          src/utils/dwd_mosmix.py
+          src/utils/dwd_current.py
+
+          deactivate
+      
+      - name: Setup server
+        run: |
+          poetry install
+
+      - name: Run tests
+        run: |
+          poetry run coverage run -m pytest
