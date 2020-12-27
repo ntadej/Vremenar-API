@@ -66,11 +66,11 @@ Copyright (C) 2020 Tadej Novak
 
 This project may be used under the terms of the
 GNU Affero General Public License version 3.0 as published by the
-Free Software Foundation and appearing in the file [LICENSE.md](LICENSE.md).
+Free Software Foundation and appearing in the file [LICENSE](LICENSE).
 
 [web]: https://vremenar.tano.si
 [release]: https://github.com/ntadej/Vremenar-API/releases/latest
-[license]: https://github.com/ntadej/Vremenar-API/blob/master/LICENSE.md
+[license]: https://github.com/ntadej/Vremenar-API/blob/master/LICENSE
 [ci]: https://github.com/ntadej/Vremenar-API/actions
 [black]: https://github.com/psf/black
 [codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=master
