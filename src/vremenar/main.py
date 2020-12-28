@@ -3,9 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 
-from .api import version
-from .api import stations
-from .api import maps
+from .api import version, stations, maps, copyright
 
 tags_metadata = [
     {
@@ -21,6 +19,10 @@ tags_metadata = [
         'name': 'maps',
         'description': 'Query available weather maps and their information.',
     },
+    {
+        'name': 'copyright',
+        'description': 'Data attribution and copyright.',
+    },
 ]
 
 app: FastAPI = FastAPI(
@@ -32,5 +34,6 @@ app.add_middleware(GZipMiddleware)
 app.include_router(version)
 app.include_router(stations)
 app.include_router(maps)
+app.include_router(copyright)
 
 __all__ = ['app']
