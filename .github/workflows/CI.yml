@@ -49,19 +49,14 @@ jobs:
           poetry install
           popd
 
-      # - name: Run utils
-      #   run: |
-      #     source src/utils/.venv/bin/activate
-      #     src/utils/scripts/dwd_update.sh
-      #     src/utils/scripts/dwd_cleanup.sh
-
       - name: Setup server
         run: |
           poetry install
 
       - name: Run tests
         run: |
-          poetry run coverage run -m pytest
+          tests/fixtures/setup.sh
+          poetry run pytest
 
       - name: Report coverage with Codecov
         if: github.event_name == 'push' && matrix.python-version == 3.9 && matrix.os == 'ubuntu-latest'

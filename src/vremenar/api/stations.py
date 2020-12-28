@@ -64,6 +64,6 @@ async def condition(country: CountryID, station_id: str) -> WeatherInfo:
     response_model=List[WeatherInfo],
     **defaults,
 )
-async def map(country: CountryID, map_id: str) -> List[WeatherInfo]:
+async def conditions_map(country: CountryID, map_id: str) -> List[WeatherInfo]:
     """Get weather conditions map for a specific ID."""
     return await get_weather_map(country, map_id)

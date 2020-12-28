@@ -81,7 +81,12 @@ def _weather_map_url(map_id: str) -> str:
     if map_id == 'current':
         return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json'
 
-    return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json'
+    if map_id[0] == 'd':
+        return (
+            f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json'
+        )
+
+    return ''
 
 
 @lru_cache
@@ -343,6 +348,12 @@ async def get_weather_map(map_id: str) -> List[WeatherInfo]:
 
     async with AsyncClient() as client:
         response = await client.get(url)
+
+    if response.status_code == 404:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Map ID is not recognised',
+        )
 
     response_body = response.json()
     if 'features' not in response_body:
