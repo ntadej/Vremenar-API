@@ -39,10 +39,16 @@ def test_maps_list_cloud() -> None:
     response = client.get('/maps/list/cloud?country=si')
     assert response.status_code == 200
 
+    response = client.get('/maps/list/cloud?country=de')
+    assert response.status_code == 200
+
 
 def test_maps_list_wind() -> None:
     """Test maps list - wind."""
     response = client.get('/maps/list/wind?country=si')
+    assert response.status_code == 200
+
+    response = client.get('/maps/list/wind?country=de')
     assert response.status_code == 200
 
 
@@ -51,10 +57,16 @@ def test_maps_list_temperature() -> None:
     response = client.get('/maps/list/temperature?country=si')
     assert response.status_code == 200
 
+    response = client.get('/maps/list/temperature?country=de')
+    assert response.status_code == 200
+
 
 def test_maps_list_hail() -> None:
     """Test maps list - hail."""
     response = client.get('/maps/list/hail?country=si')
+    assert response.status_code == 200
+
+    response = client.get('/maps/list/hail?country=de')
     assert response.status_code == 200
 
 
@@ -108,6 +120,10 @@ def test_maps_legends() -> None:
 
     response = client.get('/maps/legend/wind?country=si')
     assert response.status_code == 200
+
+    response = client.get('/maps/legend/wind?country=de')
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Unsupported or unknown map type'}
 
     response = client.get('/maps/legend/temperature?country=si')
     assert response.status_code == 200

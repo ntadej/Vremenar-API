@@ -105,6 +105,9 @@ def test_stations_map() -> None:
     response = client.get('/stations/map/d2h00?country=si')
     assert response.status_code == 200
 
+    response = client.get('/stations/map/d7?country=si')
+    assert response.status_code == 200
+
     response = client.get('/stations/map/current?country=de')
     assert response.status_code == 200
 

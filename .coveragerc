@@ -9,4 +9,5 @@ exclude_lines =
     if __name__ == .__main__.:
 ignore_errors = True
 omit =
+    src/vremenar/tests/*
     tests/*

@@ -43,9 +43,10 @@ exclude = '''
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--ignore=src/utils/ --cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage"
+addopts = "--ignore=src/utils/ --ignore=src/vremenar/tests/ --cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage"
 testpaths = [
-    "tests",
+  "src/vremenar/tests",
+  "tests",
 ]
 
 [build-system]
