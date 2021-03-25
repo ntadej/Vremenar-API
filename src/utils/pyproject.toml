@@ -6,7 +6,7 @@ authors = ["Tadej Novak <tadej@tano.si>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-brightsky = "^1.0.0"
+brightsky = "^1.0.7"
 httpx = "^0.16.1"
 
 [tool.poetry.dev-dependencies]
