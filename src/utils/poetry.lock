@@ -283,7 +283,7 @@ http2 = ["h2 (>=3.0.0,<4.0.0)"]
 
 [[package]]
 name = "huey"
-version = "2.3.1"
+version = "2.3.2"
 description = "huey, a little task queue"
 category = "main"
 optional = false
@@ -505,7 +505,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.11.0"
+version = "2.13.0"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -725,7 +725,7 @@ six = ">=1.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4a09ce234ea6c74c57841815d5715c12aa51ec629015199774264b7fe769aca2"
+content-hash = "6520cd4b9c1fd1cb3489e58f212893b55d9bbd7a8418b76da1db06e90486e869"
 
 [metadata.files]
 appdirs = [
@@ -833,7 +833,7 @@ httpx = [
     {file = "httpx-0.17.1.tar.gz", hash = "sha256:cc2a55188e4b25272d2bcd46379d300f632045de4377682aa98a8a6069d55967"},
 ]
 huey = [
-    {file = "huey-2.3.1.tar.gz", hash = "sha256:de9b6d0fd59794378fe05813d302be68038044ef3b68274b84ca8d285e20f803"},
+    {file = "huey-2.3.2.tar.gz", hash = "sha256:7176acb113850824490da5a31f328cc48a2002a59bfb396efbab8ecbd3573910"},
 ]
 humanfriendly = [
     {file = "humanfriendly-9.1-py2.py3-none-any.whl", hash = "sha256:d5c731705114b9ad673754f3317d9fa4c23212f36b29bdc4272a892eafc9bc72"},
@@ -1004,8 +1004,8 @@ pytz = [
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.11.0-py2.py3-none-any.whl", hash = "sha256:47cd92db1675a9043bebbe0b67a103b66527883b35e22634060a6bcb99138baa"},
-    {file = "pyupgrade-2.11.0.tar.gz", hash = "sha256:5dcae14b1c9b7ecce5ec42210528eb30a1a2408613da744f2ba4a9b54b344cf6"},
+    {file = "pyupgrade-2.13.0-py2.py3-none-any.whl", hash = "sha256:1cb5a15573fc63824b952bf7dde5b96f9672a1179ec779ac2d159a845da743c8"},
+    {file = "pyupgrade-2.13.0.tar.gz", hash = "sha256:dc6b580b7bc82f357acb354bbba03d8d69da51425ecd5993a2651059bca80518"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
