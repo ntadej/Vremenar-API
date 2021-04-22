@@ -12,7 +12,7 @@ DwdRecord = Dict[str, Any]
 NaN = float('nan')
 
 DWD_STATIONS_CURRENT: Path = Path.cwd() / 'data/stations/DWD.current.csv'
-DWD_CACHE_DIR: Path = Path.cwd() / '.cache/dwd'
+DWD_CACHE_DIR: Path = Path.cwd() / '.cache/dwd-tmp'
 
 
 def dwd_stations() -> List[str]:
