@@ -16,7 +16,7 @@ DwdRecord = Dict[str, Any]
 DwdGenerator = Generator[DwdRecord, None, None]
 
 BRIGHTSKY_CACHE: Path = Path.cwd() / '.cache/brightsky/MOSMIX_S_LATEST_240.kml'
-DWD_CACHE_DIR: Path = Path.cwd() / '.cache/dwd'
+DWD_CACHE_DIR: Path = Path.cwd() / '.cache/dwd-tmp'
 NS = {
     'dwd': 'https://opendata.dwd.de/weather/lib/pointforecast_dwd_extension_V1_0.xsd',
     'kml': 'http://www.opengis.net/kml/2.2',
