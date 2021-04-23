@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 
+from . import __version__
 from .api import version, stations, maps, copyright
 
 tags_metadata = [
@@ -28,6 +29,7 @@ tags_metadata = [
 app: FastAPI = FastAPI(
     title='Vremenar API',
     description='Weather API powering Vremenar application',
+    version=__version__,
     openapi_tags=tags_metadata,
 )
 app.add_middleware(GZipMiddleware)

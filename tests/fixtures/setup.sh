@@ -9,3 +9,5 @@ if [[ ! -d ".cache/dwd" ]]; then
     mkdir -p ".cache/dwd"
     cp "tests/fixtures/DWD_MOSMIX.json" ".cache/dwd/MOSMIX:${current_time}.json"
 fi
+
+echo "{}" > version.json
