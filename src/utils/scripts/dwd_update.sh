@@ -20,6 +20,7 @@ fi
 
 deactivate
 
+mkdir -p ".cache/dwd/"
 if [[ -d ".cache/dwd-tmp" ]]; then
     cp ".cache/dwd-tmp/"*.json ".cache/dwd/"
     rm -r ".cache/dwd-tmp"
