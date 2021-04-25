@@ -62,7 +62,7 @@ pre-commit run --all
 
 ## Copyright info
 
-Copyright (C) 2020 Tadej Novak
+Copyright (C) 2020-2021 Tadej Novak
 
 This project may be used under the terms of the
 GNU Affero General Public License version 3.0 as published by the
