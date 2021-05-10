@@ -24,7 +24,7 @@ pre-commit = "^2.12.1"
 pre-commit-hooks = "^3.4.0"
 pytest = "^6.2.3"
 pytest-cov = "^2.11.1"
-pyupgrade = "^2.13.0"
+pyupgrade = "^2.15.0"
 requests = "^2.25.1"
 
 [tool.black]
