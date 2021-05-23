@@ -446,10 +446,8 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
     #         detail='Unknown station',
     #     )
 
-    url: str = (
-        join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
-        + f'?wmo_station_id={station_id}'
-    )
+    url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
+    url += f'?wmo_station_id={station_id}'
 
     logger.debug('Brightsky URL: %s', url)
 
