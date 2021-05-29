@@ -8,5 +8,11 @@
     "python.linting.mypyArgs": [
         "--show-column-numbers"
     ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
     "cSpell.enabled": false
 }
