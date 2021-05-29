@@ -92,7 +92,7 @@ def _get_icon(station: StationInfo, weather: Dict[str, Any], time: datetime) -> 
     condition = None
     if weather['condition'] == 'fog':  # TODO: intensity
         base_icon = 'FG'
-    else:
+    elif 'cloud_cover' in weather and weather['cloud_cover'] is not None:
         cloud_cover_fraction = weather['cloud_cover'] / 100
         if 1 / 8 <= cloud_cover_fraction < 4 / 8:
             base_icon = 'partCloudy'
@@ -141,13 +141,16 @@ def get_dwd_stations() -> Dict[str, StationInfo]:
         next(csv)  # Skip header row.
         for row in csv:
             station_id: str = row[0]
-            stations[station_id] = StationInfo(
-                id=station_id,
-                name=row[3],
-                coordinate=Coordinate(latitude=row[4], longitude=row[5]),
-                zoom_level=_zoom_level_conversion(row[6], float(row[7])),
-                metadata={'DWD_ID': row[1]},
-            )
+            try:
+                stations[station_id] = StationInfo(
+                    id=station_id,
+                    name=row[3],
+                    coordinate=Coordinate(latitude=row[4], longitude=row[5]),
+                    zoom_level=_zoom_level_conversion(row[6], float(row[7])),
+                    metadata={'DWD_ID': row[1], 'status': row[8]},
+                )
+            except ValueError:
+                pass
     return stations
 
 
@@ -341,7 +344,14 @@ def _parse_record(
     if station_id not in stations:
         return (None, None)
 
-    station = stations[station_id]
+    station: Optional[StationInfo] = stations.get(station_id, None)
+    if not station:
+        return (None, None)
+
+    # TODO: temporary check
+    if not station.metadata or station.metadata['status'] != '1':
+        print(station.metadata)
+        return (None, None)
 
     condition = WeatherCondition(
         observation=observation,
@@ -439,15 +449,14 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
     """Get current station weather condition."""
     stations = get_dwd_stations()
     station: Optional[StationInfo] = stations.get(station_id, None)
-    # TODO: enable validation once all stations are in
-    # if not station:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_404_NOT_FOUND,
-    #         detail='Unknown station',
-    #     )
+    if not station:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Unknown station',
+        )
 
     url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
-    url += f'?wmo_station_id={station_id}'
+    url += f'?lat={station.coordinate.latitude}&lon={station.coordinate.longitude}'
 
     logger.debug('Brightsky URL: %s', url)
 
