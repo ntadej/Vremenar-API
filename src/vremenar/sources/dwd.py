@@ -350,7 +350,6 @@ def _parse_record(
 
     # TODO: temporary check
     if not station.metadata or station.metadata['status'] != '1':
-        print(station.metadata)
         return (None, None)
 
     condition = WeatherCondition(
@@ -390,7 +389,7 @@ async def get_weather_map(map_id: str) -> List[WeatherInfo]:
     return conditions_list
 
 
-def _parse_source(source: Dict[str, Any]) -> StationInfo:
+def _parse_source(source: Dict[str, Any]) -> Optional[StationInfo]:
     stations = get_dwd_stations()
     source_id = source['wmo_station_id']
     if source_id in stations:
@@ -401,11 +400,7 @@ def _parse_source(source: Dict[str, Any]) -> StationInfo:
             coordinate=temp_station.coordinate,
         )
 
-    return StationInfo(
-        id=source_id,
-        name=source['station_name'],
-        coordinate=Coordinate(latitude=source['lat'], longitude=source['lon']),
-    )
+    return None
 
 
 async def find_station(query: StationSearchModel) -> List[StationInfo]:
@@ -440,7 +435,9 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
 
     locations = []
     for source in response_body['sources']:
-        locations.append(_parse_source(source))
+        station = _parse_source(source)
+        if station:
+            locations.append(station)
 
     return locations
 
