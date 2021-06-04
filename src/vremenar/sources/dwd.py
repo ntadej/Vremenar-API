@@ -151,7 +151,7 @@ def get_dwd_stations() -> Dict[str, StationInfo]:
                 )
             except ValueError:
                 pass
-    return stations
+    return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
 
 
 def list_stations() -> List[StationInfo]:
