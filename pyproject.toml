@@ -7,25 +7,26 @@ authors = ["Tadej Novak <tadej@tano.si>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 astral = "^2.2"
-fastapi = "^0.65.1"
+fastapi = "^0.65.2"
 gunicorn = "^20.1.0"
-httpx = "^0.18.1"
+httpx = "^0.18.2"
 uvicorn = "^0.14.0"
 
 [tool.poetry.dev-dependencies]
-black = "^21.5b2"
+black = "^21.6b0"
 flake8 = "^3.9.2"
 flake8-bugbear = "^21.4.3"
 flake8-docstrings = "^1.6.0"
 flake8-quotes = "^3.2.0"
-mypy = "^0.812"
+mypy = "^0.910"
 pep8-naming = "^0.11.1"
 pre-commit = "^2.13.0"
 pre-commit-hooks = "^4.0.1"
 pytest = "^6.2.4"
 pytest-cov = "^2.12.1"
-pyupgrade = "^2.19.1"
+pyupgrade = "^2.19.4"
 requests = "^2.25.1"
+types-python-dateutil = "^0.1.4"
 
 [tool.black]
 line-length = 88
