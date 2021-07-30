@@ -23,6 +23,7 @@ from ..utils import join_url, logger, parse_time, to_timestamp
 
 BASEURL: str = 'https://vreme.arso.gov.si'
 API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
+TIMEOUT: int = 15
 
 MAP_URL = {
     MapType.WeatherCondition: '/forecast_si_data/',
@@ -129,7 +130,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
-        response = await client.get(url)
+        response = await client.get(url, timeout=TIMEOUT)
 
     country_suffix = f'?country={CountryID.Slovenia}'
 
@@ -395,7 +396,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
     logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
-        response = await client.get(url)
+        response = await client.get(url, timeout=TIMEOUT)
 
     response_body = response.json()
 
@@ -431,7 +432,7 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
     logger.debug('ARSO URL: %s', url)
 
     async with AsyncClient() as client:
-        response = await client.get(url)
+        response = await client.get(url, timeout=TIMEOUT)
 
     response_body = response.json()
     if 'features' not in response_body:
