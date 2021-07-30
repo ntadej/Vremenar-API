@@ -4,6 +4,8 @@ from fastapi import APIRouter
 from pydantic import BaseModel, Field
 from typing import Dict
 
+from ..definitions import CountryID
+
 router = APIRouter()
 
 
@@ -18,13 +20,15 @@ class CopyrightInfo(BaseModel):
     '/copyright',
     tags=['copyright'],
     response_description='Get data copyright',
-    response_model=Dict[str, CopyrightInfo],
+    response_model=Dict[CountryID, CopyrightInfo],
 )
-async def copyright() -> Dict[str, CopyrightInfo]:
+async def copyright() -> Dict[CountryID, CopyrightInfo]:
     """Get data copyright."""
     return {
-        'sl': CopyrightInfo(
+        CountryID.Slovenia: CopyrightInfo(
             provider='Slovenian Environment Agency', url='https://meteo.arso.gov.si'
         ),
-        'de': CopyrightInfo(provider='Deutscher Wetterdienst', url='https://dwd.de'),
+        CountryID.Germany: CopyrightInfo(
+            provider='Deutscher Wetterdienst', url='https://dwd.de'
+        ),
     }
