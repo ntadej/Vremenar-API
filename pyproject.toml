@@ -24,7 +24,7 @@ pre-commit = "^2.13.0"
 pre-commit-hooks = "^4.0.1"
 pytest = "^6.2.4"
 pytest-cov = "^2.12.1"
-pyupgrade = "^2.19.4"
+pyupgrade = "^2.23.1"
 requests = "^2.25.1"
 types-python-dateutil = "^0.1.4"
 
