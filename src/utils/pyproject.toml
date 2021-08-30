@@ -20,7 +20,7 @@ mypy = "^0.910"
 pep8-naming = "^0.12.0"
 pre-commit = "^2.13.0"
 pre-commit-hooks = "^4.0.1"
-pyupgrade = "^2.23.1"
+pyupgrade = "^2.25.0"
 types-python-dateutil = "^0.1.4"
 
 [tool.black]
