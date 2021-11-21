@@ -567,7 +567,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.25.1"
+version = "2.29.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -773,7 +773,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5ed2e5801b9813ae78dd62edaab2846cb39293207cae94cdc338634d1f90e59b"
+content-hash = "53277d428d0c7445ed2225d6ef56ce5bc15fbddbeabe438831efbfb83892237d"
 
 [metadata.files]
 anyio = [
@@ -910,6 +910,7 @@ flake8-quotes = [
     {file = "flake8-quotes-3.3.0.tar.gz", hash = "sha256:f1dd87830ed77ff2ce47fc0ee0fd87ae20e8f045355354ffbf4dcaa18d528217"},
 ]
 gunicorn = [
+    {file = "gunicorn-20.1.0-py3-none-any.whl", hash = "sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e"},
     {file = "gunicorn-20.1.0.tar.gz", hash = "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"},
 ]
 h11 = [
@@ -1058,8 +1059,8 @@ pytz = [
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.25.1-py2.py3-none-any.whl", hash = "sha256:6e23f9c3c196b8e120a39d3fbad09265c3e2413a65e085b690606a45e59e8140"},
-    {file = "pyupgrade-2.25.1.tar.gz", hash = "sha256:2b541340157fc9dba0c4cac4f28804aa11fbf2aa2cad83ec05e64abec38f1fea"},
+    {file = "pyupgrade-2.29.1-py2.py3-none-any.whl", hash = "sha256:1d3f03d14652caacd6f3d464696e103ef33578531a5c1b995be3821b14b811b7"},
+    {file = "pyupgrade-2.29.1.tar.gz", hash = "sha256:737e02bed0de70247df5d2a0c3edba6b4529adf44f5ef588ecda4a69f14bf694"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
