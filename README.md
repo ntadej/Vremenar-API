@@ -38,12 +38,6 @@ Uvicorn can be used directly for development:
 poetry run uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug
 ```
 
-### Data cache
-
-Raw DWD data is cached separately due to size. Helper utilities are provided
-in `src/utils/scripts`. They can be run in a `cron` job with the working
-directory the root folder of this repository.
-
 ## Contributing
 
 ### pre-commit

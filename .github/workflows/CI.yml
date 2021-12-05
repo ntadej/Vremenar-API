@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -34,20 +34,12 @@ jobs:
           echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info[:3]))")
 
       - name: Set up cache
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2
         with:
-          path: |
-            .venv
-            src/utils/.venv
+          path: .venv
           key: ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-venv-${{ steps.full-python-version.outputs.version }}-
-
-      - name: Setup utils
-        run: |
-          pushd src/utils
-          poetry install
-          popd
 
       - name: Setup server
         run: |
@@ -60,7 +52,7 @@ jobs:
 
       - name: Report coverage with Codecov
         if: github.event_name == 'push' && matrix.python-version == 3.9 && matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v2.0.3
+        uses: codecov/codecov-action@v2
         with:
           file: ./coverage.xml
           flags: unittests
