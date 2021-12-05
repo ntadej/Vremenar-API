@@ -165,7 +165,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
     if map_type == MapType.WeatherCondition:
         now = datetime.now(tz=timezone.utc)
-        now = now.replace(minute=0, second=0)
+        now = now.replace(minute=0, second=0, microsecond=0)
 
         country_suffix = f'?country={CountryID.Germany}'
 
@@ -191,8 +191,8 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
         # Today
         start = now.replace(hour=0)
-        for i in range(1, 4):
-            time = start + timedelta(hours=i * 6)
+        for i in range(1, 8):
+            time = start + timedelta(hours=i * 3)
             if time <= soon:
                 continue
             time_string = time.strftime('%Y-%m-%dT%H:%M:%SZ')

@@ -112,7 +112,7 @@ def test_stations_map() -> None:
     assert response.status_code == 200
 
     now = datetime.now(tz=timezone.utc)
-    now = now.replace(minute=0, second=0)
+    now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
     soon_string = soon.strftime('%Y-%m-%dT%H:%M:%SZ')
     response = client.get(f'/stations/map/{soon_string}?country=de')
