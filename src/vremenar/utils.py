@@ -1,7 +1,7 @@
 """Helper utilities."""
 
 from astral import Observer, sun  # type: ignore
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from functools import lru_cache
 from logging import Logger, getLogger
 from typing import Tuple, cast
@@ -46,6 +46,12 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
 def parse_time(time: str) -> datetime:
     """Parse time from standard string."""
     return datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
+
+
+def parse_timestamp(time: str) -> datetime:
+    """Parse time from timestamp string."""
+    print(time, time[:-3])
+    return datetime.fromtimestamp(float(time[-3]), tz=timezone.utc)
 
 
 def to_timestamp(time: datetime) -> str:

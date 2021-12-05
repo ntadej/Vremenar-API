@@ -22,7 +22,14 @@ from ..models.maps import (
 from ..models.stations import StationInfo, StationSearchModel
 from ..models.weather import WeatherCondition, WeatherInfo
 from ..units import kelvin_to_celsius
-from ..utils import day_or_night, join_url, logger, parse_time, to_timestamp
+from ..utils import (
+    day_or_night,
+    join_url,
+    logger,
+    parse_time,
+    parse_timestamp,
+    to_timestamp,
+)
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
 BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
@@ -355,7 +362,7 @@ def _parse_record(
     condition = WeatherCondition(
         observation=observation,
         timestamp=record['timestamp'],
-        icon=_get_icon(station, record, parse_time(record['time'])),
+        icon=_get_icon(station, record, parse_timestamp(record['timestamp'])),
         temperature=kelvin_to_celsius(record['temperature']),
     )
 
