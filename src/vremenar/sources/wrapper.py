@@ -5,8 +5,8 @@ from typing import List, Tuple
 
 from ..definitions import CountryID
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
-from ..models.stations import StationInfo, StationSearchModel
-from ..models.weather import WeatherInfo
+from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
+from ..models.weather import WeatherInfoExtended
 
 from . import arso
 from . import dwd
@@ -66,7 +66,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     )
 
 
-async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfo]:
+async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfoExtended]:
     """Get weather condition map for the chosen country."""
     if country == CountryID.Slovenia:
         return await arso.get_weather_map(map_id)
@@ -79,7 +79,7 @@ async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfo]:
     )
 
 
-def list_stations(country: CountryID) -> List[StationInfo]:
+def list_stations(country: CountryID) -> List[StationInfoExtended]:
     """List weather stations for the chosen country."""
     if country == CountryID.Slovenia:
         return arso.list_stations()
@@ -107,7 +107,9 @@ async def find_station(
     )
 
 
-async def current_station_condition(country: CountryID, station_id: str) -> WeatherInfo:
+async def current_station_condition(
+    country: CountryID, station_id: str
+) -> WeatherInfoExtended:
     """Get current station weather condition."""
     if country == CountryID.Slovenia:
         return await arso.current_station_condition(station_id)

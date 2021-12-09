@@ -5,9 +5,9 @@
         "id": "METEO-16036_",
         "parentId": "IT_PORDENONE_",
         "country": "IT",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Aviano",
-        "altitude": "128"
+        "altitude": 128
     },
     {
         "longitude": 14.5449,
@@ -15,9 +15,9 @@
         "id": "METEO-1401_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Babno Polje",
-        "altitude": "756"
+        "altitude": 756
     },
     {
         "longitude": 13.88,
@@ -25,9 +25,9 @@
         "id": "METEO-11213_",
         "parentId": "AT_GAILTAL_",
         "country": "AT",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Beljak",
-        "altitude": "501"
+        "altitude": 501
     },
     {
         "longitude": 12.33,
@@ -35,9 +35,9 @@
         "id": "METEO-16105_",
         "parentId": "IT_VENEZIA_",
         "country": "IT",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Benetke",
-        "altitude": "6"
+        "altitude": 6
     },
     {
         "longitude": 15.88,
@@ -45,9 +45,9 @@
         "id": "METEO-14520_",
         "parentId": "BIH_",
         "country": "BIH",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Bihač",
-        "altitude": "323"
+        "altitude": 323
     },
     {
         "longitude": 13.6243,
@@ -55,9 +55,9 @@
         "id": "METEO-1402_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Bilje pri Novi Gorici",
-        "altitude": "55"
+        "altitude": 55
     },
     {
         "longitude": 14.1101,
@@ -65,9 +65,9 @@
         "id": "METEO-0038_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Bled",
-        "altitude": "487"
+        "altitude": 487
     },
     {
         "longitude": 14.0816,
@@ -75,9 +75,9 @@
         "id": "METEO-1403_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Blegoš",
-        "altitude": "1188"
+        "altitude": 1188
     },
     {
         "longitude": 13.9422,
@@ -85,9 +85,9 @@
         "id": "METEO-1404_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Bohinjska Češnjica",
-        "altitude": "596"
+        "altitude": 596
     },
     {
         "longitude": 14.1806,
@@ -95,9 +95,9 @@
         "id": "METEO-1496_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Boršt Gorenja vas",
-        "altitude": "530"
+        "altitude": 530
     },
     {
         "longitude": 13.5543,
@@ -105,9 +105,9 @@
         "id": "METEO-1030_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Bovec",
-        "altitude": "452"
+        "altitude": 452
     },
     {
         "longitude": 13.4272,
@@ -115,9 +115,9 @@
         "id": "METEO-1405_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Breginj",
-        "altitude": "546"
+        "altitude": 546
     },
     {
         "longitude": 15.5947,
@@ -125,9 +125,9 @@
         "id": "METEO-0026_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Brežice",
-        "altitude": "163"
+        "altitude": 163
     },
     {
         "longitude": 13.8885,
@@ -135,9 +135,9 @@
         "id": "METEO-1406_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Bukovski vrh",
-        "altitude": "779"
+        "altitude": 779
     },
     {
         "longitude": 15.2257,
@@ -145,9 +145,9 @@
         "id": "METEO-1025_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Celje",
-        "altitude": "244"
+        "altitude": 244
     },
     {
         "longitude": 14.33,
@@ -155,9 +155,9 @@
         "id": "METEO-11231_",
         "parentId": "AT_KAERNTEN_",
         "country": "AT",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Celovec",
-        "altitude": "476"
+        "altitude": 476
     },
     {
         "longitude": 14.3604,
@@ -165,9 +165,9 @@
         "id": "METEO-0048_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Cerknica",
-        "altitude": "562"
+        "altitude": 562
     },
     {
         "longitude": 14.3989,
@@ -175,9 +175,9 @@
         "id": "METEO-1407_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Cerkniško jezero",
-        "altitude": "586"
+        "altitude": 586
     },
     {
         "longitude": 15.1461,
@@ -185,9 +185,9 @@
         "id": "METEO-1033_",
         "parentId": "SI_BELOKRANJSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Črnomelj",
-        "altitude": "157"
+        "altitude": 157
     },
     {
         "longitude": 14.0684,
@@ -195,9 +195,9 @@
         "id": "METEO-1409_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Davča",
-        "altitude": "1002"
+        "altitude": 1002
     },
     {
         "longitude": 13.9013,
@@ -205,9 +205,9 @@
         "id": "METEO-2002_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Dolenje pri Ajdovščini",
-        "altitude": "83"
+        "altitude": 83
     },
     {
         "longitude": 14.5945,
@@ -215,9 +215,9 @@
         "id": "METEO-0013_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Domžale",
-        "altitude": "303"
+        "altitude": 303
     },
     {
         "longitude": 15.6838,
@@ -225,9 +225,9 @@
         "id": "METEO-1411_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Gačnik",
-        "altitude": "292"
+        "altitude": 292
     },
     {
         "longitude": 13.8436,
@@ -235,9 +235,9 @@
         "id": "METEO-1412_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Godnje",
-        "altitude": "320"
+        "altitude": 320
     },
     {
         "longitude": 14.8063,
@@ -245,9 +245,9 @@
         "id": "METEO-1414_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Gornji Grad",
-        "altitude": "428"
+        "altitude": 428
     },
     {
         "longitude": 15.43,
@@ -255,9 +255,9 @@
         "id": "METEO-11240_",
         "parentId": "AT_STEIERMARK_",
         "country": "AT",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Gradec",
-        "altitude": "347"
+        "altitude": 347
     },
     {
         "longitude": 13.3947,
@@ -265,9 +265,9 @@
         "id": "METEO-16002_",
         "parentId": "IT_TRIESTE_",
         "country": "IT",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Gradež",
-        "altitude": "4"
+        "altitude": 4
     },
     {
         "longitude": 14.6552,
@@ -275,9 +275,9 @@
         "id": "METEO-0023_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Grosuplje",
-        "altitude": "338"
+        "altitude": 338
     },
     {
         "longitude": 15.5875,
@@ -285,9 +285,9 @@
         "id": "METEO-1415_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Hočko Pohorje",
-        "altitude": "585"
+        "altitude": 585
     },
     {
         "longitude": 15.0833,
@@ -295,9 +295,9 @@
         "id": "METEO-3414_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Hrastnik",
-        "altitude": "290"
+        "altitude": 290
     },
     {
         "longitude": 14.0289,
@@ -305,9 +305,9 @@
         "id": "METEO-1416_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Idrija",
-        "altitude": "325"
+        "altitude": 325
     },
     {
         "longitude": 14.2358,
@@ -315,9 +315,9 @@
         "id": "METEO-1037_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Ilirska Bistrica",
-        "altitude": ""
+        "altitude": 421
     },
     {
         "longitude": 14.858,
@@ -325,9 +325,9 @@
         "id": "METEO-1417_",
         "parentId": "SI_KOCEVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Iskrba",
-        "altitude": "540"
+        "altitude": 540
     },
     {
         "longitude": 13.6594,
@@ -335,9 +335,9 @@
         "id": "METEO-0016_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Izola",
-        "altitude": "4"
+        "altitude": 4
     },
     {
         "longitude": 14.3445,
@@ -345,9 +345,9 @@
         "id": "METEO-1418_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Jelendol",
-        "altitude": "760"
+        "altitude": 760
     },
     {
         "longitude": 14.9481,
@@ -355,9 +355,9 @@
         "id": "METEO-1419_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Jeronim",
-        "altitude": "760"
+        "altitude": 760
     },
     {
         "longitude": 16.188,
@@ -365,9 +365,9 @@
         "id": "METEO-1420_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Jeruzalem",
-        "altitude": "335"
+        "altitude": 335
     },
     {
         "longitude": 14.057,
@@ -375,9 +375,9 @@
         "id": "METEO-0011_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Jesenice",
-        "altitude": "563"
+        "altitude": 563
     },
     {
         "longitude": 14.5144,
@@ -385,9 +385,9 @@
         "id": "METEO-1489_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Jezersko",
-        "altitude": "894"
+        "altitude": 894
     },
     {
         "longitude": 14.2973,
@@ -395,9 +395,9 @@
         "id": "METEO-1421_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Juršče",
-        "altitude": "701"
+        "altitude": 701
     },
     {
         "longitude": 15.9503,
@@ -405,9 +405,9 @@
         "id": "METEO-1422_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Kadrenci",
-        "altitude": "310"
+        "altitude": 310
     },
     {
         "longitude": 14.6119,
@@ -415,9 +415,9 @@
         "id": "METEO-0010_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Kamnik",
-        "altitude": "375"
+        "altitude": 375
     },
     {
         "longitude": 14.6033,
@@ -425,9 +425,9 @@
         "id": "METEO-1423_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Kamniška Bistrica",
-        "altitude": "549"
+        "altitude": 549
     },
     {
         "longitude": 13.4744,
@@ -435,9 +435,9 @@
         "id": "METEO-1424_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Kanin",
-        "altitude": "2262"
+        "altitude": 2262
     },
     {
         "longitude": 15.565,
@@ -445,9 +445,9 @@
         "id": "METEO-14232_",
         "parentId": "HR_LICKO-SENJSKA_",
         "country": "HR",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Karlovec",
-        "altitude": "112"
+        "altitude": 112
     },
     {
         "longitude": 13.8247,
@@ -455,9 +455,9 @@
         "id": "METEO-1425_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Kneške Ravne",
-        "altitude": "752"
+        "altitude": 752
     },
     {
         "longitude": 14.8496,
@@ -465,9 +465,9 @@
         "id": "METEO-1426_",
         "parentId": "SI_KOCEVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Kočevje",
-        "altitude": "467"
+        "altitude": 467
     },
     {
         "longitude": 15.0569,
@@ -475,9 +475,9 @@
         "id": "METEO-1427_",
         "parentId": "SI_DOLENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Kočevske Poljane",
-        "altitude": "189"
+        "altitude": 189
     },
     {
         "longitude": 13.7245,
@@ -485,9 +485,9 @@
         "id": "METEO-1038_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Koper",
-        "altitude": "4"
+        "altitude": 4
     },
     {
         "longitude": 13.7517,
@@ -495,9 +495,9 @@
         "id": "METEO-1428_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Korensko sedlo",
-        "altitude": "1072"
+        "altitude": 1072
     },
     {
         "longitude": 14.4449,
@@ -505,9 +505,9 @@
         "id": "METEO-1469_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Korošče",
-        "altitude": "829"
+        "altitude": 829
     },
     {
         "longitude": 16.0306,
@@ -515,9 +515,9 @@
         "id": "METEO-1027_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Krajinski park Goričko",
-        "altitude": "415"
+        "altitude": 415
     },
     {
         "longitude": 14.3647,
@@ -525,9 +525,9 @@
         "id": "METEO-1429_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Kranj",
-        "altitude": "403"
+        "altitude": 403
     },
     {
         "longitude": 15.888,
@@ -535,9 +535,9 @@
         "id": "METEO-14234_",
         "parentId": "HR_ZAGREBACKA_",
         "country": "HR",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Krapina",
-        "altitude": "203"
+        "altitude": 203
     },
     {
         "longitude": 13.8489,
@@ -545,9 +545,9 @@
         "id": "METEO-1430_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Kredarica",
-        "altitude": "2514"
+        "altitude": 2514
     },
     {
         "longitude": 14.575,
@@ -555,9 +555,9 @@
         "id": "METEO-0052_",
         "parentId": "HR_PRIMORSKO-GORANSKA_",
         "country": "HR",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Krk",
-        "altitude": "24"
+        "altitude": 24
     },
     {
         "longitude": 13.658,
@@ -565,9 +565,9 @@
         "id": "METEO-1431_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Krn",
-        "altitude": "910"
+        "altitude": 910
     },
     {
         "longitude": 15.4965,
@@ -575,9 +575,9 @@
         "id": "METEO-3098_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Krško",
-        "altitude": "156"
+        "altitude": 156
     },
     {
         "longitude": 14.5333,
@@ -585,9 +585,9 @@
         "id": "METEO-1432_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Krvavec",
-        "altitude": "1740"
+        "altitude": 1740
     },
     {
         "longitude": 13.8689,
@@ -595,9 +595,9 @@
         "id": "METEO-1433_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Kubed",
-        "altitude": "234"
+        "altitude": 234
     },
     {
         "longitude": 15.0732,
@@ -605,9 +605,9 @@
         "id": "METEO-1434_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Kum",
-        "altitude": "1211"
+        "altitude": 1211
     },
     {
         "longitude": 16.458,
@@ -615,9 +615,9 @@
         "id": "METEO-1028_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Lendava",
-        "altitude": "159"
+        "altitude": 159
     },
     {
         "longitude": 15.5161,
@@ -625,9 +625,9 @@
         "id": "METEO-1035_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Letališče Cerklje ob Krki",
-        "altitude": "154"
+        "altitude": 154
     },
     {
         "longitude": 15.6821,
@@ -635,9 +635,9 @@
         "id": "METEO-1023_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Letališče Edvarda Rusjana Maribor",
-        "altitude": "264"
+        "altitude": 264
     },
     {
         "longitude": 14.4728,
@@ -645,9 +645,9 @@
         "id": "METEO-1493_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Letališče Jožeta Pučnika Ljubljana",
-        "altitude": "364"
+        "altitude": 364
     },
     {
         "longitude": 14.1718,
@@ -655,9 +655,9 @@
         "id": "METEO-1034_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Letališče Lesce",
-        "altitude": "515"
+        "altitude": 515
     },
     {
         "longitude": 13.6161,
@@ -665,9 +665,9 @@
         "id": "METEO-1008_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Letališče Portorož",
-        "altitude": "2"
+        "altitude": 2
     },
     {
         "longitude": 12.81,
@@ -675,9 +675,9 @@
         "id": "METEO-11204_",
         "parentId": "AT_GAILTAL_",
         "country": "AT",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Lienz",
-        "altitude": "673"
+        "altitude": 673
     },
     {
         "longitude": 15.2849,
@@ -685,9 +685,9 @@
         "id": "METEO-1435_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Lisca",
-        "altitude": "943"
+        "altitude": 943
     },
     {
         "longitude": 14.8186,
@@ -695,19 +695,19 @@
         "id": "METEO-1436_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Litija",
-        "altitude": "272"
+        "altitude": 272
     },
     {
         "longitude": 14.5124,
         "latitude": 46.0655,
-        "id": "METEO-1005_",
+        "id": "METEO-1495_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Ljubljana",
-        "altitude": "299"
+        "altitude": 299
     },
     {
         "longitude": 14.8343,
@@ -715,9 +715,9 @@
         "id": "METEO-0051_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Ljubno ob Savinji",
-        "altitude": "434"
+        "altitude": 434
     },
     {
         "longitude": 14.6311,
@@ -725,9 +725,9 @@
         "id": "METEO-1437_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Logarska dolina",
-        "altitude": "730"
+        "altitude": 730
     },
     {
         "longitude": 14.2032,
@@ -735,9 +735,9 @@
         "id": "METEO-1438_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Logatec",
-        "altitude": "486"
+        "altitude": 486
     },
     {
         "longitude": 13.6046,
@@ -745,9 +745,9 @@
         "id": "METEO-0031_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Lucija",
-        "altitude": "12"
+        "altitude": 12
     },
     {
         "longitude": 14.7489,
@@ -755,9 +755,9 @@
         "id": "METEO-1439_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Luče",
-        "altitude": "520"
+        "altitude": 520
     },
     {
         "longitude": 13.7448,
@@ -765,9 +765,9 @@
         "id": "METEO-2001_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Luka Koper",
-        "altitude": "-2"
+        "altitude": -2
     },
     {
         "longitude": 16.162,
@@ -775,9 +775,9 @@
         "id": "METEO-1440_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Mačkovci",
-        "altitude": "275"
+        "altitude": 275
     },
     {
         "longitude": 15.2049,
@@ -785,9 +785,9 @@
         "id": "METEO-1029_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Malkovec",
-        "altitude": "400"
+        "altitude": 400
     },
     {
         "longitude": 15.6261,
@@ -795,9 +795,9 @@
         "id": "METEO-1491_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Maribor",
-        "altitude": "279"
+        "altitude": 279
     },
     {
         "longitude": 14.8178,
@@ -805,9 +805,9 @@
         "id": "METEO-1410_",
         "parentId": "SI_DOLENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Marinča vas",
-        "altitude": "272"
+        "altitude": 272
     },
     {
         "longitude": 14.4137,
@@ -815,9 +815,9 @@
         "id": "METEO-0037_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Medvode",
-        "altitude": "312"
+        "altitude": 312
     },
     {
         "longitude": 14.5722,
@@ -825,9 +825,9 @@
         "id": "METEO-0029_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Mengeš",
-        "altitude": "317"
+        "altitude": 317
     },
     {
         "longitude": 15.3201,
@@ -835,9 +835,9 @@
         "id": "METEO-1441_",
         "parentId": "SI_BELOKRANJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Metlika",
-        "altitude": "210"
+        "altitude": 210
     },
     {
         "longitude": 14.8597,
@@ -845,9 +845,9 @@
         "id": "METEO-1442_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Mežica",
-        "altitude": "506"
+        "altitude": 506
     },
     {
         "longitude": 15.6974,
@@ -855,9 +855,9 @@
         "id": "METEO-0047_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Miklavž na Dravskem polju",
-        "altitude": "259"
+        "altitude": 259
     },
     {
         "longitude": 15.3225,
@@ -865,9 +865,9 @@
         "id": "METEO-1443_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Miklavž na Gorjancih",
-        "altitude": "958"
+        "altitude": 958
     },
     {
         "longitude": 16.1913,
@@ -875,9 +875,9 @@
         "id": "METEO-1444_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Murska Sobota",
-        "altitude": "188"
+        "altitude": 188
     },
     {
         "longitude": 14.0538,
@@ -885,9 +885,9 @@
         "id": "METEO-1445_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Nanos",
-        "altitude": "1242"
+        "altitude": 1242
     },
     {
         "longitude": 13.6524,
@@ -895,9 +895,9 @@
         "id": "METEO-3421_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Nova Gorica",
-        "altitude": "113"
+        "altitude": 113
     },
     {
         "longitude": 14.5088,
@@ -905,9 +905,9 @@
         "id": "METEO-1446_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Nova vas - Bloke",
-        "altitude": "718"
+        "altitude": 718
     },
     {
         "longitude": 15.1773,
@@ -915,9 +915,9 @@
         "id": "METEO-1447_",
         "parentId": "SI_DOLENJSKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Novo mesto",
-        "altitude": "220"
+        "altitude": 220
     },
     {
         "longitude": 15.222,
@@ -925,9 +925,9 @@
         "id": "METEO-14328_",
         "parentId": "HR_LICKO-SENJSKA_",
         "country": "HR",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Ogulin",
-        "altitude": "323"
+        "altitude": 323
     },
     {
         "longitude": 14.6915,
@@ -935,19 +935,19 @@
         "id": "METEO-1448_",
         "parentId": "SI_KOCEVSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Osilnica",
-        "altitude": "331"
+        "altitude": 331
     },
     {
         "longitude": 13.9161,
         "latitude": 45.9381,
-        "id": "METEO-3031_",
+        "id": "METEO-3424_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Otlica",
-        "altitude": "965"
+        "altitude": 965
     },
     {
         "longitude": 13.9931,
@@ -955,9 +955,9 @@
         "id": "METEO-3029_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Park Škocjanske jame",
-        "altitude": "420"
+        "altitude": 420
     },
     {
         "longitude": 14.2282,
@@ -965,9 +965,9 @@
         "id": "METEO-1449_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Pasja ravan",
-        "altitude": "1020"
+        "altitude": 1020
     },
     {
         "longitude": 14.5853,
@@ -975,9 +975,9 @@
         "id": "METEO-1450_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Pavličevo sedlo",
-        "altitude": "1337"
+        "altitude": 1337
     },
     {
         "longitude": 13.945,
@@ -985,9 +985,9 @@
         "id": "METEO-14308_",
         "parentId": "HR_ISTARSKA_",
         "country": "HR",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Pazin",
-        "altitude": "277"
+        "altitude": 277
     },
     {
         "longitude": 13.5672,
@@ -995,9 +995,9 @@
         "id": "METEO-0049_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Piran",
-        "altitude": "11"
+        "altitude": 11
     },
     {
         "longitude": 13.7236,
@@ -1005,9 +1005,9 @@
         "id": "METEO-0053_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Planica",
-        "altitude": "926"
+        "altitude": 926
     },
     {
         "longitude": 14.0525,
@@ -1015,9 +1015,9 @@
         "id": "METEO-1451_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Planina pod Golico",
-        "altitude": "970"
+        "altitude": 970
     },
     {
         "longitude": 15.5066,
@@ -1025,9 +1025,9 @@
         "id": "METEO-1452_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Planina v Podbočju",
-        "altitude": "686"
+        "altitude": 686
     },
     {
         "longitude": 15.6083,
@@ -1035,9 +1035,9 @@
         "id": "METEO-1019_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Podčetrtek",
-        "altitude": "202"
+        "altitude": 202
     },
     {
         "longitude": 13.9659,
@@ -1045,9 +1045,9 @@
         "id": "METEO-1454_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Podnanos",
-        "altitude": "153"
+        "altitude": 153
     },
     {
         "longitude": 14.1973,
@@ -1055,9 +1055,9 @@
         "id": "METEO-1455_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Postojna",
-        "altitude": "538"
+        "altitude": 538
     },
     {
         "longitude": 13.5784,
@@ -1065,9 +1065,9 @@
         "id": "METEO-1456_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Predel",
-        "altitude": "1156"
+        "altitude": 1156
     },
     {
         "longitude": 14.9031,
@@ -1075,9 +1075,9 @@
         "id": "METEO-0043_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Prevalje",
-        "altitude": "410"
+        "altitude": 410
     },
     {
         "longitude": 15.8492,
@@ -1085,9 +1085,9 @@
         "id": "METEO-1457_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Ptuj",
-        "altitude": "222"
+        "altitude": 222
     },
     {
         "longitude": 13.932,
@@ -1095,9 +1095,9 @@
         "id": "METEO-14307_",
         "parentId": "HR_ISTARSKA_",
         "country": "HR",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Pulj",
-        "altitude": "63"
+        "altitude": 63
     },
     {
         "longitude": 14.769,
@@ -1105,9 +1105,9 @@
         "id": "METEO-14321_",
         "parentId": "HR_PRIMORSKO-GORANSKA_",
         "country": "HR",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Rab",
-        "altitude": "24"
+        "altitude": 24
     },
     {
         "longitude": 14.933,
@@ -1115,9 +1115,9 @@
         "id": "METEO-1413_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Radegunda",
-        "altitude": "789"
+        "altitude": 789
     },
     {
         "longitude": 16.0487,
@@ -1125,9 +1125,9 @@
         "id": "METEO-1032_",
         "parentId": "SI_POMURSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Radenci",
-        "altitude": "203"
+        "altitude": 203
     },
     {
         "longitude": 14.1685,
@@ -1135,9 +1135,9 @@
         "id": "METEO-0032_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Radovljica",
-        "altitude": "492"
+        "altitude": 492
     },
     {
         "longitude": 13.7129,
@@ -1145,9 +1145,9 @@
         "id": "METEO-1031_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Rateče",
-        "altitude": "864"
+        "altitude": 864
     },
     {
         "longitude": 14.0901,
@@ -1155,9 +1155,9 @@
         "id": "METEO-1458_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Ratitovec",
-        "altitude": "1642"
+        "altitude": 1642
     },
     {
         "longitude": 14.94,
@@ -1165,9 +1165,9 @@
         "id": "METEO-1026_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Ravne na Koroškem",
-        "altitude": "396"
+        "altitude": 396
     },
     {
         "longitude": 14.443,
@@ -1175,9 +1175,9 @@
         "id": "METEO-14216_",
         "parentId": "HR_PRIMORSKO-GORANSKA_",
         "country": "HR",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Reka",
-        "altitude": "120"
+        "altitude": 120
     },
     {
         "longitude": 14.7134,
@@ -1185,9 +1185,9 @@
         "id": "METEO-1460_",
         "parentId": "SI_KOCEVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Ribnica - Dolenji Lazi",
-        "altitude": "500"
+        "altitude": 500
     },
     {
         "longitude": 15.6439,
@@ -1195,9 +1195,9 @@
         "id": "METEO-1461_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Rogaška Slatina",
-        "altitude": "288"
+        "altitude": 288
     },
     {
         "longitude": 15.3315,
@@ -1205,9 +1205,9 @@
         "id": "METEO-1462_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Rogla",
-        "altitude": "1494"
+        "altitude": 1494
     },
     {
         "longitude": 13.614,
@@ -1215,9 +1215,9 @@
         "id": "METEO-14303_",
         "parentId": "HR_ISTARSKA_",
         "country": "HR",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Rovinj",
-        "altitude": "8"
+        "altitude": 8
     },
     {
         "longitude": 13.9235,
@@ -1225,9 +1225,9 @@
         "id": "METEO-1463_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Rudno polje",
-        "altitude": "1344"
+        "altitude": 1344
     },
     {
         "longitude": 15.5154,
@@ -1235,9 +1235,9 @@
         "id": "METEO-0046_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Ruše",
-        "altitude": "305"
+        "altitude": 305
     },
     {
         "longitude": 14.903,
@@ -1245,9 +1245,9 @@
         "id": "METEO-14323_",
         "parentId": "HR_LICKO-SENJSKA_",
         "country": "HR",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Senj",
-        "altitude": "26"
+        "altitude": 26
     },
     {
         "longitude": 15.3005,
@@ -1255,9 +1255,9 @@
         "id": "METEO-0044_",
         "parentId": "SI_SPODNJEPOSAVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Sevnica",
-        "altitude": "183"
+        "altitude": 183
     },
     {
         "longitude": 14.9236,
@@ -1265,9 +1265,9 @@
         "id": "METEO-1465_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Sevno",
-        "altitude": "545"
+        "altitude": 545
     },
     {
         "longitude": 13.8685,
@@ -1275,9 +1275,9 @@
         "id": "METEO-0035_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Sežana",
-        "altitude": "366"
+        "altitude": 366
     },
     {
         "longitude": 16.367,
@@ -1285,9 +1285,9 @@
         "id": "METEO-14244_",
         "parentId": "HR_ZAGREBACKA_",
         "country": "HR",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Sisak",
-        "altitude": "98"
+        "altitude": 98
     },
     {
         "longitude": 13.976,
@@ -1295,9 +1295,9 @@
         "id": "METEO-1466_",
         "parentId": "SI_OBALNO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Slavnik",
-        "altitude": "1020"
+        "altitude": 1020
     },
     {
         "longitude": 15.5704,
@@ -1305,9 +1305,9 @@
         "id": "METEO-0021_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Slovenska Bistrica",
-        "altitude": "279"
+        "altitude": 279
     },
     {
         "longitude": 15.4368,
@@ -1315,9 +1315,9 @@
         "id": "METEO-1467_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Slovenske Konjice",
-        "altitude": "328"
+        "altitude": 328
     },
     {
         "longitude": 14.3988,
@@ -1325,9 +1325,9 @@
         "id": "METEO-1470_",
         "parentId": "SI_NOTRANJSKO-KRASKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Sviščaki",
-        "altitude": "1302"
+        "altitude": 1302
     },
     {
         "longitude": 13.9113,
@@ -1335,9 +1335,9 @@
         "id": "METEO-1482_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Šebreljski vrh",
-        "altitude": "970"
+        "altitude": 970
     },
     {
         "longitude": 15.3927,
@@ -1345,9 +1345,9 @@
         "id": "METEO-0041_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Šentjur",
-        "altitude": "263"
+        "altitude": 263
     },
     {
         "longitude": 14.3065,
@@ -1355,9 +1355,9 @@
         "id": "METEO-0014_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Škofja Loka",
-        "altitude": "345"
+        "altitude": 345
     },
     {
         "longitude": 15.5166,
@@ -1365,9 +1365,9 @@
         "id": "METEO-1464_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Šmarje pri Jelšah",
-        "altitude": "251"
+        "altitude": 251
     },
     {
         "longitude": 15.1112,
@@ -1375,9 +1375,9 @@
         "id": "METEO-1471_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Šmartno pri Slovenj Gradcu",
-        "altitude": "455"
+        "altitude": 455
     },
     {
         "longitude": 13.48,
@@ -1385,9 +1385,9 @@
         "id": "METEO-11272_",
         "parentId": "AT_GAILTAL_",
         "country": "AT",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Špital",
-        "altitude": "560"
+        "altitude": 560
     },
     {
         "longitude": 13.3167,
@@ -1395,9 +1395,9 @@
         "id": "METEO-16000_",
         "parentId": "IT_PORDENONE_",
         "country": "IT",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Tablja",
-        "altitude": "568"
+        "altitude": 568
     },
     {
         "longitude": 14.0876,
@@ -1405,9 +1405,9 @@
         "id": "METEO-1472_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Tatre",
-        "altitude": "749"
+        "altitude": 749
     },
     {
         "longitude": 13.0167,
@@ -1415,9 +1415,9 @@
         "id": "METEO-16001_",
         "parentId": "IT_PORDENONE_",
         "country": "IT",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Tolmeč",
-        "altitude": "568"
+        "altitude": 568
     },
     {
         "longitude": 13.718,
@@ -1425,9 +1425,9 @@
         "id": "METEO-1473_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Tolmin - Volče",
-        "altitude": "187"
+        "altitude": 187
     },
     {
         "longitude": 14.3713,
@@ -1435,19 +1435,19 @@
         "id": "METEO-1474_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Topol",
-        "altitude": "692"
+        "altitude": 692
     },
     {
         "longitude": 15.044,
         "latitude": 46.1489,
-        "id": "METEO-0009_",
+        "id": "METEO-3413_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Trbovlje",
-        "altitude": "268"
+        "altitude": 268
     },
     {
         "longitude": 15.0072,
@@ -1455,9 +1455,9 @@
         "id": "METEO-1475_",
         "parentId": "SI_DOLENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Trebnje",
-        "altitude": "277"
+        "altitude": 277
     },
     {
         "longitude": 15.4567,
@@ -1465,9 +1465,9 @@
         "id": "METEO-1468_",
         "parentId": "SI_PODRAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Trije Kralji na Pohorju",
-        "altitude": "1200"
+        "altitude": 1200
     },
     {
         "longitude": 14.9109,
@@ -1475,9 +1475,9 @@
         "id": "METEO-1476_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Trojane - Limovce",
-        "altitude": "671"
+        "altitude": 671
     },
     {
         "longitude": 13.75,
@@ -1485,9 +1485,9 @@
         "id": "METEO-16110_",
         "parentId": "IT_TRIESTE_",
         "country": "IT",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Trst",
-        "altitude": "4"
+        "altitude": 4
     },
     {
         "longitude": 14.5562,
@@ -1495,9 +1495,9 @@
         "id": "METEO-0050_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Trzin",
-        "altitude": "297"
+        "altitude": 297
     },
     {
         "longitude": 14.9634,
@@ -1505,9 +1505,9 @@
         "id": "METEO-1477_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Uršlja gora",
-        "altitude": "1695"
+        "altitude": 1695
     },
     {
         "longitude": 16.364,
@@ -1515,9 +1515,9 @@
         "id": "METEO-14246_",
         "parentId": "HR_ZAGREBACKA_",
         "country": "HR",
-        "zoomLevel": "5",
+        "zoomLevel": 5,
         "title": "Varaždin",
-        "altitude": "173"
+        "altitude": 173
     },
     {
         "longitude": 13.541,
@@ -1525,9 +1525,9 @@
         "id": "METEO-1478_",
         "parentId": "SI_GORISKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Vedrijan",
-        "altitude": "231"
+        "altitude": 231
     },
     {
         "longitude": 15.1119,
@@ -1535,9 +1535,9 @@
         "id": "METEO-1479_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Velenje",
-        "altitude": "410"
+        "altitude": 410
     },
     {
         "longitude": 14.6427,
@@ -1545,9 +1545,9 @@
         "id": "METEO-1480_",
         "parentId": "SI_KOCEVSKA_",
         "country": "SI",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Velike Lašče",
-        "altitude": "528"
+        "altitude": 528
     },
     {
         "longitude": 13.2311,
@@ -1555,9 +1555,9 @@
         "id": "METEO-16046_",
         "parentId": "IT_UDINE_",
         "country": "IT",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Videm",
-        "altitude": "52"
+        "altitude": 52
     },
     {
         "longitude": 13.8396,
@@ -1565,9 +1565,9 @@
         "id": "METEO-1481_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Vogel",
-        "altitude": "1500"
+        "altitude": 1500
     },
     {
         "longitude": 14.833,
@@ -1575,9 +1575,9 @@
         "id": "METEO-11000_",
         "parentId": "AT_KAERNTEN_",
         "country": "AT",
-        "zoomLevel": "4",
+        "zoomLevel": 4,
         "title": "Volšperk",
-        "altitude": "463"
+        "altitude": 463
     },
     {
         "longitude": 14.9518,
@@ -1585,9 +1585,9 @@
         "id": "METEO-0054_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Vransko",
-        "altitude": "240"
+        "altitude": 240
     },
     {
         "longitude": 14.2973,
@@ -1595,9 +1595,9 @@
         "id": "METEO-1483_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Vrhnika",
-        "altitude": "310"
+        "altitude": 310
     },
     {
         "longitude": 13.7478,
@@ -1605,9 +1605,9 @@
         "id": "METEO-1484_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Vršič",
-        "altitude": "1684"
+        "altitude": 1684
     },
     {
         "longitude": 14.0023,
@@ -1615,9 +1615,9 @@
         "id": "METEO-1408_",
         "parentId": "SI_BOVSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Zadlog",
-        "altitude": "716"
+        "altitude": 716
     },
     {
         "longitude": 14.9986,
@@ -1625,9 +1625,9 @@
         "id": "METEO-0030_",
         "parentId": "SI_OSREDNJESLOVENSKA_",
         "country": "SI",
-        "zoomLevel": "0",
+        "zoomLevel": 0,
         "title": "Zagorje",
-        "altitude": "258"
+        "altitude": 258
     },
     {
         "longitude": 16.034,
@@ -1635,9 +1635,9 @@
         "id": "METEO-14240_",
         "parentId": "HR_ZAGREBACKA_",
         "country": "HR",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Zagreb",
-        "altitude": "123"
+        "altitude": 123
     },
     {
         "longitude": 16.8,
@@ -1645,9 +1645,9 @@
         "id": "METEO-12915_",
         "parentId": "HU_ZALA_",
         "country": "HU",
-        "zoomLevel": "6",
+        "zoomLevel": 6,
         "title": "Zalaegerszeg",
-        "altitude": "180"
+        "altitude": 180
     },
     {
         "longitude": 14.9958,
@@ -1655,9 +1655,9 @@
         "id": "METEO-1485_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Zavodnje",
-        "altitude": "764"
+        "altitude": 764
     },
     {
         "longitude": 14.2329,
@@ -1665,9 +1665,9 @@
         "id": "METEO-1486_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Zelenica",
-        "altitude": "1538"
+        "altitude": 1538
     },
     {
         "longitude": 15.3502,
@@ -1675,9 +1675,9 @@
         "id": "METEO-1459_",
         "parentId": "SI_KOROSKA_",
         "country": "SI",
-        "zoomLevel": "3",
+        "zoomLevel": 3,
         "title": "Zgornja Kapla",
-        "altitude": "723"
+        "altitude": 723
     },
     {
         "longitude": 13.9352,
@@ -1685,9 +1685,9 @@
         "id": "METEO-1487_",
         "parentId": "SI_ZGORNJESAVSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Zgornja Radovna",
-        "altitude": "778"
+        "altitude": 778
     },
     {
         "longitude": 14.0285,
@@ -1695,9 +1695,9 @@
         "id": "METEO-1488_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Zgornja Sorica",
-        "altitude": "846"
+        "altitude": 846
     },
     {
         "longitude": 15.1604,
@@ -1705,9 +1705,9 @@
         "id": "METEO-0042_",
         "parentId": "SI_SAVINJSKA_",
         "country": "SI",
-        "zoomLevel": "1",
+        "zoomLevel": 1,
         "title": "Žalec",
-        "altitude": "259"
+        "altitude": 259
     },
     {
         "longitude": 14.1197,
@@ -1715,8 +1715,8 @@
         "id": "METEO-1490_",
         "parentId": "SI_GORENJSKA_",
         "country": "SI",
-        "zoomLevel": "2",
+        "zoomLevel": 2,
         "title": "Žiri",
-        "altitude": "494"
+        "altitude": 494
     }
 ]

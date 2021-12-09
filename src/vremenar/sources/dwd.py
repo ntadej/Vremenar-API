@@ -19,8 +19,13 @@ from ..models.maps import (
     MapType,
     SupportedMapType,
 )
-from ..models.stations import StationInfo, StationSearchModel
-from ..models.weather import WeatherCondition, WeatherInfo
+from ..models.stations import (
+    StationBase,
+    StationInfo,
+    StationInfoExtended,
+    StationSearchModel,
+)
+from ..models.weather import WeatherCondition, WeatherInfoExtended
 from ..units import kelvin_to_celsius
 from ..utils import (
     day_or_night,
@@ -139,29 +144,28 @@ def _get_icon(station: StationInfo, weather: Dict[str, Any], time: datetime) -> 
 
 
 @lru_cache
-def get_dwd_stations() -> Dict[str, StationInfo]:
+def get_dwd_stations() -> Dict[str, StationInfoExtended]:
     """Get a dictionary of supported DWD stations."""
     path: Path = Path.cwd() / 'data/stations/DWD.csv'
-    stations: Dict[str, StationInfo] = {}
+    stations: Dict[str, StationInfoExtended] = {}
     with open(path, newline='') as csvfile:
         csv = reader(csvfile, dialect='excel')
-        next(csv)  # Skip header row.
         for row in csv:
             station_id: str = row[0]
-            try:
-                stations[station_id] = StationInfo(
-                    id=station_id,
-                    name=row[3],
-                    coordinate=Coordinate(latitude=row[4], longitude=row[5]),
-                    zoom_level=_zoom_level_conversion(row[6], float(row[7])),
-                    metadata={'DWD_ID': row[1], 'status': row[8]},
-                )
-            except ValueError:
-                pass
+            stations[station_id] = StationInfoExtended(
+                id=station_id,
+                name=row[4],
+                coordinate=Coordinate(
+                    latitude=row[5], longitude=row[6], altitude=row[7]
+                ),
+                zoom_level=_zoom_level_conversion(row[8], float(row[9])),
+                forecast_only=not int(row[2]),
+                metadata={'DWD_ID': row[1], 'status': row[10]},
+            )
     return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
 
 
-def list_stations() -> List[StationInfo]:
+def list_stations() -> List[StationInfoExtended]:
     """List DWD weather stations."""
     return list(get_dwd_stations().values())
 
@@ -344,20 +348,19 @@ def _weather_map_url(map_id: str) -> Optional[Path]:
 
 def _parse_record(
     record: Dict[str, Any], observation: ObservationType
-) -> Tuple[Optional[StationInfo], Optional[WeatherCondition]]:
+) -> Tuple[Optional[StationBase], Optional[WeatherCondition]]:
     station_id = record['wmo_station_id']
     stations = get_dwd_stations()
 
     if station_id not in stations:
-        return (None, None)
+        return None, None
 
-    station: Optional[StationInfo] = stations.get(station_id, None)
+    station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
-        return (None, None)
+        return None, None
 
-    # TODO: temporary check
     if not station.metadata or station.metadata['status'] != '1':
-        return (None, None)
+        return None, None
 
     condition = WeatherCondition(
         observation=observation,
@@ -366,10 +369,10 @@ def _parse_record(
         temperature=kelvin_to_celsius(record['temperature']),
     )
 
-    return (station, condition)
+    return station, condition
 
 
-async def get_weather_map(map_id: str) -> List[WeatherInfo]:
+async def get_weather_map(map_id: str) -> List[WeatherInfoExtended]:
     """Get weather map from ID."""
     path: Optional[Path] = _weather_map_url(map_id)
     if not path:
@@ -391,21 +394,18 @@ async def get_weather_map(map_id: str) -> List[WeatherInfo]:
         )
         if not station:
             continue
-        conditions_list.append(WeatherInfo(station=station, condition=condition))
+        conditions_list.append(
+            WeatherInfoExtended(station=station, condition=condition)
+        )
 
     return conditions_list
 
 
-def _parse_source(source: Dict[str, Any]) -> Optional[StationInfo]:
+def _parse_source(source: Dict[str, Any]) -> Optional[StationInfoExtended]:
     stations = get_dwd_stations()
     source_id = source['wmo_station_id']
     if source_id in stations:
-        temp_station = stations[source_id]
-        return StationInfo(
-            id=temp_station.id,
-            name=temp_station.name,
-            coordinate=temp_station.coordinate,
-        )
+        return stations[source_id]
 
     return None
 
@@ -440,7 +440,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             detail='Unknown station',
         )
 
-    locations = []
+    locations: List[StationInfo] = []
     for source in response_body['sources']:
         station = _parse_source(source)
         if station:
@@ -449,10 +449,10 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
     return locations
 
 
-async def current_station_condition(station_id: str) -> WeatherInfo:
+async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
     stations = get_dwd_stations()
-    station: Optional[StationInfo] = stations.get(station_id, None)
+    station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -495,7 +495,7 @@ async def current_station_condition(station_id: str) -> WeatherInfo:
         temperature=weather['temperature'],
     )
 
-    return WeatherInfo(station=station, condition=condition)
+    return WeatherInfoExtended(station=station, condition=condition)
 
 
 __all__ = [

@@ -17,6 +17,15 @@ def test_stations_list() -> None:
     assert response.status_code == 200
 
 
+def test_stations_details() -> None:
+    """Test stations details."""
+    response = client.get('/stations/list?country=si&extended=true')
+    assert response.status_code == 200
+
+    response = client.get('/stations/list?country=de&extended=true')
+    assert response.status_code == 200
+
+
 def test_stations_find_string() -> None:
     """Test stations find by string."""
     response = client.post('/stations/find?country=si', json={'string': 'Bled'})

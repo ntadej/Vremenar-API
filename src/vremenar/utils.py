@@ -50,7 +50,6 @@ def parse_time(time: str) -> datetime:
 
 def parse_timestamp(time: str) -> datetime:
     """Parse time from timestamp string."""
-    print(time, time[:-3])
     return datetime.fromtimestamp(float(time[-3]), tz=timezone.utc)
 
 

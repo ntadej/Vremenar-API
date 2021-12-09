@@ -3,7 +3,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from .stations import StationInfo
+from .stations import StationBase, StationInfo
 from ..definitions import ObservationType
 
 
@@ -25,10 +25,25 @@ class WeatherCondition(BaseModel):
 class WeatherInfo(BaseModel):
     """Weather info model."""
 
-    station: StationInfo
+    station: StationBase
     condition: WeatherCondition
 
     class Config:
         """Weather info model config."""
 
         title: str = 'Weather information'
+
+
+class WeatherInfoExtended(WeatherInfo):
+    """Weather extended info model."""
+
+    station: StationInfo
+
+    def base(self) -> WeatherInfo:
+        """Return an instance of WeatherInfo."""
+        return WeatherInfo(station=self.station.base(), condition=self.condition)
+
+    class Config:
+        """Weather extended info model config."""
+
+        title: str = 'Weather information with extended station information'
