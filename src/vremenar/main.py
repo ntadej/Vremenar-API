@@ -6,6 +6,9 @@ from fastapi.middleware.gzip import GZipMiddleware
 from . import __version__
 from .api import version, stations, maps, copyright
 
+# Should not be enabled in production!
+debug = False
+
 tags_metadata = [
     {
         'name': 'version',
@@ -37,5 +40,12 @@ app.include_router(version)
 app.include_router(stations)
 app.include_router(maps)
 app.include_router(copyright)
+
+if debug:
+    from fastapi_profiler.profiler_middleware import (  # type: ignore
+        PyInstrumentProfilerMiddleware,
+    )
+
+    app.add_middleware(PyInstrumentProfilerMiddleware)
 
 __all__ = ['app']
