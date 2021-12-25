@@ -1,7 +1,6 @@
 """Vremenar backend main application."""
 
 from fastapi import FastAPI
-from fastapi.middleware.gzip import GZipMiddleware
 
 from . import __version__
 from .api import version, stations, maps, copyright
@@ -35,7 +34,6 @@ app: FastAPI = FastAPI(
     version=__version__,
     openapi_tags=tags_metadata,
 )
-app.add_middleware(GZipMiddleware)
 app.include_router(version)
 app.include_router(stations)
 app.include_router(maps)
