@@ -118,6 +118,7 @@ def get_arso_stations() -> Dict[str, StationInfoExtended]:
     return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
 
 
+@lru_cache
 def list_stations() -> List[StationInfoExtended]:
     """List ARSO weather stations."""
     return list(get_arso_stations().values())
