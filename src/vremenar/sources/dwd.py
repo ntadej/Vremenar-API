@@ -52,6 +52,21 @@ def get_supported_map_types() -> List[SupportedMapType]:
             rendering_type=MapRenderingType.Tiles,
             has_legend=True,
         ),
+        SupportedMapType(
+            map_type=MapType.Temperature,
+            rendering_type=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+        SupportedMapType(
+            map_type=MapType.UVIndexMax,
+            rendering_type=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+        SupportedMapType(
+            map_type=MapType.UVDose,
+            rendering_type=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
     ]
 
 
@@ -231,62 +246,134 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
         return layers, []
 
-    if map_type != MapType.Precipitation:
-        return [], []
-
     current_time = datetime.utcnow()
     current_now = datetime.now()
     utc_delta = (current_now - current_time).seconds
-    time_delta = timedelta(
-        minutes=current_time.minute % 5,
-        seconds=current_time.second,
-        microseconds=current_time.microsecond,
+
+    if map_type == MapType.Precipitation:
+        time_delta = timedelta(
+            minutes=current_time.minute % 5,
+            seconds=current_time.second,
+            microseconds=current_time.microsecond,
+        )
+        current_time -= time_delta
+        if time_delta.seconds < 100:  # buffer for recent image
+            current_time -= timedelta(minutes=5)
+        test_time = current_time.isoformat()
+        test_url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
+
+        logger.debug('DWD Map URL: %s', test_url)
+
+        async with AsyncClient() as client:
+            response = await client.get(test_url)
+
+        if 'InvalidDimensionValue' in response.text:
+            logger.info('Map not available yet')
+            current_time -= timedelta(minutes=5)
+
+        # historical data + recent
+        for i in range(18, -1, -1):
+            time = current_time - timedelta(minutes=5 * i)
+            time_string = time.isoformat()
+            time += timedelta(seconds=utc_delta)
+            url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
+            layers.append(
+                MapLayer(
+                    url=url,
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Historical
+                    if i != 0
+                    else ObservationType.Recent,
+                )
+            )
+        # forecast
+        for i in range(1, 19, 1):
+            time = current_time + timedelta(minutes=5 * i)
+            time_string = time.isoformat()
+            time += timedelta(seconds=utc_delta)
+            url = f'{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
+            layers.append(
+                MapLayer(
+                    url=url,
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Forecast,
+                )
+            )
+
+        return layers, []
+
+    if map_type == MapType.Temperature:
+        time_delta = timedelta(
+            minutes=current_time.minute,
+            seconds=current_time.second,
+            microseconds=current_time.microsecond,
+        )
+        current_time -= time_delta
+        test_time = current_time.isoformat()
+        test_url = f'{MAPS_BASEURL}&layers=dwd:WAWFOR_ieu_temperature_2m&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
+
+        logger.debug('DWD Map URL: %s', test_url)
+
+        async with AsyncClient() as client:
+            response = await client.get(test_url)
+
+        if 'InvalidDimensionValue' in response.text:
+            logger.info('Map not available yet')
+            current_time += timedelta(hours=1)
+
+        for i in range(24):
+            time = current_time + timedelta(hours=i)
+            time_string = time.isoformat()
+            time += timedelta(seconds=utc_delta)
+            url = f'{MAPS_BASEURL}&layers=dwd:WAWFOR_ieu_temperature_2m&width=512&height=512&time={time_string}.000Z'  # noqa E501
+            layers.append(
+                MapLayer(
+                    url=url,
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Forecast,
+                )
+            )
+
+        return layers, []
+
+    if map_type == MapType.UVIndexMax or map_type == MapType.UVDose:
+        map_name = (
+            'dwd:UVIndex' if map_type == MapType.UVIndexMax else 'dwd:UV_Dosis_EU_CL'
+        )
+        map_style = 'uvi_cs' if map_type == MapType.UVIndexMax else ''
+        current_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
+        test_time = current_time.isoformat()
+        test_url = f'{MAPS_BASEURL}&layers={map_name}&styles={map_style}&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
+
+        logger.debug('DWD Map URL: %s', test_url)
+
+        async with AsyncClient() as client:
+            response = await client.get(test_url)
+
+        if 'InvalidDimensionValue' in response.text:
+            logger.info('Map not available yet')
+            current_time -= timedelta(days=1)
+
+        # forecast
+        for i in range(0, 3):
+            time = current_time + timedelta(days=i)
+            time_string = time.isoformat()
+            url = f'{MAPS_BASEURL}&layers={map_name}&styles={map_style}&width=512&height=512&time={time_string}.000Z'  # noqa E501
+            time += timedelta(seconds=utc_delta)
+            layers.append(
+                MapLayer(
+                    url=url,
+                    timestamp=to_timestamp(time),
+                    observation=ObservationType.Forecast,
+                )
+            )
+
+        return layers, []
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Unsupported or unknown map type',
     )
-    current_time -= time_delta
-    if time_delta.seconds < 100:  # buffer for recent image
-        current_time -= timedelta(minutes=5)
-    test_time = current_time.isoformat()
-    test_url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
-
-    logger.debug('DWD Map URL: %s', test_url)
-
-    async with AsyncClient() as client:
-        response = await client.get(test_url)
-
-    if 'InvalidDimensionValue' in response.text:
-        logger.info('Current map not available yet')
-        current_time -= timedelta(minutes=5)
-
-    # historical data + recent
-    for i in range(18, -1, -1):
-        time = current_time - timedelta(minutes=5 * i)
-        time_string = time.isoformat()
-        time += timedelta(seconds=utc_delta)
-        url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
-        layers.append(
-            MapLayer(
-                url=url,
-                timestamp=to_timestamp(time),
-                observation=ObservationType.Historical
-                if i != 0
-                else ObservationType.Recent,
-            )
-        )
-    # forecast
-    for i in range(1, 19, 1):
-        time = current_time + timedelta(minutes=5 * i)
-        time_string = time.isoformat()
-        time += timedelta(seconds=utc_delta)
-        url = f'{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512&time={time_string}.000Z'  # noqa E501
-        layers.append(
-            MapLayer(
-                url=url,
-                timestamp=to_timestamp(time),
-                observation=ObservationType.Forecast,
-            )
-        )
-
-    return layers, []
 
 
 def get_map_legend(map_type: MapType) -> MapLegend:
@@ -313,6 +400,60 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         items.append(MapLegendItem(value='75', color='#EA64FE'))
         items.append(MapLegendItem(value='85', color='#000000'))
         items.append(MapLegendItem(value='dBZ', color='transparent', placeholder=True))
+        return MapLegend(map_type=map_type, items=items)
+
+    if map_type == MapType.Temperature:
+        items = []
+        items.append(MapLegendItem(value='', color='transparent', placeholder=True))
+        items.append(MapLegendItem(value='', color='#9168A3'))
+        items.append(MapLegendItem(value='-7.5', color='#8172A8'))
+        items.append(MapLegendItem(value='-2.5', color='#8292bC'))
+        items.append(MapLegendItem(value='2.5', color='#86B1D1'))
+        items.append(MapLegendItem(value='7.5', color='#96C7E3'))
+        items.append(MapLegendItem(value='12.5', color='#E6E6E6'))
+        items.append(MapLegendItem(value='17.5', color='#F7D640'))
+        items.append(MapLegendItem(value='22.5', color='#D0AF65'))
+        items.append(MapLegendItem(value='27.5', color='#ED9C67'))
+        items.append(MapLegendItem(value='32.5', color='#EB8963'))
+        items.append(MapLegendItem(value='37.5', color='#E87C66'))
+        items.append(MapLegendItem(value='°C', color='transparent', placeholder=True))
+        return MapLegend(map_type=map_type, items=items)
+
+    if map_type == MapType.UVIndexMax:
+        items = []
+        items.append(MapLegendItem(value='', color='transparent', placeholder=True))
+        items.append(MapLegendItem(value='0', color='#000000'))
+        items.append(MapLegendItem(value='1', color='#4FB400'))
+        items.append(MapLegendItem(value='2', color='#A0CE01'))
+        items.append(MapLegendItem(value='3', color='#F7E500'))
+        items.append(MapLegendItem(value='4', color='#F8B700'))
+        items.append(MapLegendItem(value='5', color='#F88800'))
+        items.append(MapLegendItem(value='6', color='#F85B00'))
+        items.append(MapLegendItem(value='7', color='#E72D0D'))
+        items.append(MapLegendItem(value='8', color='#D8011D'))
+        items.append(MapLegendItem(value='9', color='#FF0097'))
+        items.append(MapLegendItem(value='10', color='#B34CFF'))
+        items.append(MapLegendItem(value='11', color='#998CFF'))
+        items.append(MapLegendItem(value='12', color='#D48CBD'))
+        items.append(MapLegendItem(value='13', color='#EAA8D3'))
+        items.append(MapLegendItem(value='UV', color='transparent', placeholder=True))
+        return MapLegend(map_type=map_type, items=items)
+
+    if map_type == MapType.UVDose:
+        items = []
+        items.append(MapLegendItem(value='', color='transparent', placeholder=True))
+        items.append(MapLegendItem(value='0', color='#1332FF'))
+        items.append(MapLegendItem(value='0.25', color='#00B49F'))
+        items.append(MapLegendItem(value='1.25', color='#02FE01'))
+        items.append(MapLegendItem(value='2.5', color='#009700'))
+        items.append(MapLegendItem(value='5.0', color='#FCFF6E'))
+        items.append(MapLegendItem(value='6.25', color='#F6BD0C'))
+        items.append(MapLegendItem(value='7.5', color='#FF311D'))
+        items.append(MapLegendItem(value='8.75', color='#FF96FF'))
+        items.append(MapLegendItem(value='10.0', color='#FFC5FF'))
+        items.append(
+            MapLegendItem(value='kJ/m²', color='transparent', placeholder=True)
+        )
         return MapLegend(map_type=map_type, items=items)
 
     raise HTTPException(

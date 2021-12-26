@@ -130,7 +130,7 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
     if not url:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown map type',
+            detail='Unsupported or unknown map type',
         )
 
     url = join_url(API_BASEURL, url, trailing_slash=True)

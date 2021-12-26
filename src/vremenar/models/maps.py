@@ -16,6 +16,8 @@ class MapType(str, Enum):
     WindSpeed = 'wind'
     Temperature = 'temperature'
     HailProbability = 'hail'
+    UVIndexMax = 'uv_index_max'
+    UVDose = 'uv_dose'
 
 
 class MapRenderingType(str, Enum):

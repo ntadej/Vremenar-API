@@ -40,7 +40,7 @@ def test_maps_list_cloud() -> None:
     assert response.status_code == 200
 
     response = client.get('/maps/list/cloud?country=de')
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 
 def test_maps_list_wind() -> None:
@@ -49,7 +49,7 @@ def test_maps_list_wind() -> None:
     assert response.status_code == 200
 
     response = client.get('/maps/list/wind?country=de')
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 
 def test_maps_list_temperature() -> None:
@@ -67,6 +67,24 @@ def test_maps_list_hail() -> None:
     assert response.status_code == 200
 
     response = client.get('/maps/list/hail?country=de')
+    assert response.status_code == 404
+
+
+def test_maps_list_uv_index_max() -> None:
+    """Test maps list - hail."""
+    response = client.get('/maps/list/uv_index_max?country=si')
+    assert response.status_code == 404
+
+    response = client.get('/maps/list/uv_index_max?country=de')
+    assert response.status_code == 200
+
+
+def test_maps_list_uv_dose() -> None:
+    """Test maps list - hail."""
+    response = client.get('/maps/list/uv_dose?country=si')
+    assert response.status_code == 404
+
+    response = client.get('/maps/list/uv_dose?country=de')
     assert response.status_code == 200
 
 
