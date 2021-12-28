@@ -67,15 +67,15 @@ Free Software Foundation and appearing in the file [LICENSE](LICENSE).
 
 [web]: https://vremenar.tano.si
 [release]: https://github.com/ntadej/Vremenar-API/releases/latest
-[license]: https://github.com/ntadej/Vremenar-API/blob/master/LICENSE
+[license]: https://github.com/ntadej/Vremenar-API/blob/main/LICENSE
 [ci]: https://github.com/ntadej/Vremenar-API/actions
 [black]: https://github.com/psf/black
-[codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=master
+[codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=main
 [codefactor]: https://www.codefactor.io/repository/github/ntadej/vremenar-api
 [web-img]: https://img.shields.io/badge/web-vremenar.tano.si-yellow.svg
 [release-img]: https://img.shields.io/github/release/ntadej/Vremenar-API.svg
 [license-img]: https://img.shields.io/github/license/ntadej/Vremenar-API.svg
 [ci-img]: https://github.com/ntadej/Vremenar-API/workflows/Continuous%20Integration/badge.svg
 [black-img]: https://img.shields.io/badge/code%20style-black-000000.svg
-[codecov-img]: https://codecov.io/github/ntadej/Vremenar-API/coverage.svg?branch=master
+[codecov-img]: https://codecov.io/github/ntadej/Vremenar-API/coverage.svg?branch=main
 [codefactor-img]: https://www.codefactor.io/repository/github/ntadej/vremenar-api/badge
