@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vremenar"
-version = "0.1.4"
+version = "0.2.0"
 description = ""
 authors = ["Tadej Novak <tadej@tano.si>"]
 
