@@ -2,7 +2,7 @@
 
 from json import load
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
@@ -34,7 +34,7 @@ class VersionInfo(BaseModel):
 )
 async def version() -> VersionInfo:
     """Get app and server versions."""
-    data: Dict[str, str] = {}
+    data: dict[str, str] = {}
 
     if VERSION_INFO.is_file():
         with VERSION_INFO.open() as f:

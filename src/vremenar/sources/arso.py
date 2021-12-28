@@ -5,7 +5,7 @@ from functools import lru_cache
 from httpx import AsyncClient
 from json import load
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
@@ -39,7 +39,7 @@ MAP_URL = {
 }
 
 
-def get_supported_map_types() -> List[SupportedMapType]:
+def get_supported_map_types() -> list[SupportedMapType]:
     """Get ARSO supported map types."""
     return [
         SupportedMapType(
@@ -95,10 +95,10 @@ def _weather_map_url(map_id: str) -> str:
 
 
 @lru_cache
-def get_arso_stations() -> Dict[str, StationInfoExtended]:
+def get_arso_stations() -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported ARSO stations."""
     path: Path = Path.cwd() / 'data/stations/ARSO.json'
-    stations: Dict[str, StationInfoExtended] = {}
+    stations: dict[str, StationInfoExtended] = {}
     with open(path) as file:
         data = load(file)
         for station in data:
@@ -119,12 +119,12 @@ def get_arso_stations() -> Dict[str, StationInfoExtended]:
 
 
 @lru_cache
-def list_stations() -> List[StationInfoExtended]:
+def list_stations() -> list[StationInfoExtended]:
     """List ARSO weather stations."""
     return list(get_arso_stations().values())
 
 
-async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]]:
+async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     """Get ARSO map layers."""
     url: str = MAP_URL.get(map_type, '')
     if not url:
@@ -141,8 +141,8 @@ async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]
 
     country_suffix = f'?country={CountryID.Slovenia}'
 
-    layers: List[MapLayer] = []
-    bbox: List[float] = []
+    layers: list[MapLayer] = []
+    bbox: list[float] = []
     for layer in response.json():
         if map_type == MapType.WeatherCondition:
             if 'nowcast' in layer['path']:
@@ -289,13 +289,13 @@ def get_map_legend(map_type: MapType) -> MapLegend:
     )
 
 
-def get_all_map_legends() -> List[MapLegend]:
+def get_all_map_legends() -> list[MapLegend]:
     """Get all ARSO map legends."""
     supported = get_supported_map_types()
     return [get_map_legend(t.map_type) for t in supported if t.has_legend]
 
 
-def _parse_station(feature: Dict[Any, Any]) -> Optional[StationInfoExtended]:
+def _parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
     stations = get_arso_stations()
 
     properties = feature['properties']
@@ -309,8 +309,8 @@ def _parse_station(feature: Dict[Any, Any]) -> Optional[StationInfoExtended]:
 
 
 def _parse_feature(
-    feature: Dict[Any, Any], observation: ObservationType
-) -> Tuple[Optional[StationInfoExtended], Optional[WeatherCondition]]:
+    feature: dict[Any, Any], observation: ObservationType
+) -> tuple[Optional[StationInfoExtended], Optional[WeatherCondition]]:
     stations = get_arso_stations()
 
     properties = feature['properties']
@@ -344,7 +344,7 @@ def _parse_feature(
     return station, condition
 
 
-async def get_weather_map(map_id: str) -> List[WeatherInfoExtended]:
+async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
     url: str = _weather_map_url(map_id)
     if not url:
@@ -382,7 +382,7 @@ async def get_weather_map(map_id: str) -> List[WeatherInfoExtended]:
     return conditions_list
 
 
-async def find_station(query: StationSearchModel) -> List[StationInfo]:
+async def find_station(query: StationSearchModel) -> list[StationInfo]:
     """Find station by coordinate or string."""
     url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
 
@@ -419,7 +419,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
     if 'features' not in response_body:
         return []
 
-    locations: List[StationInfo] = []
+    locations: list[StationInfo] = []
     for feature in response_body['features']:
         station = _parse_station(feature)
         if station:

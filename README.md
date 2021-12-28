@@ -10,9 +10,12 @@ and [DWD](https://dwd.de/EN/) weather data.
 
 ## Installation and running
 
+Vremenar API is python-based, with Python 3.9 as the minimum supported version.
+
 ### Python Poetry
 
-This project uses [Python Poetry](https://python-poetry.org) to track dependencies. For basic setup run
+This project uses [Python Poetry](https://python-poetry.org) to track dependencies.
+For basic setup run
 
 ```shell
 poetry install

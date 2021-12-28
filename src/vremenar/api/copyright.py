@@ -2,7 +2,6 @@
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
-from typing import Dict
 
 from ..definitions import CountryID
 
@@ -20,9 +19,9 @@ class CopyrightInfo(BaseModel):
     '/copyright',
     tags=['copyright'],
     response_description='Get data copyright',
-    response_model=Dict[CountryID, CopyrightInfo],
+    response_model=dict[CountryID, CopyrightInfo],
 )
-async def copyright() -> Dict[CountryID, CopyrightInfo]:
+async def copyright() -> dict[CountryID, CopyrightInfo]:
     """Get data copyright."""
     return {
         CountryID.Slovenia: CopyrightInfo(

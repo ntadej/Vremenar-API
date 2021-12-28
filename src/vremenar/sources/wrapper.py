@@ -1,7 +1,6 @@
 """Weather sources wrapper."""
 
 from fastapi import HTTPException, status
-from typing import List, Tuple
 
 from ..definitions import CountryID
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
@@ -12,7 +11,7 @@ from . import arso
 from . import dwd
 
 
-def get_all_supported_map_types(country: CountryID) -> List[SupportedMapType]:
+def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
     """Get supported map types for the chosen country."""
     if country == CountryID.Slovenia:
         return arso.get_supported_map_types()
@@ -27,7 +26,7 @@ def get_all_supported_map_types(country: CountryID) -> List[SupportedMapType]:
 
 async def get_map_layers(
     country: CountryID, map_type: MapType
-) -> Tuple[List[MapLayer], List[float]]:
+) -> tuple[list[MapLayer], list[float]]:
     """Get map layers for the chosen country."""
     if country == CountryID.Slovenia:
         return await arso.get_map_layers(map_type)
@@ -40,7 +39,7 @@ async def get_map_layers(
     )
 
 
-def get_all_map_legends(country: CountryID) -> List[MapLegend]:
+def get_all_map_legends(country: CountryID) -> list[MapLegend]:
     """Get all map legends for the chosen country."""
     if country == CountryID.Slovenia:
         return arso.get_all_map_legends()
@@ -66,7 +65,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     )
 
 
-async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfoExtended]:
+async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoExtended]:
     """Get weather condition map for the chosen country."""
     if country == CountryID.Slovenia:
         return await arso.get_weather_map(map_id)
@@ -79,7 +78,7 @@ async def get_weather_map(country: CountryID, map_id: str) -> List[WeatherInfoEx
     )
 
 
-def list_stations(country: CountryID) -> List[StationInfoExtended]:
+def list_stations(country: CountryID) -> list[StationInfoExtended]:
     """List weather stations for the chosen country."""
     if country == CountryID.Slovenia:
         return arso.list_stations()
@@ -94,7 +93,7 @@ def list_stations(country: CountryID) -> List[StationInfoExtended]:
 
 async def find_station(
     country: CountryID, query: StationSearchModel
-) -> List[StationInfo]:
+) -> list[StationInfo]:
     """Find weather station by coordinate or string."""
     if country == CountryID.Slovenia:
         return await arso.find_station(query)

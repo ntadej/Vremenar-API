@@ -1,7 +1,6 @@
 """Weather map layers API."""
 
 from fastapi import APIRouter
-from typing import List
 
 from .config import defaults
 from ..definitions import CountryID
@@ -20,10 +19,10 @@ router = APIRouter()
     '/maps/types',
     tags=['maps'],
     response_description='Get the supported map types',
-    response_model=List[SupportedMapType],
+    response_model=list[SupportedMapType],
     **defaults,
 )
-async def supported_map_types(country: CountryID) -> List[SupportedMapType]:
+async def supported_map_types(country: CountryID) -> list[SupportedMapType]:
     """Get all supported map types for a specific country."""
     return get_all_supported_map_types(country)
 
@@ -45,10 +44,10 @@ async def map_layers(country: CountryID, map_type: MapType) -> MapLayersList:
     '/maps/legend',
     tags=['maps'],
     response_description='Get the legend for all map types',
-    response_model=List[MapLegend],
+    response_model=list[MapLegend],
     **defaults,
 )
-async def all_map_legends(country: CountryID) -> List[MapLegend]:
+async def all_map_legends(country: CountryID) -> list[MapLegend]:
     """Get all map legends for a specific country."""
     return get_all_map_legends(country)
 

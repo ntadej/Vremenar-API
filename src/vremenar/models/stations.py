@@ -1,7 +1,7 @@
 """Station models."""
 
 from pydantic import BaseModel, Field
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .common import Coordinate
 
@@ -38,7 +38,7 @@ class StationInfo(StationBase):
 class StationInfoExtended(StationInfo):
     """Station extended info model."""
 
-    metadata: Optional[Dict[str, Any]] = Field(None)
+    metadata: Optional[dict[str, Any]] = Field(None)
 
     def info(self) -> StationInfo:
         """Return an instance of StationInfo."""

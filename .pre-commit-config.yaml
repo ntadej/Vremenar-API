@@ -19,7 +19,7 @@ repos:
         types: [python]
       - id: pyupgrade
         name: pyupgrade
-        args: ["--py38-plus"]
+        args: ["--py39-plus"]
         entry: pyupgrade
         language: system
         types: [python]
@@ -41,7 +41,7 @@ repos:
         types: [text]
         stages: [commit, push, manual]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.1.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer

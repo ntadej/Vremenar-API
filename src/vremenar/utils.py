@@ -4,7 +4,7 @@ from astral import Observer, sun  # type: ignore
 from datetime import date, datetime, timezone
 from functools import lru_cache
 from logging import Logger, getLogger
-from typing import Tuple, cast
+from typing import cast
 
 from .models.common import Coordinate
 
@@ -23,10 +23,10 @@ def join_url(*args: str, trailing_slash: bool = False) -> str:
 @lru_cache
 def sunrise_sunset(
     latitude: float, longitude: float, date: date
-) -> Tuple[datetime, datetime]:
+) -> tuple[datetime, datetime]:
     """Get sunrise and sunset."""
     return cast(
-        Tuple[datetime, datetime],
+        tuple[datetime, datetime],
         sun.daylight(Observer(latitude, longitude), date),
     )
 

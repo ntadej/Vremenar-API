@@ -2,7 +2,7 @@
 
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import Optional
 
 from ..definitions import ObservationType
 
@@ -54,12 +54,12 @@ class MapLayersList(BaseModel):
 
     map_type: MapType = Field(..., example=MapType.Precipitation)
     rendering: MapRenderingType = Field(..., example=MapRenderingType.Image)
-    layers: List[MapLayer]
-    bbox: Optional[List[float]] = Field(None, example=[44.67, 12.1, 47.42, 17.44])
+    layers: list[MapLayer]
+    bbox: Optional[list[float]] = Field(None, example=[44.67, 12.1, 47.42, 17.44])
 
     @classmethod
     def init(
-        cls, map_type: MapType, bbox: List[float], layers: List[MapLayer]
+        cls, map_type: MapType, bbox: list[float], layers: list[MapLayer]
     ) -> 'MapLayersList':
         """Initialise map response model."""
         rendering: MapRenderingType = (
@@ -94,7 +94,7 @@ class MapLegend(BaseModel):
     """Map legend model."""
 
     map_type: MapType = Field(..., example=MapType.Precipitation)
-    items: List[MapLegendItem]
+    items: list[MapLegendItem]
 
     class Config:
         """Map legend model config."""

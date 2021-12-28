@@ -7,7 +7,7 @@ from functools import lru_cache
 from httpx import AsyncClient
 from json import load
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from ..definitions import CountryID, ObservationType
 from ..models.common import Coordinate
@@ -41,7 +41,7 @@ BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
 
 
-def get_supported_map_types() -> List[SupportedMapType]:
+def get_supported_map_types() -> list[SupportedMapType]:
     """Get DWD supported map types."""
     return [
         SupportedMapType(
@@ -89,7 +89,7 @@ def _zoom_level_conversion(location_type: str, admin_level: float) -> float:
     return 7.5
 
 
-def _get_icon(station: StationInfo, weather: Dict[str, Any], time: datetime) -> str:
+def _get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> str:
     # SOURCE:
     # conditions: dry, fog, rain, sleet, snow, hail, thunderstorm, null
     #
@@ -159,10 +159,10 @@ def _get_icon(station: StationInfo, weather: Dict[str, Any], time: datetime) -> 
 
 
 @lru_cache
-def get_dwd_stations() -> Dict[str, StationInfoExtended]:
+def get_dwd_stations() -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported DWD stations."""
     path: Path = Path.cwd() / 'data/stations/DWD.csv'
-    stations: Dict[str, StationInfoExtended] = {}
+    stations: dict[str, StationInfoExtended] = {}
     with open(path, newline='') as csvfile:
         csv = reader(csvfile, dialect='excel')
         for row in csv:
@@ -181,14 +181,14 @@ def get_dwd_stations() -> Dict[str, StationInfoExtended]:
 
 
 @lru_cache
-def list_stations() -> List[StationInfoExtended]:
+def list_stations() -> list[StationInfoExtended]:
     """List DWD weather stations."""
     return list(get_dwd_stations().values())
 
 
-async def get_map_layers(map_type: MapType) -> Tuple[List[MapLayer], List[float]]:
+async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     """Get DWD map layers."""
-    layers: List[MapLayer] = []
+    layers: list[MapLayer] = []
 
     if map_type == MapType.WeatherCondition:
         now = datetime.now(tz=timezone.utc)
@@ -462,7 +462,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
     )
 
 
-def get_all_map_legends() -> List[MapLegend]:
+def get_all_map_legends() -> list[MapLegend]:
     """Get all DWD map legends."""
     supported = get_supported_map_types()
     return [get_map_legend(t.map_type) for t in supported if t.has_legend]
@@ -489,8 +489,8 @@ def _weather_map_url(map_id: str) -> Optional[Path]:
 
 
 def _parse_record(
-    record: Dict[str, Any], observation: ObservationType
-) -> Tuple[Optional[StationBase], Optional[WeatherCondition]]:
+    record: dict[str, Any], observation: ObservationType
+) -> tuple[Optional[StationBase], Optional[WeatherCondition]]:
     station_id = record['wmo_station_id']
     stations = get_dwd_stations()
 
@@ -514,7 +514,7 @@ def _parse_record(
     return station, condition
 
 
-async def get_weather_map(map_id: str) -> List[WeatherInfoExtended]:
+async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
     path: Optional[Path] = _weather_map_url(map_id)
     if not path:
@@ -543,7 +543,7 @@ async def get_weather_map(map_id: str) -> List[WeatherInfoExtended]:
     return conditions_list
 
 
-def _parse_source(source: Dict[str, Any]) -> Optional[StationInfoExtended]:
+def _parse_source(source: dict[str, Any]) -> Optional[StationInfoExtended]:
     stations = get_dwd_stations()
     source_id = source['wmo_station_id']
     if source_id in stations:
@@ -552,7 +552,7 @@ def _parse_source(source: Dict[str, Any]) -> Optional[StationInfoExtended]:
     return None
 
 
-async def find_station(query: StationSearchModel) -> List[StationInfo]:
+async def find_station(query: StationSearchModel) -> list[StationInfo]:
     """Find station by coordinate or string."""
     url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
 
@@ -582,7 +582,7 @@ async def find_station(query: StationSearchModel) -> List[StationInfo]:
             detail='Unknown station',
         )
 
-    locations: List[StationInfo] = []
+    locations: list[StationInfo] = []
     for source in response_body['sources']:
         station = _parse_source(source)
         if station:
