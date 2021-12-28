@@ -19,6 +19,12 @@ def test_stations_list() -> None:
 
 def test_stations_details() -> None:
     """Test stations details."""
+    response = client.get('/stations/list?country=si')
+    assert response.status_code == 200
+
+    response = client.get('/stations/list?country=de')
+    assert response.status_code == 200
+
     response = client.get('/stations/list?country=si&extended=true')
     assert response.status_code == 200
 
@@ -68,6 +74,16 @@ def test_stations_find_errors() -> None:
     assert response.json()['detail'][0]['type'] == 'value_error.missing'
     assert response.json()['detail'][0]['loc'] == ['body']
 
+    response = client.post('/stations/find?country=si', json={})
+    assert response.status_code == 422
+    assert (
+        response.json()['detail'] == 'Either search string or coordinates are required'
+    )
+
+    response = client.post('/stations/find?country=de', json={})
+    assert response.status_code == 422
+    assert response.json()['detail'] == 'Only coordinates are required'
+
     response = client.post(
         '/stations/find?country=si',
         json={
@@ -90,6 +106,12 @@ def test_stations_condition() -> None:
     response = client.get('/stations/condition/10147?country=de')
     assert response.status_code == 200
 
+    response = client.get('/stations/condition/METEO-0038?country=si&extended=true')
+    assert response.status_code == 200
+
+    response = client.get('/stations/condition/10147?country=de&extended=true')
+    assert response.status_code == 200
+
 
 def test_stations_condition_error() -> None:
     """Test stations condition errors."""
@@ -108,7 +130,10 @@ def test_stations_condition_error() -> None:
 
 def test_stations_map() -> None:
     """Test stations map."""
-    response = client.get('/stations/map/current?country=si')
+    response = client.get('/stations/map/current?country=si&extended=false')
+    assert response.status_code == 200
+
+    response = client.get('/stations/map/current?country=si&extended=true')
     assert response.status_code == 200
 
     response = client.get('/stations/map/d2h00?country=si')
@@ -117,7 +142,10 @@ def test_stations_map() -> None:
     response = client.get('/stations/map/d7?country=si')
     assert response.status_code == 200
 
-    response = client.get('/stations/map/current?country=de')
+    response = client.get('/stations/map/current?country=de&extended=false')
+    assert response.status_code == 200
+
+    response = client.get('/stations/map/current?country=de&extended=true')
     assert response.status_code == 200
 
     now = datetime.now(tz=timezone.utc)

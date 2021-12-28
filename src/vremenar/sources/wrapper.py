@@ -18,7 +18,7 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
     if country == CountryID.Germany:
         return dwd.get_supported_map_types()
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -33,7 +33,7 @@ async def get_map_layers(
     if country == CountryID.Germany:
         return await dwd.get_map_layers(map_type)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -46,7 +46,7 @@ def get_all_map_legends(country: CountryID) -> list[MapLegend]:
     if country == CountryID.Germany:
         return dwd.get_all_map_legends()
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -59,7 +59,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     if country == CountryID.Germany:
         return dwd.get_map_legend(map_type)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -72,7 +72,7 @@ async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoEx
     if country == CountryID.Germany:
         return await dwd.get_weather_map(map_id)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -85,7 +85,7 @@ def list_stations(country: CountryID) -> list[StationInfoExtended]:
     if country == CountryID.Germany:
         return dwd.list_stations()
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -100,7 +100,7 @@ async def find_station(
     if country == CountryID.Germany:
         return await dwd.find_station(query)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
@@ -115,7 +115,7 @@ async def current_station_condition(
     if country == CountryID.Germany:
         return await dwd.current_station_condition(station_id)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )

@@ -84,7 +84,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
 
     # Today
     start = now.replace(hour=0)
-    for i in range(1, 8):
+    for i in range(1, 8):  # pragma: no cover
         time = start + timedelta(hours=i * 3)
         if time <= soon:
             continue
@@ -126,7 +126,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
         microseconds=current_time.microsecond,
     )
     current_time -= time_delta
-    if time_delta.seconds < 100:  # buffer for recent image
+    if time_delta.seconds < 100:  # buffer for recent image # pragma: no cover
         current_time -= timedelta(minutes=5)
     test_time = current_time.isoformat()
     test_url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
@@ -136,7 +136,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
-    if 'InvalidDimensionValue' in response.text:
+    if 'InvalidDimensionValue' in response.text:  # pragma: no cover
         logger.info('Map not available yet')
         current_time -= timedelta(minutes=5)
 
@@ -193,7 +193,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
-    if 'InvalidDimensionValue' in response.text:
+    if 'InvalidDimensionValue' in response.text:  # pragma: no cover
         logger.info('Map not available yet')
         current_time += timedelta(hours=1)
 
@@ -232,7 +232,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
-    if 'InvalidDimensionValue' in response.text:
+    if 'InvalidDimensionValue' in response.text:  # pragma: no cover
         logger.info('Map not available yet')
         current_time -= timedelta(days=1)
 

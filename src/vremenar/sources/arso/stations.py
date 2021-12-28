@@ -53,7 +53,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         if station:
             return [station]
 
-    if 'features' not in response_body:
+    if 'features' not in response_body:  # pragma: no cover
         return []
 
     locations: list[StationInfo] = []
@@ -85,7 +85,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
         response = await client.get(url, timeout=TIMEOUT)
 
     response_body = response.json()
-    if 'features' not in response_body:
+    if 'features' not in response_body:  # pragma: no cover
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Unknown station',
@@ -95,7 +95,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
         _, condition = parse_feature(feature, ObservationType.Recent)
         return WeatherInfoExtended(station=station, condition=condition)
 
-    raise HTTPException(
+    raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unknown station',
     )

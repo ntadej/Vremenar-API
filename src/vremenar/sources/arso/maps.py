@@ -251,7 +251,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
         )
 
     response_body = response.json()
-    if 'features' not in response_body:
+    if 'features' not in response_body:  # pragma: no cover
         return []
 
     conditions_list = []

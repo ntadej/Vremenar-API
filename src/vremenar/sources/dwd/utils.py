@@ -156,11 +156,11 @@ def parse_record(
     station_id = record['wmo_station_id']
     stations = get_stations()
 
-    if station_id not in stations:
+    if station_id not in stations:  # pragma: no cover
         return None, None
 
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
+    if not station:  # pragma: no cover
         return None, None
 
     if not station.metadata or station.metadata['status'] != '1':
@@ -180,7 +180,4 @@ def parse_source(source: dict[str, Any]) -> Optional[StationInfoExtended]:
     """Parse DWD weather source."""
     stations = get_stations()
     source_id = source['wmo_station_id']
-    if source_id in stations:
-        return stations[source_id]
-
-    return None
+    return stations.get(source_id, None)

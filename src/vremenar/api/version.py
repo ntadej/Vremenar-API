@@ -36,7 +36,7 @@ async def version() -> VersionInfo:
     """Get app and server versions."""
     data: dict[str, str] = {}
 
-    if VERSION_INFO.is_file():
+    if VERSION_INFO.is_file():  # pragma: no cover
         with VERSION_INFO.open() as f:
             data = load(f)
 

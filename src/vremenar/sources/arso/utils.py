@@ -16,16 +16,14 @@ API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
 TIMEOUT: int = 15
 
 
-def zoom_level_conversion(zoom_level: Optional[float]) -> Optional[float]:
+def zoom_level_conversion(zoom_level: float) -> float:
     """Convert zoom levels from ARSO ones."""
-    if zoom_level is not None:
-        zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
-        zoom_level /= 6
-        zoom_epsilon = 0.25
-        zoom_level *= 11 - 7.5 - zoom_epsilon
-        zoom_level = 11 - zoom_level - zoom_epsilon
-        return zoom_level
-    return None
+    zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
+    zoom_level /= 6
+    zoom_epsilon = 0.25
+    zoom_level *= 11 - 7.5 - zoom_epsilon
+    zoom_level = 11 - zoom_level - zoom_epsilon
+    return zoom_level
 
 
 def weather_map_url(map_id: str) -> str:
@@ -58,9 +56,9 @@ def get_stations() -> dict[str, StationInfoExtended]:
                     longitude=station['longitude'],
                     altitude=station['altitude'],
                 ),
-                zoom_level=zoom_level_conversion(
-                    float(station['zoomLevel']) if 'zoomLevel' in station else None
-                ),
+                zoom_level=zoom_level_conversion(station['zoomLevel'])
+                if 'zoomLevel' in station
+                else None,
             )
     return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
 
@@ -72,11 +70,7 @@ def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
     properties = feature['properties']
 
     station_id = properties['id'].strip('_')
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
-        return None
-
-    return station
+    return stations.get(station_id, None)
 
 
 def parse_feature(
@@ -89,7 +83,7 @@ def parse_feature(
 
     station_id = properties['id'].strip('_')
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
+    if not station:  # pragma: no cover
         logger.warning('Unknown ARSO station: %s = %s', station_id, properties['title'])
         return None, None
 

@@ -37,7 +37,7 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
         sunrise, sunset = sunrise_sunset(
             coordinate.latitude, coordinate.longitude, time.date()
         )
-    except ValueError as e:
+    except ValueError as e:  # pragma: no cover
         return 'day' if 'above' in e.args[0] else 'night'
     else:
         return 'day' if sunrise <= time <= sunset else 'night'
