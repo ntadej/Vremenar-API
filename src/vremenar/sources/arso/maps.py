@@ -1,15 +1,10 @@
-"""ARSO weather source."""
+"""ARSO weather maps."""
 
 from fastapi import HTTPException, status
-from functools import lru_cache
 from httpx import AsyncClient
-from json import load
-from pathlib import Path
-from typing import Any, Optional
 
-from ..definitions import CountryID, ObservationType
-from ..models.common import Coordinate
-from ..models.maps import (
+from ...definitions import CountryID, ObservationType
+from ...models.maps import (
     MapLayer,
     MapLegend,
     MapLegendItem,
@@ -17,17 +12,10 @@ from ..models.maps import (
     MapType,
     SupportedMapType,
 )
-from ..models.stations import (
-    StationInfo,
-    StationInfoExtended,
-    StationSearchModel,
-)
-from ..models.weather import WeatherCondition, WeatherInfoExtended
-from ..utils import join_url, logger, parse_time, to_timestamp
+from ...models.weather import WeatherInfoExtended
+from ...utils import join_url, logger, parse_time, to_timestamp
 
-BASEURL: str = 'https://vreme.arso.gov.si'
-API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
-TIMEOUT: int = 15
+from .utils import API_BASEURL, BASEURL, TIMEOUT, parse_feature, weather_map_url
 
 MAP_URL = {
     MapType.WeatherCondition: '/forecast_si_data/',
@@ -69,59 +57,6 @@ def get_supported_map_types() -> list[SupportedMapType]:
             has_legend=True,
         ),
     ]
-
-
-def _zoom_level_conversion(zoom_level: Optional[float]) -> Optional[float]:
-    if zoom_level is not None:
-        zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
-        zoom_level /= 6
-        zoom_epsilon = 0.25
-        zoom_level *= 11 - 7.5 - zoom_epsilon
-        zoom_level = 11 - zoom_level - zoom_epsilon
-        return zoom_level
-    return None
-
-
-def _weather_map_url(map_id: str) -> str:
-    if map_id == 'current':
-        return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json'
-
-    if map_id[0] == 'd':
-        return (
-            f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json'
-        )
-
-    return ''
-
-
-@lru_cache
-def get_arso_stations() -> dict[str, StationInfoExtended]:
-    """Get a dictionary of supported ARSO stations."""
-    path: Path = Path.cwd() / 'data/stations/ARSO.json'
-    stations: dict[str, StationInfoExtended] = {}
-    with open(path) as file:
-        data = load(file)
-        for station in data:
-            station_id: str = station['id'].strip('_')
-            stations[station_id] = StationInfoExtended(
-                id=station_id,
-                name=station['title'],
-                coordinate=Coordinate(
-                    latitude=station['latitude'],
-                    longitude=station['longitude'],
-                    altitude=station['altitude'],
-                ),
-                zoom_level=_zoom_level_conversion(
-                    float(station['zoomLevel']) if 'zoomLevel' in station else None
-                ),
-            )
-    return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
-
-
-@lru_cache
-def list_stations() -> list[StationInfoExtended]:
-    """List ARSO weather stations."""
-    return list(get_arso_stations().values())
 
 
 async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
@@ -295,58 +230,9 @@ def get_all_map_legends() -> list[MapLegend]:
     return [get_map_legend(t.map_type) for t in supported if t.has_legend]
 
 
-def _parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
-    stations = get_arso_stations()
-
-    properties = feature['properties']
-
-    station_id = properties['id'].strip('_')
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
-        return None
-
-    return station
-
-
-def _parse_feature(
-    feature: dict[Any, Any], observation: ObservationType
-) -> tuple[Optional[StationInfoExtended], Optional[WeatherCondition]]:
-    stations = get_arso_stations()
-
-    properties = feature['properties']
-
-    station_id = properties['id'].strip('_')
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
-        logger.warning('Unknown ARSO station: %s = %s', station_id, properties['title'])
-        return None, None
-
-    timeline = properties['days'][0]['timeline'][0]
-    time = parse_time(timeline['valid'])
-    icon = timeline['clouds_icon_wwsyn_icon']
-
-    if 'txsyn' in timeline:
-        temperature: float = float(timeline['txsyn'])
-        temperature_low: Optional[float] = float(timeline['tnsyn'])
-    else:
-        temperature = float(timeline['t'])
-        temperature_low = None
-
-    condition = WeatherCondition(
-        observation=observation,
-        timestamp=to_timestamp(time),
-        icon=icon,
-        temperature=temperature,
-    )
-    if temperature_low:
-        condition.temperature_low = temperature_low
-
-    return station, condition
-
-
 async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
-    url: str = _weather_map_url(map_id)
+    url: str = weather_map_url(map_id)
     if not url:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -370,7 +256,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
 
     conditions_list = []
     for feature in response_body['features']:
-        station, condition = _parse_feature(
+        station, condition = parse_feature(
             feature,
             ObservationType.Recent if map_id == 'current' else ObservationType.Forecast,
         )
@@ -380,93 +266,3 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
             )
 
     return conditions_list
-
-
-async def find_station(query: StationSearchModel) -> list[StationInfo]:
-    """Find station by coordinate or string."""
-    url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
-
-    if query.string and (query.latitude or query.longitude):
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Either search string or coordinates are required',
-        )
-
-    if query.string:
-        single = False
-        url += f'?loc={query.string}'
-    elif query.latitude is not None and query.longitude is not None:
-        single = True
-        url += f'?lat={query.latitude}&lon={query.longitude}'
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Either search string or coordinates are required',
-        )
-
-    logger.debug('ARSO URL: %s', url)
-
-    async with AsyncClient() as client:
-        response = await client.get(url, timeout=TIMEOUT)
-
-    response_body = response.json()
-
-    if single:
-        station = _parse_station(response_body)
-        if station:
-            return [station]
-
-    if 'features' not in response_body:
-        return []
-
-    locations: list[StationInfo] = []
-    for feature in response_body['features']:
-        station = _parse_station(feature)
-        if station:
-            locations.append(station)
-
-    return locations
-
-
-async def current_station_condition(station_id: str) -> WeatherInfoExtended:
-    """Get current station weather condition."""
-    stations = get_arso_stations()
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
-    if not station:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
-
-    url = (
-        join_url(API_BASEURL, 'locations', trailing_slash=True) + f'?loc={station.name}'
-    )
-
-    logger.debug('ARSO URL: %s', url)
-
-    async with AsyncClient() as client:
-        response = await client.get(url, timeout=TIMEOUT)
-
-    response_body = response.json()
-    if 'features' not in response_body:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
-
-    for feature in response_body['features']:
-        _, condition = _parse_feature(feature, ObservationType.Recent)
-        return WeatherInfoExtended(station=station, condition=condition)
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unknown station',
-    )
-
-
-__all__ = [
-    'current_station_condition',
-    'find_station',
-    'get_map_layers',
-    'get_weather_map',
-]
