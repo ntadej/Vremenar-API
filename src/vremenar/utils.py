@@ -48,9 +48,9 @@ def parse_time(time: str) -> datetime:
     return datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
 
 
-def parse_timestamp(time: str) -> datetime:
+def parse_timestamp(timestamp: str) -> datetime:
     """Parse time from timestamp string."""
-    return datetime.fromtimestamp(float(time[-3]), tz=timezone.utc)
+    return datetime.fromtimestamp(float(timestamp[:-3]), tz=timezone.utc)
 
 
 def to_timestamp(time: datetime) -> str:
