@@ -1,5 +1,5 @@
 """DWD weather stations."""
-
+from datetime import date, timedelta
 from fastapi import HTTPException, status
 from functools import lru_cache
 from httpx import AsyncClient
@@ -23,7 +23,10 @@ def list_stations() -> list[StationInfoExtended]:
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
     """Find station by coordinate or string."""
-    url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
+    url_forecast: str = join_url(BRIGHTSKY_BASEURL, 'weather', trailing_slash=False)
+    url_current: str = join_url(
+        BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False
+    )
 
     if query.string:
         raise HTTPException(
@@ -32,17 +35,25 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         )
 
     if query.latitude is not None and query.longitude is not None:
-        url += f'?lat={query.latitude}&lon={query.longitude}'
+        url_forecast += f'?lat={query.latitude}&lon={query.longitude}'
+        url_current += f'?lat={query.latitude}&lon={query.longitude}'
     else:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail='Only coordinates are required',
         )
 
-    logger.debug('Brightsky URL: %s', url)
+    today = date.today()
+    target_date = today + timedelta(days=2)
+    url_forecast += (
+        f'&date={target_date.strftime("%Y-%m-%d")}'
+        f'&last_date={target_date.strftime("%Y-%m-%d")}'
+    )
+
+    logger.debug('Brightsky URL forecast: %s', url_forecast)
 
     async with AsyncClient() as client:
-        response = await client.get(url)
+        response = await client.get(url_forecast)
 
     response_body = response.json()
     if 'sources' not in response_body:  # pragma: no cover
@@ -56,6 +67,26 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         station = parse_source(source)
         if station:
             locations.append(station)
+            break
+
+    if not locations or locations[0].forecast_only:
+        logger.debug('Brightsky URL current: %s', url_current)
+
+        async with AsyncClient() as client:
+            response = await client.get(url_current)
+
+        response_body = response.json()
+        if 'sources' not in response_body:  # pragma: no cover
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Unknown station',
+            )
+
+        for source in response_body['sources']:
+            station = parse_source(source)
+            if station:
+                locations.append(station)
+                break
 
     return locations
 
