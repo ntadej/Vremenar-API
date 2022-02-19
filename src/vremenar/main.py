@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 
 from . import __version__
-from .api import version, stations, maps, copyright
+from .api import version, stations, maps, alerts, copyright
 
 # Should not be enabled in production!
 debug = False
@@ -22,6 +22,7 @@ tags_metadata = [
         'name': 'maps',
         'description': 'Query available weather maps and their information.',
     },
+    {'name': 'alerts', 'description': 'Weather alerts.'},
     {
         'name': 'copyright',
         'description': 'Data attribution and copyright.',
@@ -37,6 +38,7 @@ app: FastAPI = FastAPI(
 app.include_router(version)
 app.include_router(stations)
 app.include_router(maps)
+app.include_router(alerts)
 app.include_router(copyright)
 
 if debug:

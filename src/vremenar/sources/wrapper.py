@@ -2,13 +2,15 @@
 
 from fastapi import HTTPException, status
 
-from ..definitions import CountryID
+from ..definitions import CountryID, LanguageID
+from ..models.alerts import AlertAreaWithPolygon, AlertInfoExtended
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
 from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ..models.weather import WeatherInfoExtended
 
 from . import arso
 from . import dwd
+from . import meteoalarm
 
 
 def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
@@ -119,3 +121,15 @@ async def current_station_condition(
         status_code=status.HTTP_404_NOT_FOUND,
         detail='Unsupported country',
     )
+
+
+async def list_alerts(
+    country: CountryID, language: LanguageID
+) -> list[AlertInfoExtended]:
+    """Get list of alerts for a country."""
+    return await meteoalarm.list_alerts(country, language)
+
+
+def list_alert_areas(country: CountryID) -> list[AlertAreaWithPolygon]:
+    """Get list of alert areas for a country."""
+    return meteoalarm.list_alert_areas(country)

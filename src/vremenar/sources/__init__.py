@@ -8,6 +8,8 @@ from .wrapper import (
     get_map_layers,
     get_map_legend,
     get_weather_map,
+    list_alerts,
+    list_alert_areas,
     list_stations,
 )
 
@@ -19,5 +21,7 @@ __all__ = [
     'get_map_layers',
     'get_map_legend',
     'get_weather_map',
+    'list_alerts',
+    'list_alert_areas',
     'list_stations',
 ]

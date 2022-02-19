@@ -9,6 +9,21 @@ class CountryID(str, Enum):
     Slovenia = 'si'
     Germany = 'de'
 
+    def full_name(self) -> str:
+        """Get country full name."""
+        if self is CountryID.Slovenia:
+            return 'slovenia'
+        if self is CountryID.Germany:
+            return 'germany'
+
+
+class LanguageID(str, Enum):
+    """Supported languages ID enum."""
+
+    English = 'en'
+    German = 'de'
+    Slovenian = 'sl'
+
 
 class ObservationType(str, Enum):
     """Observation type enum."""
