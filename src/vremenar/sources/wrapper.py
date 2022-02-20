@@ -1,9 +1,10 @@
 """Weather sources wrapper."""
 
 from fastapi import HTTPException, status
+from typing import Optional
 
 from ..definitions import CountryID, LanguageID
-from ..models.alerts import AlertAreaWithPolygon, AlertInfoExtended
+from ..models.alerts import AlertAreaWithPolygon, AlertInfo, AlertInfoExtended
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
 from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ..models.weather import WeatherInfoExtended
@@ -128,6 +129,16 @@ async def list_alerts(
 ) -> list[AlertInfoExtended]:
     """Get list of alerts for a country."""
     return await meteoalarm.list_alerts(country, language)
+
+
+async def list_alerts_for_critera(
+    country: CountryID,
+    language: LanguageID = LanguageID.English,
+    stations: Optional[list[str]] = None,
+    areas: Optional[list[str]] = None,
+) -> list[AlertInfo]:
+    """Get list of alerts for criteria."""
+    return await meteoalarm.list_alerts_for_critera(country, language, stations, areas)
 
 
 def list_alert_areas(country: CountryID) -> list[AlertAreaWithPolygon]:

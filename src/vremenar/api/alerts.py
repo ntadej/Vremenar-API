@@ -1,12 +1,15 @@
 """Weather alerts API."""
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
+from typing import Optional
 
 from .config import defaults
 from ..definitions import CountryID, LanguageID
-from ..models.alerts import AlertAreaWithPolygon, AlertInfoExtended
-from ..sources import list_alerts, list_alert_areas
+from ..models.alerts import AlertAreaWithPolygon, AlertInfo, AlertInfoExtended
+from ..sources import list_alerts, list_alerts_for_critera, list_alert_areas
 
 router = APIRouter()
+
+default_query = Query(None)
 
 
 @router.get(
@@ -26,11 +29,29 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
     '/alerts/list',
     tags=['alerts'],
     name='List weather alerts',
-    response_description='List of weather alerts for a country',
-    response_model=list[AlertInfoExtended],
+    response_description='List of weather alerts',
+    response_model=list[AlertInfo],
     **defaults,
 )
 async def alerts_list(
+    country: CountryID,
+    language: LanguageID = LanguageID.English,
+    station: Optional[list[str]] = default_query,
+    area: Optional[list[str]] = default_query,
+) -> list[AlertInfo]:
+    """List weather alerts for the criteria."""
+    return await list_alerts_for_critera(country, language, station, area)
+
+
+@router.get(
+    '/alerts/full_list',
+    tags=['alerts'],
+    name='List all weather alerts',
+    response_description='List of all weather alerts for a country',
+    response_model=list[AlertInfoExtended],
+    **defaults,
+)
+async def alerts_full_list(
     country: CountryID, language: LanguageID = LanguageID.English
 ) -> list[AlertInfoExtended]:
     """List weather alerts for a country."""

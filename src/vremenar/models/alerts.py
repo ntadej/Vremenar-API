@@ -50,10 +50,10 @@ class AlertUrgency(str, Enum):
 class AlertSeverity(str, Enum):
     """Alert severity."""
 
-    Minor = 'minor'  # green
-    Moderate = 'moderate'  # yellow
-    Severe = 'severe'  # orange
-    Extreme = 'extreme'  # red
+    Minor = 'minor'  # yellow
+    Moderate = 'moderate'  # orange
+    Severe = 'severe'  # red
+    Extreme = 'extreme'  # violet
 
 
 class AlertCertainty(str, Enum):
@@ -158,12 +158,16 @@ class AlertInfoExtended(AlertInfo):
     sender_name: Optional[str] = Field(None, example='Deutscher Wetterdienst')
     web: Optional[str] = Field(None, example='https://www.wettergefahren.de')
 
+    def base(self) -> AlertInfo:
+        """Return an instance of AlertInfo."""
+        return self.copy(exclude={'areas', 'sender_name', 'web'})
+
     @classmethod
     def init(
         cls,
         dictionary: dict[str, Any],
         language: LanguageID,
-        areas: dict[str, AlertAreaWithPolygon],
+        areas: Optional[dict[str, AlertAreaWithPolygon]] = None,
         **kwargs: Any,
     ) -> 'AlertInfoExtended':
         """Initialise from a dictionary."""
@@ -171,12 +175,12 @@ class AlertInfoExtended(AlertInfo):
         en: str = LanguageID.English.value
 
         # translatable values
-        kwargs.setdefault(
-            'event',
+        event: str = (
             dictionary['event'][lang]
             if lang in dictionary['event']
-            else dictionary['event'][en],
+            else dictionary['event'][en]
         )
+        kwargs.setdefault('event', event[0].upper() + event[1:])
 
         kwargs.setdefault(
             'headline',
@@ -218,9 +222,11 @@ class AlertInfoExtended(AlertInfo):
             )
 
         # areas
-        areas_list = dictionary['areas']
-        areas_list.sort()
-        areas_objs = [areas[a].base() for a in areas_list]
+        areas_objs = []
+        if areas is not None:
+            areas_list = dictionary['areas']
+            areas_list.sort()
+            areas_objs = [areas[a].base() for a in areas_list]
 
         kwargs.setdefault('areas', areas_objs)
 
@@ -232,8 +238,8 @@ class AlertInfoExtended(AlertInfo):
             severity=dictionary['severity'],
             certainty=dictionary['certainty'],
             response_type=dictionary['response_type'],
-            onset=dictionary['onset'],
-            ending=dictionary['expires'],
+            onset=f"{dictionary['onset']}000",
+            ending=f"{dictionary['expires']}000",
             **kwargs,
         )
 
