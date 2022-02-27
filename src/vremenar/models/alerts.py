@@ -3,8 +3,6 @@ from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Any, Optional
 
-from ..definitions import LanguageID
-
 
 class AlertType(str, Enum):
     """Alert type."""
@@ -124,6 +122,8 @@ class AlertInfo(BaseModel):
     certainty: AlertCertainty = Field(..., example=AlertCertainty.Likely)
     response_type: AlertResponseType = Field(..., example=AlertResponseType.Prepare)
 
+    areas: list[AlertArea] = Field(..., example=[])
+
     onset: str = Field(..., example='1645286400000')
     ending: str = Field(..., example='1645311600000')
 
@@ -144,106 +144,59 @@ class AlertInfo(BaseModel):
             'Twigs or branches could fall down. Watch out for falling debris.'
         ),
     )
-
-    class Config:
-        """Weather alert extended info model config."""
-
-        title: str = 'Alert information'
-
-
-class AlertInfoExtended(AlertInfo):
-    """Weather alert extended info model."""
-
-    areas: list[AlertArea] = Field(..., example=[])
     sender_name: Optional[str] = Field(None, example='Deutscher Wetterdienst')
     web: Optional[str] = Field(None, example='https://www.wettergefahren.de')
-
-    def base(self) -> AlertInfo:
-        """Return an instance of AlertInfo."""
-        return self.copy(exclude={'areas', 'sender_name', 'web'})
 
     @classmethod
     def init(
         cls,
-        dictionary: dict[str, Any],
-        language: LanguageID,
+        info: dict[str, Any],
+        localised: dict[str, Any],
+        alert_areas: set[str],
         areas: Optional[dict[str, AlertAreaWithPolygon]] = None,
         **kwargs: Any,
-    ) -> 'AlertInfoExtended':
+    ) -> 'AlertInfo':
         """Initialise from a dictionary."""
-        lang: str = language.value
-        en: str = LanguageID.English.value
-
         # translatable values
-        event: str = (
-            dictionary['event'][lang]
-            if lang in dictionary['event']
-            else dictionary['event'][en]
-        )
-        kwargs.setdefault('event', event[0].upper() + event[1:])
-
         kwargs.setdefault(
-            'headline',
-            dictionary['headline'][lang]
-            if lang in dictionary['headline']
-            else dictionary['headline'][en],
+            'event', localised['event'][0].upper() + localised['event'][1:]
         )
+        kwargs.setdefault('headline', localised['headline'])
 
-        if dictionary['description']:
-            kwargs.setdefault(
-                'description',
-                dictionary['description'][lang]
-                if lang in dictionary['description']
-                else dictionary['description'][en],
-            )
+        if 'description' in localised and localised['description']:
+            kwargs.setdefault('description', localised['description'])
 
-        if dictionary['instructions']:
-            kwargs.setdefault(
-                'instructions',
-                dictionary['instructions'][lang]
-                if lang in dictionary['instructions']
-                else dictionary['instructions'][en],
-            )
+        if 'instructions' in localised and localised['instructions']:
+            kwargs.setdefault('instructions', localised['instructions'])
 
-        if dictionary['sender_name']:
-            kwargs.setdefault(
-                'sender_name',
-                dictionary['sender_name'][lang]
-                if lang in dictionary['sender_name']
-                else dictionary['sender_name'][en],
-            )
+        if 'sender_name' in localised and localised['sender_name']:
+            kwargs.setdefault('sender_name', localised['sender_name'])
 
-        if dictionary['web']:
-            kwargs.setdefault(
-                'web',
-                dictionary['web'][lang]
-                if lang in dictionary['web']
-                else dictionary['web'][en],
-            )
+        if 'web' in localised and localised['web']:
+            kwargs.setdefault('web', localised['web'])
 
         # areas
         areas_objs = []
-        if areas is not None:
-            areas_list = dictionary['areas']
+        if areas is not None and alert_areas is not None:
+            areas_list = list(alert_areas)
             areas_list.sort()
             areas_objs = [areas[a].base() for a in areas_list]
-
         kwargs.setdefault('areas', areas_objs)
 
         # init
         return cls(
-            id=dictionary['key'],
-            type=dictionary['type'],
-            urgency=dictionary['urgency'],
-            severity=dictionary['severity'],
-            certainty=dictionary['certainty'],
-            response_type=dictionary['response_type'],
-            onset=f"{dictionary['onset']}000",
-            ending=f"{dictionary['expires']}000",
+            id=info['id'],
+            type=info['type'],
+            urgency=info['urgency'],
+            severity=info['severity'],
+            certainty=info['certainty'],
+            response_type=info['response_type'],
+            onset=info['onset'],
+            ending=info['expires'],
             **kwargs,
         )
 
     class Config:
         """Weather alert extended info model config."""
 
-        title: str = 'Alert extended information'
+        title: str = 'Alert information'

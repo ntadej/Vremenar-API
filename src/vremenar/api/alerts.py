@@ -4,7 +4,7 @@ from typing import Optional
 
 from .config import defaults
 from ..definitions import CountryID, LanguageID
-from ..models.alerts import AlertAreaWithPolygon, AlertInfo, AlertInfoExtended
+from ..models.alerts import AlertAreaWithPolygon, AlertInfo
 from ..sources import list_alerts, list_alerts_for_critera, list_alert_areas
 
 router = APIRouter()
@@ -22,7 +22,7 @@ default_query = Query(None)
 )
 async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
     """List weather alert areas for a country."""
-    return list_alert_areas(country)
+    return await list_alert_areas(country)
 
 
 @router.get(
@@ -48,11 +48,11 @@ async def alerts_list(
     tags=['alerts'],
     name='List all weather alerts',
     response_description='List of all weather alerts for a country',
-    response_model=list[AlertInfoExtended],
+    response_model=list[AlertInfo],
     **defaults,
 )
 async def alerts_full_list(
     country: CountryID, language: LanguageID = LanguageID.English
-) -> list[AlertInfoExtended]:
+) -> list[AlertInfo]:
     """List weather alerts for a country."""
     return await list_alerts(country, language)

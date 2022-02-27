@@ -4,12 +4,17 @@ from astral import Observer, sun  # type: ignore
 from datetime import date, datetime, timezone
 from functools import lru_cache
 from logging import Logger, getLogger
-from typing import cast
+from typing import cast, Any, Generator
 
 from .models.common import Coordinate
 
 
 logger: Logger = getLogger('uvicorn.error')
+
+
+def chunker(container: list[Any], size: int) -> Generator[list[Any], None, None]:
+    """Loop over a container in chunks."""
+    return (container[pos : pos + size] for pos in range(0, len(container), size))
 
 
 def join_url(*args: str, trailing_slash: bool = False) -> str:

@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from typing import Optional
 
 from ..definitions import CountryID, LanguageID
-from ..models.alerts import AlertAreaWithPolygon, AlertInfo, AlertInfoExtended
+from ..models.alerts import AlertAreaWithPolygon, AlertInfo
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
 from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ..models.weather import WeatherInfoExtended
@@ -124,9 +124,7 @@ async def current_station_condition(
     )
 
 
-async def list_alerts(
-    country: CountryID, language: LanguageID
-) -> list[AlertInfoExtended]:
+async def list_alerts(country: CountryID, language: LanguageID) -> list[AlertInfo]:
     """Get list of alerts for a country."""
     return await meteoalarm.list_alerts(country, language)
 
@@ -141,6 +139,6 @@ async def list_alerts_for_critera(
     return await meteoalarm.list_alerts_for_critera(country, language, stations, areas)
 
 
-def list_alert_areas(country: CountryID) -> list[AlertAreaWithPolygon]:
+async def list_alert_areas(country: CountryID) -> list[AlertAreaWithPolygon]:
     """Get list of alert areas for a country."""
-    return meteoalarm.list_alert_areas(country)
+    return await meteoalarm.list_alert_areas(country)
