@@ -1,12 +1,8 @@
 """ARSO weather utils."""
-
-from functools import lru_cache
-from json import load
-from pathlib import Path
 from typing import Any, Optional
 
-from ...definitions import ObservationType
-from ...models.common import Coordinate
+from ...definitions import CountryID, ObservationType
+from ...database.stations import get_stations
 from ...models.stations import StationInfoExtended
 from ...models.weather import WeatherCondition
 from ...utils import logger, parse_time, to_timestamp
@@ -14,16 +10,6 @@ from ...utils import logger, parse_time, to_timestamp
 BASEURL: str = 'https://vreme.arso.gov.si'
 API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
 TIMEOUT: int = 15
-
-
-def zoom_level_conversion(zoom_level: float) -> float:
-    """Convert zoom levels from ARSO ones."""
-    zoom_level = zoom_level + 1.0 if zoom_level == 5.0 else zoom_level
-    zoom_level /= 6
-    zoom_epsilon = 0.25
-    zoom_level *= 11 - 7.5 - zoom_epsilon
-    zoom_level = 11 - zoom_level - zoom_epsilon
-    return zoom_level
 
 
 def weather_map_url(map_id: str) -> str:
@@ -39,33 +25,9 @@ def weather_map_url(map_id: str) -> str:
     return ''
 
 
-@lru_cache
-def get_stations() -> dict[str, StationInfoExtended]:
-    """Get a dictionary of supported ARSO stations."""
-    path: Path = Path.cwd() / 'data/stations/ARSO.json'
-    stations: dict[str, StationInfoExtended] = {}
-    with open(path) as file:
-        data = load(file)
-        for station in data:
-            station_id: str = station['id'].strip('_')
-            stations[station_id] = StationInfoExtended(
-                id=station_id,
-                name=station['title'],
-                coordinate=Coordinate(
-                    latitude=station['latitude'],
-                    longitude=station['longitude'],
-                    altitude=station['altitude'],
-                ),
-                zoom_level=zoom_level_conversion(station['zoomLevel'])
-                if 'zoomLevel' in station
-                else None,
-            )
-    return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
-
-
-def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
+async def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
     """Parse ARSO station."""
-    stations = get_stations()
+    stations = await get_stations(CountryID.Slovenia)
 
     properties = feature['properties']
 
@@ -73,11 +35,11 @@ def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
     return stations.get(station_id, None)
 
 
-def parse_feature(
+async def parse_feature(
     feature: dict[Any, Any], observation: ObservationType
 ) -> tuple[Optional[StationInfoExtended], Optional[WeatherCondition]]:
     """Parse ARSO feature."""
-    stations = get_stations()
+    stations = await get_stations(CountryID.Slovenia)
 
     properties = feature['properties']
 

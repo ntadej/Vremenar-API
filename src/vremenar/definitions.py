@@ -9,6 +9,13 @@ class CountryID(str, Enum):
     Slovenia = 'si'
     Germany = 'de'
 
+    def label(self) -> str:
+        """Get country label."""
+        if self is CountryID.Slovenia:
+            return 'Slovenia'
+        if self is CountryID.Germany:
+            return 'Germany'
+
     def full_name(self) -> str:
         """Get country full name."""
         if self is CountryID.Slovenia:

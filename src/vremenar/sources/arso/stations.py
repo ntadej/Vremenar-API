@@ -1,22 +1,22 @@
 """ARSO weather stations."""
 
 from fastapi import HTTPException, status
-from functools import lru_cache
 from httpx import AsyncClient
 from typing import Optional
 
-from ...definitions import ObservationType
+from ...database.stations import get_stations
+from ...definitions import CountryID, ObservationType
 from ...models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ...models.weather import WeatherInfoExtended
 from ...utils import join_url, logger
 
-from .utils import API_BASEURL, TIMEOUT, get_stations, parse_feature, parse_station
+from .utils import API_BASEURL, TIMEOUT, parse_feature, parse_station
 
 
-@lru_cache
-def list_stations() -> list[StationInfoExtended]:
+async def list_stations() -> list[StationInfoExtended]:
     """List ARSO weather stations."""
-    return list(get_stations().values())
+    stations = await get_stations(CountryID.Slovenia)
+    return list(stations.values())
 
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
@@ -49,7 +49,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
     response_body = response.json()
 
     if single:
-        station = parse_station(response_body)
+        station = await parse_station(response_body)
         if station:
             return [station]
 
@@ -58,7 +58,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
     locations: list[StationInfo] = []
     for feature in response_body['features']:
-        station = parse_station(feature)
+        station = await parse_station(feature)
         if station:
             locations.append(station)
 
@@ -67,7 +67,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
-    stations = get_stations()
+    stations = await get_stations(CountryID.Slovenia)
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
         raise HTTPException(
@@ -92,7 +92,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
         )
 
     for feature in response_body['features']:
-        _, condition = parse_feature(feature, ObservationType.Recent)
+        _, condition = await parse_feature(feature, ObservationType.Recent)
         return WeatherInfoExtended(station=station, condition=condition)
 
     raise HTTPException(  # pragma: no cover

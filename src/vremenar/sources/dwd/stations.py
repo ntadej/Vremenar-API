@@ -1,24 +1,24 @@
 """DWD weather stations."""
 from datetime import date, timedelta
 from fastapi import HTTPException, status
-from functools import lru_cache
 from httpx import AsyncClient
 from typing import Optional
 
-from ...definitions import ObservationType
+from ...database.stations import get_stations
+from ...definitions import CountryID, ObservationType
 from ...models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ...models.weather import WeatherCondition, WeatherInfoExtended
 from ...utils import join_url, logger, parse_time, to_timestamp
 
-from .utils import get_icon, get_stations, parse_source
+from .utils import get_icon, parse_source
 
 BRIGHTSKY_BASEURL = 'https://api.brightsky.dev'
 
 
-@lru_cache
-def list_stations() -> list[StationInfoExtended]:
+async def list_stations() -> list[StationInfoExtended]:
     """List DWD weather stations."""
-    return list(get_stations().values())
+    stations = await get_stations(CountryID.Germany)
+    return list(stations.values())
 
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
@@ -64,7 +64,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
     locations: list[StationInfo] = []
     for source in response_body['sources']:
-        station = parse_source(source)
+        station = await parse_source(source)
         if station:
             locations.append(station)
             break
@@ -83,7 +83,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
             )
 
         for source in response_body['sources']:
-            station = parse_source(source)
+            station = await parse_source(source)
             if station:
                 locations.append(station)
                 break
@@ -93,7 +93,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
-    stations = get_stations()
+    stations = await get_stations(CountryID.Germany)
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
         raise HTTPException(
@@ -117,7 +117,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
         )
 
     for source in response_body['sources']:
-        station = parse_source(source)
+        station = await parse_source(source)
         break
 
     if not station:  # pragma: no cover

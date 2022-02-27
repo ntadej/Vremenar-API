@@ -1,37 +1,16 @@
 """DWD weather utils."""
-
-from csv import reader
 from datetime import datetime, timezone
-from functools import lru_cache
 from pathlib import Path
 from typing import Any, Optional
 
-from ...definitions import ObservationType
-from ...models.common import Coordinate
+from ...database.stations import get_stations
+from ...definitions import CountryID, ObservationType
 from ...models.stations import StationBase, StationInfo, StationInfoExtended
 from ...models.weather import WeatherCondition
 from ...units import kelvin_to_celsius
 from ...utils import day_or_night, parse_time, parse_timestamp
 
 CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
-
-
-def zoom_level_conversion(location_type: str, admin_level: float) -> float:
-    """DWD zoom level conversions."""
-    # location_type: {'city', 'town', 'village', 'suburb', 'hamlet', 'isolated',
-    #                 'airport', 'special' }
-    # admin_level: {'4', '6', '8', '9', '10'}
-    if admin_level >= 10:
-        return 10.35
-    if admin_level >= 9:
-        return 9.9
-    if admin_level >= 8:
-        if location_type in ['town']:
-            return 8.5
-        if location_type in ['village', 'suburb']:
-            return 9.1
-        return 9.5
-    return 7.5
 
 
 def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> str:
@@ -104,28 +83,6 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
     return f'{base_icon}_{time_of_day}'
 
 
-@lru_cache
-def get_stations() -> dict[str, StationInfoExtended]:
-    """Get a dictionary of supported DWD stations."""
-    path: Path = Path.cwd() / 'data/stations/DWD.csv'
-    stations: dict[str, StationInfoExtended] = {}
-    with open(path, newline='') as csvfile:
-        csv = reader(csvfile, dialect='excel')
-        for row in csv:
-            station_id: str = row[0]
-            stations[station_id] = StationInfoExtended(
-                id=station_id,
-                name=row[4],
-                coordinate=Coordinate(
-                    latitude=row[5], longitude=row[6], altitude=row[7]
-                ),
-                zoom_level=zoom_level_conversion(row[8], float(row[9])),
-                forecast_only=not int(row[2]),
-                metadata={'DWD_ID': row[1], 'status': row[10]},
-            )
-    return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
-
-
 def weather_map_url(map_id: str) -> Optional[Path]:
     """Generate forecast map URL."""
     paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
@@ -147,12 +104,12 @@ def weather_map_url(map_id: str) -> Optional[Path]:
     return None
 
 
-def parse_record(
+async def parse_record(
     record: dict[str, Any], observation: ObservationType
 ) -> tuple[Optional[StationBase], Optional[WeatherCondition]]:
     """Parse DWD record."""
     station_id = record['wmo_station_id']
-    stations = get_stations()
+    stations = await get_stations(CountryID.Germany)
 
     if station_id not in stations:  # pragma: no cover
         return None, None
@@ -174,8 +131,8 @@ def parse_record(
     return station, condition
 
 
-def parse_source(source: dict[str, Any]) -> Optional[StationInfoExtended]:
+async def parse_source(source: dict[str, Any]) -> Optional[StationInfoExtended]:
     """Parse DWD weather source."""
-    stations = get_stations()
+    stations = await get_stations(CountryID.Germany)
     source_id = source['wmo_station_id']
     return stations.get(source_id, None)

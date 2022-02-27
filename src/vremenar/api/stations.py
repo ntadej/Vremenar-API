@@ -30,9 +30,9 @@ async def stations_list(
 ) -> Union[list[StationInfo], list[StationInfoExtended]]:
     """List weather stations."""
     if extended:
-        return list_stations(country)
+        return await list_stations(country)
 
-    return [s.info() for s in list_stations(country)]
+    return [s.info() for s in await list_stations(country)]
 
 
 @router.post(

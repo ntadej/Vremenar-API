@@ -81,12 +81,12 @@ async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoEx
     )
 
 
-def list_stations(country: CountryID) -> list[StationInfoExtended]:
+async def list_stations(country: CountryID) -> list[StationInfoExtended]:
     """List weather stations for the chosen country."""
     if country == CountryID.Slovenia:
-        return arso.list_stations()
+        return await arso.list_stations()
     if country == CountryID.Germany:
-        return dwd.list_stations()
+        return await dwd.list_stations()
 
     raise HTTPException(  # pragma: no cover
         status_code=status.HTTP_404_NOT_FOUND,

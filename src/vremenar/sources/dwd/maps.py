@@ -381,7 +381,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
 
     conditions_list = []
     for record in records:
-        station, condition = parse_record(
+        station, condition = await parse_record(
             record,
             ObservationType.Recent if map_id == 'current' else ObservationType.Forecast,
         )
