@@ -62,6 +62,18 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "asyncstdlib"
+version = "3.10.3"
+description = "The missing async toolbox"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[package.extras]
+doc = ["sphinx", "sphinxcontrib-trio"]
+test = ["pytest", "flake8", "flake8-bugbear", "black", "coverage", "pytest-cov", "flake8-2020", "mypy"]
+
+[[package]]
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
@@ -832,7 +844,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "530b3294cb3e1a9555cef1d6ce9228019b97244eb38a4151f42e2aacfeadc55b"
+content-hash = "36ad826b84969c032fae55c8bc6f34c8b2038edee24237ce1f3da8bde34ddbc4"
 
 [metadata.files]
 aioredis = [
@@ -854,6 +866,10 @@ astral = [
 async-timeout = [
     {file = "async-timeout-4.0.2.tar.gz", hash = "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15"},
     {file = "async_timeout-4.0.2-py3-none-any.whl", hash = "sha256:8ca1e4fcf50d07413d66d1a5e416e42cfdf5851c981d679a09851a6853383b3c"},
+]
+asyncstdlib = [
+    {file = "asyncstdlib-3.10.3-py2.py3-none-any.whl", hash = "sha256:35d34eca050b847fe45cbb10a07a55c15ef1cb43e59d4abfcbdebe90df30a6f6"},
+    {file = "asyncstdlib-3.10.3.tar.gz", hash = "sha256:4d836c65769761a47795667ed72f3de6cf4a25e480959f75fd91eb8eb5edc640"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},

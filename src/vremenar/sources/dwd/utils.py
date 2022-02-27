@@ -1,16 +1,35 @@
 """DWD weather utils."""
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import datetime
 from typing import Any, Optional
 
+from ...database.redis import redis
 from ...database.stations import get_stations
 from ...definitions import CountryID, ObservationType
 from ...models.stations import StationBase, StationInfo, StationInfoExtended
 from ...models.weather import WeatherCondition
 from ...units import kelvin_to_celsius
-from ...utils import day_or_night, parse_time, parse_timestamp
+from ...utils import chunker, day_or_night, parse_timestamp
 
-CACHE_PATH: Path = Path.cwd() / '.cache/dwd'
+
+async def get_mosmix_ids_for_timestamp(timestamp: str) -> set[str]:
+    """Get MOSMIX IDs for timestamp from redis."""
+    ids: set[str] = await redis.smembers(f'mosmix:{timestamp}')
+    return ids
+
+
+async def get_mosmix_records(ids: set[str]) -> list[dict[str, Any]]:
+    """Get MOSMIX records from redis."""
+    result: list[dict[str, Any]] = []
+
+    async with redis.client() as connection:
+        for batch in chunker(list(ids), 100):
+            async with connection.pipeline(transaction=False) as pipeline:
+                for id in batch:
+                    pipeline.hgetall(id)
+                response = await pipeline.execute()
+            result.extend(response)
+
+    return result
 
 
 def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> str:
@@ -42,10 +61,12 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
     time_of_day = day_or_night(station.coordinate, time)
     base_icon = 'clear'
     condition = None
-    if weather['condition'] == 'fog':  # TODO: intensity
+    weather_condition = weather.get('condition', None)
+    if weather_condition == 'fog':  # TODO: intensity
         base_icon = 'FG'
-    elif 'cloud_cover' in weather and weather['cloud_cover'] is not None:
-        cloud_cover_fraction = weather['cloud_cover'] / 100
+    elif 'cloud_cover' in weather and weather['cloud_cover']:
+        cloud_cover = float(weather['cloud_cover'])
+        cloud_cover_fraction = cloud_cover / 100
         if 1 / 8 <= cloud_cover_fraction < 4 / 8:
             base_icon = 'partCloudy'
         elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
@@ -53,7 +74,7 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
         else:
             base_icon = 'overcast'
 
-    precipitation_intensity = (
+    precipitation_intensity = float(
         weather['precipitation_60']
         if 'precipitation_60' in weather
         else weather['precipitation']
@@ -66,11 +87,11 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
         else:
             intensity = 'light'
 
-        if weather['condition'] in ['hail', 'sleet']:
+        if weather_condition in ['hail', 'sleet']:
             precipitation_type = 'SHGR'
-        elif weather['condition'] == 'thunderstorm':
+        elif weather_condition == 'thunderstorm':
             precipitation_type = 'TSRA'
-        elif weather['condition'] == 'snow':
+        elif weather_condition == 'snow':
             precipitation_type = 'SN'
         else:
             precipitation_type = 'RA'
@@ -83,32 +104,11 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
     return f'{base_icon}_{time_of_day}'
 
 
-def weather_map_url(map_id: str) -> Optional[Path]:
-    """Generate forecast map URL."""
-    paths = sorted(list(CACHE_PATH.glob('MOSMIX*.json')))
-    now = datetime.utcnow()
-    now = now.replace(tzinfo=timezone.utc)
-    for path in paths:
-        if map_id == 'current':
-            name = path.name.replace('MOSMIX:', '').strip('.json')
-            date = parse_time(name)
-            delta = (date - now).total_seconds()
-
-            if delta < 0:
-                continue
-
-            return path
-
-        if path.name == f'MOSMIX:{map_id}.json':
-            return path
-    return None
-
-
 async def parse_record(
     record: dict[str, Any], observation: ObservationType
 ) -> tuple[Optional[StationBase], Optional[WeatherCondition]]:
     """Parse DWD record."""
-    station_id = record['wmo_station_id']
+    station_id = record['station_id']
     stations = await get_stations(CountryID.Germany)
 
     if station_id not in stations:  # pragma: no cover
@@ -125,7 +125,7 @@ async def parse_record(
         observation=observation,
         timestamp=record['timestamp'],
         icon=get_icon(station, record, parse_timestamp(record['timestamp'])),
-        temperature=kelvin_to_celsius(record['temperature']),
+        temperature=kelvin_to_celsius(float(record['temperature'])),
     )
 
     return station, condition

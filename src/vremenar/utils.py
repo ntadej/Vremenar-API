@@ -60,4 +60,4 @@ def parse_timestamp(timestamp: str) -> datetime:
 
 def to_timestamp(time: datetime) -> str:
     """Dump timestamp in ms."""
-    return f'{str(int(time.timestamp()))}000'
+    return f'{int(time.timestamp())}000'

@@ -160,8 +160,8 @@ async def test_stations_map(client: AsyncClient) -> None:
     now = datetime.now(tz=timezone.utc)
     now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
-    soon_string = soon.strftime('%Y-%m-%dT%H:%M:%SZ')
-    response = await client.get(f'/stations/map/{soon_string}?country=de')
+    soon_timestamp = f'{int(soon.timestamp())}000'
+    response = await client.get(f'/stations/map/{soon_timestamp}?country=de')
     assert response.status_code == 200
 
 

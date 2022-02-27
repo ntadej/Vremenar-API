@@ -1,4 +1,5 @@
 """Stations database helpers."""
+import asyncstdlib as a
 from typing import Union
 
 from ..definitions import CountryID
@@ -26,8 +27,9 @@ async def load_stations(
     return stations
 
 
+@a.lru_cache
 async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
-    """Get a dictionary of supported ARSO stations."""
+    """Get a dictionary of supported stations for a country."""
     stations_raw: dict[str, dict[str, Union[str, int, float]]] = await load_stations(
         country
     )

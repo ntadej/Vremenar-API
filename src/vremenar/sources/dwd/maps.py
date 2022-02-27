@@ -1,11 +1,7 @@
 """DWD weather maps."""
-
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from httpx import AsyncClient
-from json import load
-from pathlib import Path
-from typing import Optional
 
 from ...definitions import CountryID, ObservationType
 from ...models.maps import (
@@ -19,7 +15,7 @@ from ...models.maps import (
 from ...models.weather import WeatherInfoExtended
 from ...utils import logger, to_timestamp
 
-from .utils import parse_record, weather_map_url
+from .utils import get_mosmix_ids_for_timestamp, get_mosmix_records, parse_record
 
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
 
@@ -73,11 +69,11 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
 
     # Forecast
     soon = now + timedelta(hours=2)
-    soon_string = soon.strftime('%Y-%m-%dT%H:%M:%SZ')
+    soon_timestamp = to_timestamp(soon)
     layers.append(
         MapLayer(
-            url=f'/stations/map/{soon_string}{country_suffix}',
-            timestamp=to_timestamp(soon),
+            url=f'/stations/map/{soon_timestamp}{country_suffix}',
+            timestamp=soon_timestamp,
             observation=ObservationType.Forecast,
         )
     )
@@ -88,11 +84,11 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
         time = start + timedelta(hours=i * 3)
         if time <= soon:
             continue
-        time_string = time.strftime('%Y-%m-%dT%H:%M:%SZ')
+        timestamp = to_timestamp(time)
         layers.append(
             MapLayer(
-                url=f'/stations/map/{time_string}{country_suffix}',
-                timestamp=to_timestamp(time),
+                url=f'/stations/map/{timestamp}{country_suffix}',
+                timestamp=timestamp,
                 observation=ObservationType.Forecast,
             )
         )
@@ -101,11 +97,11 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
     start = now + timedelta(hours=24 - now.hour)
     for i in range(28):
         time = start + timedelta(hours=i * 6)
-        time_string = time.strftime('%Y-%m-%dT%H:%M:%SZ')
+        timestamp = to_timestamp(time)
         layers.append(
             MapLayer(
-                url=f'/stations/map/{time_string}{country_suffix}',
-                timestamp=to_timestamp(time),
+                url=f'/stations/map/{timestamp}{country_suffix}',
+                timestamp=timestamp,
                 observation=ObservationType.Forecast,
             )
         )
@@ -367,17 +363,22 @@ def get_all_map_legends() -> list[MapLegend]:
 
 async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
-    path: Optional[Path] = weather_map_url(map_id)
-    if not path:
+    timestamp = map_id
+    if map_id == 'current':
+        now = datetime.now(tz=timezone.utc)
+        now = now.replace(minute=0, second=0, microsecond=0)
+        timestamp = to_timestamp(now)
+
+    logger.debug('DWD MOSMIX timestamp: %s', timestamp)
+
+    ids: set[str] = await get_mosmix_ids_for_timestamp(timestamp)
+    if not ids:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Map ID is not recognised',
         )
 
-    logger.debug('DWD cache location: %s', path)
-
-    with open(path) as file:
-        records = load(file)
+    records = await get_mosmix_records(ids)
 
     conditions_list = []
     for record in records:

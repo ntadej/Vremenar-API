@@ -54,7 +54,6 @@ jobs:
 
       - name: Run tests
         run: |
-          tests/fixtures/setup.sh
           poetry run python tests/fixtures/setup_fixtures.py
           poetry run pytest
 
