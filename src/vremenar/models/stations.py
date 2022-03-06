@@ -24,6 +24,7 @@ class StationInfo(StationBase):
     coordinate: Coordinate
     zoom_level: Optional[float] = Field(None, example=7.5)
     forecast_only: Optional[bool] = Field(False, example=False)
+    alerts_area: Optional[str] = Field(None, example='SI007')
 
     def base(self) -> StationBase:
         """Return an instance of StationBase."""
