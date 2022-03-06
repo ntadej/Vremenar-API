@@ -21,7 +21,9 @@ async def list_stations() -> list[StationInfoExtended]:
     return list(stations.values())
 
 
-async def find_station(query: StationSearchModel) -> list[StationInfo]:
+async def find_station(
+    query: StationSearchModel, include_forecast_only: bool
+) -> list[StationInfo]:
     """Find station by coordinate or string."""
     url_forecast: str = join_url(BRIGHTSKY_BASEURL, 'weather', trailing_slash=False)
     url_current: str = join_url(
@@ -43,31 +45,32 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
             detail='Only coordinates are required',
         )
 
-    today = date.today()
-    target_date = today + timedelta(days=2)
-    url_forecast += (
-        f'&date={target_date.strftime("%Y-%m-%d")}'
-        f'&last_date={target_date.strftime("%Y-%m-%d")}'
-    )
-
-    logger.debug('Brightsky URL forecast: %s', url_forecast)
-
-    async with AsyncClient() as client:
-        response = await client.get(url_forecast)
-
-    response_body = response.json()
-    if 'sources' not in response_body:  # pragma: no cover
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
+    locations: list[StationInfo] = []
+    if include_forecast_only:
+        today = date.today()
+        target_date = today + timedelta(days=2)
+        url_forecast += (
+            f'&date={target_date.strftime("%Y-%m-%d")}'
+            f'&last_date={target_date.strftime("%Y-%m-%d")}'
         )
 
-    locations: list[StationInfo] = []
-    for source in response_body['sources']:
-        station = await parse_source(source)
-        if station:
-            locations.append(station)
-            break
+        logger.debug('Brightsky URL forecast: %s', url_forecast)
+
+        async with AsyncClient() as client:
+            response = await client.get(url_forecast)
+
+        response_body = response.json()
+        if 'sources' not in response_body:  # pragma: no cover
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Unknown station',
+            )
+
+        for source in response_body['sources']:
+            station = await parse_source(source)
+            if station:
+                locations.append(station)
+                break
 
     if not locations or locations[0].forecast_only:
         logger.debug('Brightsky URL current: %s', url_current)

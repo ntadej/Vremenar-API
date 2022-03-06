@@ -43,9 +43,11 @@ async def stations_list(
     response_model=list[StationInfo],
     **defaults,
 )
-async def find(country: CountryID, query: StationSearchModel) -> list[StationInfo]:
+async def find(
+    country: CountryID, query: StationSearchModel, include_forecast_only: bool = False
+) -> list[StationInfo]:
     """Find weather station."""
-    return await find_station(country, query)
+    return await find_station(country, query, include_forecast_only)
 
 
 @router.get(
