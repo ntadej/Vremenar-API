@@ -1,4 +1,5 @@
 """MeteoAlarm alerts."""
+from datetime import datetime, timezone
 from fastapi import HTTPException, status
 from json import loads
 from typing import Optional
@@ -7,7 +8,7 @@ from ...database.redis import redis
 from ...database.stations import get_stations
 from ...definitions import CountryID, LanguageID
 from ...models.alerts import AlertAreaWithPolygon, AlertInfo
-from ...utils import chunker, logger
+from ...utils import chunker, logger, parse_timestamp
 
 
 async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygon]:
@@ -56,7 +57,9 @@ async def list_alerts(
         for info, localised, alert_areas in chunker(response, 3):
             if areas is not None:
                 alert_areas = {area for area in alert_areas if area in areas}
-            alerts.append(AlertInfo.init(info, localised, alert_areas, areas_dict))
+            alert = AlertInfo.init(info, localised, alert_areas, areas_dict)
+            if parse_timestamp(alert.ending) > datetime.now(tz=timezone.utc):
+                alerts.append(alert)
 
     logger.debug('Read %s alerts from the database', len(alerts))
 
