@@ -67,7 +67,9 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
     elif 'cloud_cover' in weather and weather['cloud_cover']:
         cloud_cover = float(weather['cloud_cover'])
         cloud_cover_fraction = cloud_cover / 100
-        if 1 / 8 <= cloud_cover_fraction < 4 / 8:
+        if cloud_cover_fraction < 1 / 8:
+            base_icon = 'clear'
+        elif 1 / 8 <= cloud_cover_fraction < 4 / 8:
             base_icon = 'partCloudy'
         elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
             base_icon = 'prevCloudy'
