@@ -780,7 +780,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "types-python-dateutil"
-version = "2.8.9"
+version = "2.8.11"
 description = "Typing stubs for python-dateutil"
 category = "dev"
 optional = false
@@ -844,7 +844,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "fb6d44a6bb4978df0b941afe777316d59f08277ab39d0f034067c42057499f03"
+content-hash = "4b9359690c2bc4fb73dd3c95cebe9215ecb7f68d99900852d56b6a71d707451e"
 
 [metadata.files]
 aioredis = [
@@ -1344,8 +1344,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 types-python-dateutil = [
-    {file = "types-python-dateutil-2.8.9.tar.gz", hash = "sha256:90f95a6b6d4faba359287f17a2cae511ccc9d4abc89b01969bdac1185815c05d"},
-    {file = "types_python_dateutil-2.8.9-py3-none-any.whl", hash = "sha256:d60db7f5d40ce85ce54e7fb14e4157daf33e24f5a4bfb5f44ee7a5b790dfabd0"},
+    {file = "types-python-dateutil-2.8.11.tar.gz", hash = "sha256:edc05d0b93201928ab0b5ff2b314413dd3d2b24eb12c470297ef929de77c93ef"},
+    {file = "types_python_dateutil-2.8.11-py3-none-any.whl", hash = "sha256:61222fa5518b14601a4e95ad4f17feea4ada904947610560336cf8921a7544a8"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
