@@ -1,5 +1,5 @@
 name: Continuous Integration
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -63,3 +63,14 @@ jobs:
         with:
           file: ./coverage.xml
           flags: unittests
+
+      - name: Override Coverage Source Path for Sonar
+        if: matrix.python-version == 3.9 && matrix.os == 'ubuntu-latest'
+        run: sed -i "s/<source>\/home\/runner\/work\/Vremenar-API\/Vremenar-API<\/source>/<source>\/github\/workspace<\/source>/g" coverage.xml
+
+      - name: SonarCloud Scan
+        if: matrix.python-version == 3.9 && matrix.os == 'ubuntu-latest'
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

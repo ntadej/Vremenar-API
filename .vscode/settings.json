@@ -10,5 +10,8 @@
         "--show-column-numbers",
         "--no-pretty",
     ],
+    "sonarlint.connectedMode.project": {
+        "projectKey": "ntadej_Vremenar-API"
+    },
     "cSpell.enabled": false
 }
