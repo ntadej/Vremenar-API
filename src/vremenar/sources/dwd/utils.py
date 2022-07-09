@@ -76,10 +76,13 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
         else:
             base_icon = 'overcast'
 
-    precipitation_intensity = float(
+    precipitation_intensity_str = (
         weather['precipitation_60']
         if 'precipitation_60' in weather
         else weather['precipitation']
+    )
+    precipitation_intensity = (
+        float(precipitation_intensity_str) if precipitation_intensity_str else 0
     )
     if precipitation_intensity > 0:  # TODO: snow intensity
         if precipitation_intensity > 10:
