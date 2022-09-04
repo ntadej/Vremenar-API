@@ -177,7 +177,7 @@ class AlertInfo(BaseModel):
 
         # areas
         areas_objs = []
-        if areas is not None and alert_areas is not None:
+        if areas is not None and alert_areas:
             areas_list = list(alert_areas)
             areas_list.sort()
             areas_objs = [areas[a].base() for a in areas_list]

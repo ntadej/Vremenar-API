@@ -15,6 +15,7 @@ class CountryID(str, Enum):
             return 'Slovenia'
         if self is CountryID.Germany:
             return 'Germany'
+        raise RuntimeError('Undefined behaviour')  # pragma: no cover
 
     def full_name(self) -> str:
         """Get country full name."""
@@ -22,6 +23,7 @@ class CountryID(str, Enum):
             return 'slovenia'
         if self is CountryID.Germany:
             return 'germany'
+        raise RuntimeError('Undefined behaviour')  # pragma: no cover
 
 
 class LanguageID(str, Enum):

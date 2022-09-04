@@ -47,9 +47,7 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
 
     for id, station in stations_raw.items():
         extra_keys = set(station.keys()).difference(base_keys)
-        metadata = None
-        if extra_keys:
-            metadata = {key: station[key] for key in extra_keys}
+        metadata = {key: station[key] for key in extra_keys}
 
         stations[id] = StationInfoExtended(
             id=id,
@@ -62,6 +60,6 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
             zoom_level=station['zoom_level'],
             forecast_only=station['forecast_only'],
             alerts_area=station['alerts_area'] if 'alerts_area' in station else None,
-            metadata=metadata,
+            metadata=metadata if metadata else None,
         )
     return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}

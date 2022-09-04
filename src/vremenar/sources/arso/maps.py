@@ -3,7 +3,7 @@
 from fastapi import HTTPException, status
 from httpx import AsyncClient
 
-from ...definitions import CountryID, ObservationType
+from ...definitions import ObservationType
 from ...models.maps import (
     MapLayer,
     MapLegend,
@@ -15,7 +15,13 @@ from ...models.maps import (
 from ...models.weather import WeatherInfoExtended
 from ...utils import join_url, logger, parse_time, to_timestamp
 
-from .utils import API_BASEURL, BASEURL, TIMEOUT, parse_feature, weather_map_url
+from .utils import (
+    API_BASEURL,
+    TIMEOUT,
+    parse_feature,
+    weather_map_url,
+    weather_map_response_url,
+)
 
 MAP_URL = {
     MapType.WeatherCondition: '/forecast_si_data/',
@@ -74,26 +80,10 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     async with AsyncClient() as client:
         response = await client.get(url, timeout=TIMEOUT)
 
-    country_suffix = f'?country={CountryID.Slovenia}'
-
     layers: list[MapLayer] = []
     bbox: list[float] = []
     for layer in response.json():
-        if map_type == MapType.WeatherCondition:
-            if 'nowcast' in layer['path']:
-                url = layer['path'].replace(
-                    '/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json',
-                    '/stations/map/current',
-                )
-            else:
-                url = layer['path'].replace(
-                    '/uploads/probase/www/fproduct/json/sl/forecast_si_',
-                    '/stations/map/',
-                )
-                url = url.replace('.json', '')
-            url += country_suffix
-        else:
-            url = join_url(BASEURL, layer['path'])
+        url = weather_map_response_url(map_type, layer['path'])
         time = parse_time(layer['valid'])
         layers.append(
             MapLayer(

@@ -123,7 +123,7 @@ async def parse_record(
     if not station:  # pragma: no cover
         return None, None
 
-    if not station.metadata or station.metadata['status'] != '1':
+    if not station.metadata or station.metadata['status'] != '1':  # pragma: no cover
         return None, None
 
     condition = WeatherCondition(

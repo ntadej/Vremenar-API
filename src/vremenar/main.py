@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from . import __version__
 from .api import version, stations, maps, alerts, copyright
+from .database import database_info
 
 # Should not be enabled in production!
 debug = False
@@ -47,5 +48,7 @@ if debug:
     )
 
     app.add_middleware(PyInstrumentProfilerMiddleware)
+
+database_info()
 
 __all__ = ['app']

@@ -107,15 +107,10 @@ async def list_alerts_for_critera(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail='Unknown station',
                 )
-            if (
-                stations_list[s].metadata is not None
-                and 'alerts_area' in stations_list[s].metadata  # type: ignore
-            ):
-                areas_to_query.add(
-                    stations_list[s].metadata['alerts_area']  # type: ignore
-                )
+            if stations_list[s].alerts_area:
+                areas_to_query.add(stations_list[s].alerts_area)  # type: ignore
             else:
-                raise HTTPException(
+                raise HTTPException(  # pragma: no cover
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail='Station has no assigned alerts area',
                 )

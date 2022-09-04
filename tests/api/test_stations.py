@@ -37,6 +37,9 @@ async def test_stations_find_string(client: AsyncClient) -> None:
     response = await client.post('/stations/find?country=si', json={'string': 'Bled'})
     assert response.status_code == 200
 
+    response = await client.post('/stations/find?country=si', json={'string': 'Kranj'})
+    assert response.status_code == 200
+
     response = await client.post(
         '/stations/find?country=de', json={'string': 'Hamburg'}
     )
@@ -47,6 +50,7 @@ async def test_stations_find_string(client: AsyncClient) -> None:
 @pytest.mark.asyncio
 async def test_stations_find_coordinate(client: AsyncClient) -> None:
     """Test stations find by coordinate."""
+    # Bled
     response = await client.post(
         '/stations/find?country=si',
         json={
@@ -56,11 +60,42 @@ async def test_stations_find_coordinate(client: AsyncClient) -> None:
     )
     assert response.status_code == 200
 
+    # Hamburg (simple)
     response = await client.post(
         '/stations/find?country=de',
         json={
             'latitude': 53.5511,
             'longitude': 9.9937,
+        },
+    )
+    assert response.status_code == 200
+
+    # invalid
+    response = await client.post(
+        '/stations/find?country=de&include_forecast_only=true',
+        json={
+            'latitude': 50.63,
+            'longitude': 10,
+        },
+    )
+    assert response.status_code == 200
+
+    # Hamburg
+    response = await client.post(
+        '/stations/find?country=de&include_forecast_only=true',
+        json={
+            'latitude': 53.63,
+            'longitude': 10,
+        },
+    )
+    assert response.status_code == 200
+
+    # Near Hamburg
+    response = await client.post(
+        '/stations/find?country=de&include_forecast_only=true',
+        json={
+            'latitude': 53.6022,
+            'longitude': 9.8374,
         },
     )
     assert response.status_code == 200

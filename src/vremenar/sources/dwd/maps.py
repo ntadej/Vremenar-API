@@ -19,6 +19,9 @@ from .utils import get_mosmix_ids_for_timestamp, get_mosmix_records, parse_recor
 
 MAPS_BASEURL = 'https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true'  # noqa E501
 
+MESSAGE_MAP_URL = 'DWD Map URL: %s'
+MESSAGE_NOT_AVAILABLE_YET = 'Map not available yet'
+
 
 def get_supported_map_types() -> list[SupportedMapType]:
     """Get DWD supported map types."""
@@ -127,13 +130,13 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     test_time = current_time.isoformat()
     test_url = f'{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
 
-    logger.debug('DWD Map URL: %s', test_url)
+    logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
     if 'InvalidDimensionValue' in response.text:  # pragma: no cover
-        logger.info('Map not available yet')
+        logger.info(MESSAGE_NOT_AVAILABLE_YET)
         current_time -= timedelta(minutes=5)
 
     # historical data + recent
@@ -184,13 +187,13 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     test_time = current_time.isoformat()
     test_url = f'{MAPS_BASEURL}&layers=dwd:WAWFOR_ieu_temperature_2m&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
 
-    logger.debug('DWD Map URL: %s', test_url)
+    logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
     if 'InvalidDimensionValue' in response.text:  # pragma: no cover
-        logger.info('Map not available yet')
+        logger.info(MESSAGE_NOT_AVAILABLE_YET)
         current_time += timedelta(hours=1)
 
     for i in range(24):
@@ -223,13 +226,13 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     test_time = current_time.isoformat()
     test_url = f'{MAPS_BASEURL}&layers={map_name}&styles={map_style}&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
 
-    logger.debug('DWD Map URL: %s', test_url)
+    logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
         response = await client.get(test_url)
 
     if 'InvalidDimensionValue' in response.text:  # pragma: no cover
-        logger.info('Map not available yet')
+        logger.info(MESSAGE_NOT_AVAILABLE_YET)
         current_time -= timedelta(days=1)
 
     # forecast
