@@ -61,7 +61,6 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
 
     country_suffix = f'?country={CountryID.Germany}'
 
-    # TODO: proper current
     layers.append(
         MapLayer(
             url=f'/stations/map/current{country_suffix}',
