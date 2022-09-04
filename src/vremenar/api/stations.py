@@ -55,7 +55,7 @@ async def find(
     tags=['stations'],
     name='Current station condition',
     response_description='Current weather condition for the chosen station',
-    response_model=Union[WeatherInfoExtended, WeatherInfo],  # type: ignore
+    response_model=Union[WeatherInfoExtended, WeatherInfo],
     **defaults,
 )
 async def condition(

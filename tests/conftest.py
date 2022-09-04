@@ -2,8 +2,9 @@
 import asyncio
 import pytest
 
+from collections.abc import AsyncGenerator, Generator
 from httpx import AsyncClient
-from typing import Any, AsyncGenerator, Generator
+from typing import Any
 
 
 @pytest.fixture(scope='session')

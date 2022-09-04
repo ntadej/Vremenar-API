@@ -1,10 +1,11 @@
 """Helper utilities."""
 
 from astral import Observer, sun  # type: ignore
+from collections.abc import Generator
 from datetime import date, datetime, timezone
 from functools import lru_cache
 from logging import Logger, getLogger
-from typing import cast, Any, Generator
+from typing import cast, Any
 
 from .models.common import Coordinate
 
