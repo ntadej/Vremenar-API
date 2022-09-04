@@ -21,6 +21,28 @@ async def list_stations() -> list[StationInfoExtended]:
     return list(stations.values())
 
 
+async def _process_find_station(url: str) -> list[StationInfo]:
+    """Process find station request."""
+    logger.debug('Brightsky URL: %s', url)
+
+    locations: list[StationInfo] = []
+
+    async with AsyncClient() as client:
+        response = await client.get(url)
+
+    response_body = response.json()
+    if 'sources' not in response_body:  # pragma: no cover
+        raise UnknownStationException()
+
+    for source in response_body['sources']:
+        station = await parse_source(source)
+        if station:
+            locations.append(station)
+            break
+
+    return locations
+
+
 async def find_station(
     query: StationSearchModel, include_forecast_only: bool
 ) -> list[StationInfo]:
@@ -48,36 +70,11 @@ async def find_station(
             f'&last_date={target_date.strftime("%Y-%m-%d")}'
         )
 
-        logger.debug('Brightsky URL forecast: %s', url_forecast)
-
-        async with AsyncClient() as client:
-            response = await client.get(url_forecast)
-
-        response_body = response.json()
-        if 'sources' not in response_body:  # pragma: no cover
-            raise UnknownStationException()
-
-        for source in response_body['sources']:
-            station = await parse_source(source)
-            if station:
-                locations.append(station)
-                break
+        locations = await _process_find_station(url_forecast)
 
     if not locations or locations[0].forecast_only:
-        logger.debug('Brightsky URL current: %s', url_current)
-
-        async with AsyncClient() as client:
-            response = await client.get(url_current)
-
-        response_body = response.json()
-        if 'sources' not in response_body:  # pragma: no cover
-            raise UnknownStationException()
-
-        for source in response_body['sources']:
-            station = await parse_source(source)
-            if station:
-                locations.append(station)
-                break
+        for location in await _process_find_station(url_current):
+            locations.append(location)
 
     return locations
 

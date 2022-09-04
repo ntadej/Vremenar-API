@@ -80,6 +80,36 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
     return set.union(*response)
 
 
+async def _parse_areas(
+    country: CountryID, areas: Optional[list[str]] = None
+) -> set[str]:
+    """Parse areas from query."""
+    areas_to_query: set[str] = set()
+    if areas:
+        areas_list = await list_alerts_areas(country)
+        for a in areas:
+            if a not in areas_list:
+                raise UnknownAlertAreaException()
+            areas_to_query.add(a)
+    return areas_to_query
+
+
+async def _parse_stations(
+    country: CountryID, stations: Optional[list[str]] = None
+) -> set[str]:
+    """Parse stations from query."""
+    areas_to_query: set[str] = set()
+    if stations:
+        stations_list = await get_stations(country)
+        for s in stations:
+            if s not in stations_list:
+                raise UnknownStationException()
+            if not stations_list[s].alerts_area:
+                raise UnknownStationAlertAreaException()  # pragma: no cover
+            areas_to_query.add(stations_list[s].alerts_area)  # type: ignore
+    return areas_to_query
+
+
 async def list_alerts_for_critera(
     country: CountryID,
     language: LanguageID = LanguageID.English,
@@ -90,23 +120,9 @@ async def list_alerts_for_critera(
     if not stations and not areas:
         raise InvalidSearchQueryException('At least one station or area required')
 
-    areas_to_query: set[str] = set()
-    if areas:
-        areas_list = await list_alerts_areas(country)
-        for a in areas:
-            if a not in areas_list:
-                raise UnknownAlertAreaException()
-            areas_to_query.add(a)
-
-    if stations:
-        stations_list = await get_stations(country)
-        for s in stations:
-            if s not in stations_list:
-                raise UnknownStationException()
-            if stations_list[s].alerts_area:
-                areas_to_query.add(stations_list[s].alerts_area)  # type: ignore
-            else:
-                raise UnknownStationAlertAreaException()  # pragma: no cover
+    areas_to_query: set[str] = await _parse_areas(
+        country, areas
+    ) | await _parse_stations(country, stations)
 
     # get unique alert IDs
     alert_ids: set[str] = await list_alert_ids_for_areas(country, areas_to_query)
