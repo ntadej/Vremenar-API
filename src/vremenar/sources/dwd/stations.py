@@ -1,11 +1,11 @@
 """DWD weather stations."""
 from datetime import date, timedelta
-from fastapi import HTTPException, status
 from httpx import AsyncClient
 from typing import Optional
 
 from ...database.stations import get_stations
 from ...definitions import CountryID, ObservationType
+from ...exceptions import UnknownStationException, InvalidSearchQueryException
 from ...models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ...models.weather import WeatherCondition, WeatherInfoExtended
 from ...utils import join_url, logger, parse_time, to_timestamp
@@ -31,19 +31,13 @@ async def find_station(
     )
 
     if query.string:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Only coordinates are required',
-        )
+        raise InvalidSearchQueryException('Only coordinates are required')
 
     if query.latitude is not None and query.longitude is not None:
         url_forecast += f'?lat={query.latitude}&lon={query.longitude}'
         url_current += f'?lat={query.latitude}&lon={query.longitude}'
     else:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Only coordinates are required',
-        )
+        raise InvalidSearchQueryException('Only coordinates are required')
 
     locations: list[StationInfo] = []
     if include_forecast_only:
@@ -61,10 +55,7 @@ async def find_station(
 
         response_body = response.json()
         if 'sources' not in response_body:  # pragma: no cover
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail='Unknown station',
-            )
+            raise UnknownStationException()
 
         for source in response_body['sources']:
             station = await parse_source(source)
@@ -80,10 +71,7 @@ async def find_station(
 
         response_body = response.json()
         if 'sources' not in response_body:  # pragma: no cover
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail='Unknown station',
-            )
+            raise UnknownStationException()
 
         for source in response_body['sources']:
             station = await parse_source(source)
@@ -99,10 +87,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     stations = await get_stations(CountryID.Germany)
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
+        raise UnknownStationException()
 
     url: str = join_url(BRIGHTSKY_BASEURL, 'current_weather', trailing_slash=False)
     url += f'?lat={station.coordinate.latitude}&lon={station.coordinate.longitude}'
@@ -114,20 +99,14 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
 
     response_body = response.json()
     if 'sources' not in response_body:  # pragma: no cover
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
+        raise UnknownStationException()
 
     for source in response_body['sources']:
         station = await parse_source(source)
         break
 
     if not station:  # pragma: no cover
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
+        raise UnknownStationException()
 
     weather = response_body['weather']
 

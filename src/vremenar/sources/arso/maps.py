@@ -1,9 +1,8 @@
 """ARSO weather maps."""
-
-from fastapi import HTTPException, status
 from httpx import AsyncClient
 
 from ...definitions import ObservationType
+from ...exceptions import UnsupportedMapTypeException, UnrecognisedMapIDException
 from ...models.maps import (
     MapLayer,
     MapLegend,
@@ -69,10 +68,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     """Get ARSO map layers."""
     url: str = MAP_URL.get(map_type, '')
     if not url:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unsupported or unknown map type',
-        )
+        raise UnsupportedMapTypeException()
 
     url = join_url(API_BASEURL, url, trailing_slash=True)
     logger.debug('ARSO URL: %s', url)
@@ -208,10 +204,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         )
         return MapLegend(map_type=map_type, items=items)
 
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported or unknown map type',
-    )
+    raise UnsupportedMapTypeException()
 
 
 def get_all_map_legends() -> list[MapLegend]:
@@ -224,10 +217,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
     url: str = weather_map_url(map_id)
     if not url:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Map ID is not recognised',
-        )
+        raise UnrecognisedMapIDException()
 
     logger.debug('ARSO URL: %s', url)
 
@@ -235,10 +225,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
         response = await client.get(url)
 
     if response.status_code == 404:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Map ID is not recognised',
-        )
+        raise UnrecognisedMapIDException()
 
     response_body = response.json()
     if 'features' not in response_body:  # pragma: no cover

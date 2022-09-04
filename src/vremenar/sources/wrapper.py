@@ -1,9 +1,8 @@
 """Weather sources wrapper."""
-
-from fastapi import HTTPException, status
 from typing import Optional
 
 from ..definitions import CountryID, LanguageID
+from ..exceptions import UnsupportedCountryException
 from ..models.alerts import AlertAreaWithPolygon, AlertInfo
 from ..models.maps import MapLayer, MapLegend, MapType, SupportedMapType
 from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
@@ -21,10 +20,7 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
     if country == CountryID.Germany:
         return dwd.get_supported_map_types()
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def get_map_layers(
@@ -36,10 +32,7 @@ async def get_map_layers(
     if country == CountryID.Germany:
         return await dwd.get_map_layers(map_type)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 def get_all_map_legends(country: CountryID) -> list[MapLegend]:
@@ -49,10 +42,7 @@ def get_all_map_legends(country: CountryID) -> list[MapLegend]:
     if country == CountryID.Germany:
         return dwd.get_all_map_legends()
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
@@ -62,10 +52,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     if country == CountryID.Germany:
         return dwd.get_map_legend(map_type)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoExtended]:
@@ -75,10 +62,7 @@ async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoEx
     if country == CountryID.Germany:
         return await dwd.get_weather_map(map_id)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def list_stations(country: CountryID) -> list[StationInfoExtended]:
@@ -88,10 +72,7 @@ async def list_stations(country: CountryID) -> list[StationInfoExtended]:
     if country == CountryID.Germany:
         return await dwd.list_stations()
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def find_station(
@@ -103,10 +84,7 @@ async def find_station(
     if country == CountryID.Germany:
         return await dwd.find_station(query, include_forecast_only)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def current_station_condition(
@@ -118,10 +96,7 @@ async def current_station_condition(
     if country == CountryID.Germany:
         return await dwd.current_station_condition(station_id)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported country',
-    )
+    raise UnsupportedCountryException()  # pragma: no cover
 
 
 async def list_alerts(country: CountryID, language: LanguageID) -> list[AlertInfo]:

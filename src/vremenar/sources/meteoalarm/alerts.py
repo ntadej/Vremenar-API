@@ -1,12 +1,17 @@
 """MeteoAlarm alerts."""
 from datetime import datetime, timezone
-from fastapi import HTTPException, status
 from json import loads
 from typing import Optional
 
 from ...database.redis import redis
 from ...database.stations import get_stations
 from ...definitions import CountryID, LanguageID
+from ...exceptions import (
+    UnknownAlertAreaException,
+    UnknownStationException,
+    UnknownStationAlertAreaException,
+    InvalidSearchQueryException,
+)
 from ...models.alerts import AlertAreaWithPolygon, AlertInfo
 from ...utils import chunker, logger, parse_timestamp
 
@@ -83,37 +88,25 @@ async def list_alerts_for_critera(
 ) -> list[AlertInfo]:
     """Get list of alerts for criteria."""
     if not stations and not areas:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='At least one station or area required',
-        )
+        raise InvalidSearchQueryException('At least one station or area required')
 
     areas_to_query: set[str] = set()
     if areas:
         areas_list = await list_alerts_areas(country)
         for a in areas:
             if a not in areas_list:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail='Unknown alert area',
-                )
+                raise UnknownAlertAreaException()
             areas_to_query.add(a)
 
     if stations:
         stations_list = await get_stations(country)
         for s in stations:
             if s not in stations_list:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail='Unknown station',
-                )
+                raise UnknownStationException()
             if stations_list[s].alerts_area:
                 areas_to_query.add(stations_list[s].alerts_area)  # type: ignore
             else:
-                raise HTTPException(  # pragma: no cover
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail='Station has no assigned alerts area',
-                )
+                raise UnknownStationAlertAreaException()  # pragma: no cover
 
     # get unique alert IDs
     alert_ids: set[str] = await list_alert_ids_for_areas(country, areas_to_query)

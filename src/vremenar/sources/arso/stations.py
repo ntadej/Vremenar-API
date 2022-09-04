@@ -1,11 +1,10 @@
 """ARSO weather stations."""
-
-from fastapi import HTTPException, status
 from httpx import AsyncClient
 from typing import Optional
 
 from ...database.stations import get_stations
 from ...definitions import CountryID, ObservationType
+from ...exceptions import UnknownStationException, InvalidSearchQueryException
 from ...models.stations import StationInfo, StationInfoExtended, StationSearchModel
 from ...models.weather import WeatherInfoExtended
 from ...utils import join_url, logger
@@ -24,9 +23,8 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
     url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
 
     if query.string and (query.latitude or query.longitude):
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Either search string or coordinates are required',
+        raise InvalidSearchQueryException(
+            'Either search string or coordinates are required'
         )
 
     if query.string:
@@ -36,9 +34,8 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         single = True
         url += f'?lat={query.latitude}&lon={query.longitude}'
     else:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail='Either search string or coordinates are required',
+        raise InvalidSearchQueryException(
+            'Either search string or coordinates are required'
         )
 
     logger.debug('ARSO URL: %s', url)
@@ -70,10 +67,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     stations = await get_stations(CountryID.Slovenia)
     station: Optional[StationInfoExtended] = stations.get(station_id, None)
     if not station:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
+        raise UnknownStationException()
 
     url = (
         join_url(API_BASEURL, 'locations', trailing_slash=True) + f'?loc={station.name}'
@@ -86,16 +80,10 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
 
     response_body = response.json()
     if 'features' not in response_body:  # pragma: no cover
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
-        )
+        raise UnknownStationException()
 
     for feature in response_body['features']:
         _, condition = await parse_feature(feature, ObservationType.Recent)
         return WeatherInfoExtended(station=station, condition=condition)
 
-    raise HTTPException(  # pragma: no cover
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unknown station',
-    )
+    raise UnknownStationException()  # pragma: no cover

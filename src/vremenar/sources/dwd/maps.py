@@ -1,9 +1,9 @@
 """DWD weather maps."""
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException, status
 from httpx import AsyncClient
 
 from ...definitions import CountryID, ObservationType
+from ...exceptions import UnsupportedMapTypeException, UnrecognisedMapIDException
 from ...models.maps import (
     MapLayer,
     MapLegend,
@@ -266,10 +266,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     if map_type == MapType.UVIndexMax or map_type == MapType.UVDose:
         return await get_map_uv(map_type)
 
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported or unknown map type',
-    )
+    raise UnsupportedMapTypeException()
 
 
 def get_map_legend(map_type: MapType) -> MapLegend:
@@ -352,10 +349,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         )
         return MapLegend(map_type=map_type, items=items)
 
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Unsupported or unknown map type',
-    )
+    raise UnsupportedMapTypeException()
 
 
 def get_all_map_legends() -> list[MapLegend]:
@@ -376,10 +370,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
 
     ids: set[str] = await get_mosmix_ids_for_timestamp(timestamp)
     if not ids:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='Map ID is not recognised',
-        )
+        raise UnrecognisedMapIDException()
 
     records = await get_mosmix_records(ids)
 
