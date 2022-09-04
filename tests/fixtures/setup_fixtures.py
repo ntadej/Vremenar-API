@@ -124,12 +124,12 @@ async def mosmix_fixtures() -> None:
         'wind_gust_speed': 11.83,
         'cloud_cover': 100.0,
         'pressure_msl': 97880.0,
-        'precipitation': 0.2,
+        'precipitation': 50.0,
         'sunshine': 0.0,
         'dew_point': 274.65,
         'temperature': 276.55,
         'visibility': 13900.0,
-        'condition': 61.0,
+        'condition': 'rain',
     }
 
     record_soon = {
@@ -146,7 +146,7 @@ async def mosmix_fixtures() -> None:
         'dew_point': 274.65,
         'temperature': 276.55,
         'visibility': 13900.0,
-        'condition': 61.0,
+        'condition': 'dry',
     }
 
     record_unknown = {
@@ -163,7 +163,7 @@ async def mosmix_fixtures() -> None:
         'dew_point': 274.65,
         'temperature': 276.55,
         'visibility': 13900.0,
-        'condition': 61.0,
+        'condition': 'dry',
     }
 
     await store_mosmix_record(record)

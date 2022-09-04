@@ -32,7 +32,53 @@ async def get_mosmix_records(ids: set[str]) -> list[dict[str, Any]]:
     return result
 
 
-def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> str:
+def get_icon_base(weather: dict[str, Any]) -> str:
+    """Get base icon from weather data."""
+    weather_condition = weather.get('condition', None)
+    if weather_condition == 'fog':
+        return 'FG'
+
+    cloud_cover = float(weather.get('cloud_cover', 0))
+    cloud_cover_fraction = cloud_cover / 100
+    if cloud_cover_fraction < 1 / 8:
+        return 'clear'
+    elif 1 / 8 <= cloud_cover_fraction < 4 / 8:
+        return 'partCloudy'
+    elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
+        return 'prevCloudy'
+    return 'overcast'
+
+
+def get_icon_condition(weather: dict[str, Any]) -> Optional[str]:
+    """Get icon condition from weather data."""
+    weather_condition = weather.get('condition', None)
+
+    precipitation_intensity = float(
+        weather.get('precipitation_60', weather.get('precipitation', 0))
+    )
+    if precipitation_intensity <= 0 or weather_condition == 'dry':
+        return None
+
+    if precipitation_intensity > 10:
+        intensity = 'heavy'
+    elif precipitation_intensity > 2.5:
+        intensity = 'mod'
+    else:
+        intensity = 'light'
+
+    if weather_condition in ['hail', 'sleet']:
+        precipitation_type = 'SHGR'
+    elif weather_condition == 'thunderstorm':
+        precipitation_type = 'TSRA'
+    elif weather_condition == 'snow':
+        precipitation_type = 'SN'
+    else:
+        precipitation_type = 'RA'
+
+    return f'{intensity}{precipitation_type}'
+
+
+def get_icon(weather: dict[str, Any], station: StationInfo, time: datetime) -> str:
     """Get icon from weather data."""
     # SOURCE:
     # conditions: dry, fog, rain, sleet, snow, hail, thunderstorm, null
@@ -54,58 +100,15 @@ def get_icon(station: StationInfo, weather: dict[str, Any], time: datetime) -> s
     #   heavy - when the precipitation rate is > 10 mm per hour
     # sky:
     #   clear - 0 to 1/8
-    #   partly cloudy - 1/8 to
-    #   mostly cloudy -
-    #   overcast -
+    #   partly cloudy - 1/8 to 4/8
+    #   mostly cloudy - 4/8 to 7/8
+    #   overcast - 7/8 to 1
 
     time_of_day = day_or_night(station.coordinate, time)
-    base_icon = 'clear'
-    condition = None
-    weather_condition = weather.get('condition', None)
-    if weather_condition == 'fog':  # TODO: intensity
-        base_icon = 'FG'
-    elif 'cloud_cover' in weather and weather['cloud_cover']:
-        cloud_cover = float(weather['cloud_cover'])
-        cloud_cover_fraction = cloud_cover / 100
-        if cloud_cover_fraction < 1 / 8:
-            base_icon = 'clear'
-        elif 1 / 8 <= cloud_cover_fraction < 4 / 8:
-            base_icon = 'partCloudy'
-        elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
-            base_icon = 'prevCloudy'
-        else:
-            base_icon = 'overcast'
-
-    precipitation_intensity_str = (
-        weather['precipitation_60']
-        if 'precipitation_60' in weather
-        else weather['precipitation']
-    )
-    precipitation_intensity = (
-        float(precipitation_intensity_str) if precipitation_intensity_str else 0
-    )
-    if precipitation_intensity > 0:  # TODO: snow intensity
-        if precipitation_intensity > 10:
-            intensity = 'heavy'
-        elif precipitation_intensity > 2.5:
-            intensity = 'mod'
-        else:
-            intensity = 'light'
-
-        if weather_condition in ['hail', 'sleet']:
-            precipitation_type = 'SHGR'
-        elif weather_condition == 'thunderstorm':
-            precipitation_type = 'TSRA'
-        elif weather_condition == 'snow':
-            precipitation_type = 'SN'
-        else:
-            precipitation_type = 'RA'
-
-        condition = f'{intensity}{precipitation_type}'
-
+    base_icon = get_icon_base(weather)
+    condition = get_icon_condition(weather)
     if condition:
         return f'{base_icon}_{condition}_{time_of_day}'
-
     return f'{base_icon}_{time_of_day}'
 
 
@@ -129,7 +132,7 @@ async def parse_record(
     condition = WeatherCondition(
         observation=observation,
         timestamp=record['timestamp'],
-        icon=get_icon(station, record, parse_timestamp(record['timestamp'])),
+        icon=get_icon(record, station, parse_timestamp(record['timestamp'])),
         temperature=kelvin_to_celsius(float(record['temperature'])),
     )
 

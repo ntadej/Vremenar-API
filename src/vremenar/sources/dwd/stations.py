@@ -112,7 +112,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     condition = WeatherCondition(
         observation=ObservationType.Recent,
         timestamp=to_timestamp(time),
-        icon=get_icon(station, weather, time),
+        icon=get_icon(weather, station, time),
         temperature=weather['temperature'],
     )
 
