@@ -1,5 +1,5 @@
 """Redis utilities."""
-from aioredis import Redis, from_url
+from redis.asyncio import Redis, from_url
 from os import getenv
 from typing import Any, Optional
 
@@ -25,7 +25,7 @@ def database_info() -> None:
 class BatchedRedis:
     """Put items to redis in batches."""
 
-    def __init__(self, connection: Redis, limit: Optional[int] = 1000) -> None:
+    def __init__(self, connection: 'Redis[Any]', limit: Optional[int] = 1000) -> None:
         """Initialise with DB."""
         self.connection = connection
         self.queue: list[Any] = []
@@ -46,7 +46,7 @@ class BatchedRedis:
 
         self.queue.append(item)
 
-    def process(self, pipeline: Redis, item: Any) -> None:
+    def process(self, pipeline: 'Redis[Any]', item: Any) -> None:
         """Process items in queue."""
         raise NotImplementedError(
             'BatchedRedis needs to be subclassed and process implemented'

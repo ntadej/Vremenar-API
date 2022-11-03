@@ -1,6 +1,6 @@
 """Helper utilities."""
 
-from astral import Observer, sun  # type: ignore
+from astral import Observer, sun
 from collections.abc import Generator
 from datetime import date, datetime, timezone
 from functools import lru_cache

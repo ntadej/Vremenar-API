@@ -6,8 +6,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.10"]
+        os: [ubuntu-22.04, macos-12]
+        python-version: ["3.9", "3.10", "3.11"]
 
     steps:
       - name: Checkout
@@ -22,6 +22,8 @@ jobs:
 
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v2.1.6
+        with:
+          poetry-version: 1.2.2
 
       - name: Config Poetry
         run: |
