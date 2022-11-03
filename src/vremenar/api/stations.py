@@ -1,7 +1,6 @@
 """Weather stations API."""
 
 from fastapi import APIRouter
-from typing import Union
 
 from .config import defaults
 from ..definitions import CountryID
@@ -22,12 +21,12 @@ router = APIRouter()
     tags=['stations'],
     name='List stations',
     response_description='List of weather stations',
-    response_model=list[Union[StationInfoExtended, StationInfo]],
+    response_model=list[StationInfo] | list[StationInfoExtended],
     **defaults,
 )
 async def stations_list(
     country: CountryID, extended: bool = False
-) -> Union[list[StationInfo], list[StationInfoExtended]]:
+) -> list[StationInfo] | list[StationInfoExtended]:
     """List weather stations."""
     if extended:
         return await list_stations(country)
@@ -55,12 +54,12 @@ async def find(
     tags=['stations'],
     name='Current station condition',
     response_description='Current weather condition for the chosen station',
-    response_model=Union[WeatherInfoExtended, WeatherInfo],
+    response_model=WeatherInfoExtended | WeatherInfo,
     **defaults,
 )
 async def condition(
     country: CountryID, station_id: str, extended: bool = False
-) -> Union[WeatherInfoExtended, WeatherInfo]:
+) -> WeatherInfoExtended | WeatherInfo:
     """Get current station condition."""
     condition = await current_station_condition(country, station_id)
 
@@ -75,12 +74,12 @@ async def condition(
     tags=['stations'],
     name='Weather conditions map',
     response_description='List of weather information',
-    response_model=list[Union[WeatherInfoExtended, WeatherInfo]],
+    response_model=list[WeatherInfo] | list[WeatherInfoExtended],
     **defaults,
 )
 async def conditions_map(
     country: CountryID, map_id: str, extended: bool = True
-) -> Union[list[WeatherInfo], list[WeatherInfoExtended]]:
+) -> list[WeatherInfo] | list[WeatherInfoExtended]:
     """Get weather conditions map for a specific ID."""
     weather_map = await get_weather_map(country, map_id)
 

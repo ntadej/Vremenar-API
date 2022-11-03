@@ -1,6 +1,4 @@
 """Weather sources wrapper."""
-from typing import Optional
-
 from ..definitions import CountryID, LanguageID
 from ..exceptions import UnsupportedCountryException
 from ..models.alerts import AlertAreaWithPolygon, AlertInfo
@@ -107,8 +105,8 @@ async def list_alerts(country: CountryID, language: LanguageID) -> list[AlertInf
 async def list_alerts_for_critera(
     country: CountryID,
     language: LanguageID = LanguageID.English,
-    stations: Optional[list[str]] = None,
-    areas: Optional[list[str]] = None,
+    stations: list[str] | None = None,
+    areas: list[str] | None = None,
 ) -> list[AlertInfo]:
     """Get list of alerts for criteria."""
     return await meteoalarm.list_alerts_for_critera(country, language, stations, areas)

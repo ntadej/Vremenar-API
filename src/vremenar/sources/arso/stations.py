@@ -1,6 +1,5 @@
 """ARSO weather stations."""
 from httpx import AsyncClient
-from typing import Optional
 
 from ...database.stations import get_stations
 from ...definitions import CountryID, ObservationType
@@ -65,7 +64,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
     stations = await get_stations(CountryID.Slovenia)
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
+    station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
         raise UnknownStationException()
 

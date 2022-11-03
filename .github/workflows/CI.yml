@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-12]
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11"]
 
     steps:
       - name: Checkout
@@ -55,18 +55,18 @@ jobs:
           poetry run pytest
 
       - name: Report coverage with Codecov
-        if: github.event_name == 'push' && matrix.python-version == 3.9 && matrix.os == 'ubuntu-22.04'
+        if: github.event_name == 'push' && matrix.python-version == 3.10 && matrix.os == 'ubuntu-22.04'
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml
           flags: unittests
 
       - name: Override Coverage Source Path for Sonar
-        if: matrix.python-version == 3.9 && matrix.os == 'ubuntu-22.04'
+        if: matrix.python-version == 3.10 && matrix.os == 'ubuntu-22.04'
         run: sed -i "s/<source>\/home\/runner\/work\/Vremenar-API\/Vremenar-API<\/source>/<source>\/github\/workspace<\/source>/g" coverage.xml
 
       - name: SonarCloud Scan
-        if: matrix.python-version == 3.9 && matrix.os == 'ubuntu-22.04'
+        if: matrix.python-version == 3.10 && matrix.os == 'ubuntu-22.04'
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

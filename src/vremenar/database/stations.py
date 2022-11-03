@@ -1,6 +1,5 @@
 """Stations database helpers."""
 import asyncstdlib as a
-from typing import Union
 
 from ..definitions import CountryID
 from ..models.common import Coordinate
@@ -11,9 +10,9 @@ from .redis import redis
 
 async def load_stations(
     country: CountryID,
-) -> dict[str, dict[str, Union[str, int, float]]]:
+) -> dict[str, dict[str, str | int | float]]:
     """Load stations from redis."""
-    stations: dict[str, dict[str, Union[str, int, float]]] = {}
+    stations: dict[str, dict[str, str | int | float]] = {}
     async with redis.client() as connection:
         ids: set[str] = await redis.smembers(f'station:{country.value}')
         async with connection.pipeline(transaction=False) as pipeline:
@@ -30,9 +29,7 @@ async def load_stations(
 @a.lru_cache
 async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported stations for a country."""
-    stations_raw: dict[str, dict[str, Union[str, int, float]]] = await load_stations(
-        country
-    )
+    stations_raw: dict[str, dict[str, str | int | float]] = await load_stations(country)
     stations: dict[str, StationInfoExtended] = {}
     base_keys: set[str] = {
         'id',

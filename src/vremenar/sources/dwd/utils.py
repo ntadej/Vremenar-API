@@ -1,6 +1,6 @@
 """DWD weather utils."""
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from ...database.redis import redis
 from ...database.stations import get_stations
@@ -49,7 +49,7 @@ def get_icon_base(weather: dict[str, Any]) -> str:
     return 'overcast'
 
 
-def get_icon_condition(weather: dict[str, Any]) -> Optional[str]:
+def get_icon_condition(weather: dict[str, Any]) -> str | None:
     """Get icon condition from weather data."""
     weather_condition = weather.get('condition', None)
 
@@ -114,7 +114,7 @@ def get_icon(weather: dict[str, Any], station: StationInfo, time: datetime) -> s
 
 async def parse_record(
     record: dict[str, Any], observation: ObservationType
-) -> tuple[Optional[StationBase], Optional[WeatherCondition]]:
+) -> tuple[StationBase | None, WeatherCondition | None]:
     """Parse DWD record."""
     station_id = record['station_id']
     stations = await get_stations(CountryID.Germany)
@@ -122,7 +122,7 @@ async def parse_record(
     if station_id not in stations:  # pragma: no cover
         return None, None
 
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
+    station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:  # pragma: no cover
         return None, None
 
@@ -139,7 +139,7 @@ async def parse_record(
     return station, condition
 
 
-async def parse_source(source: dict[str, Any]) -> Optional[StationInfoExtended]:
+async def parse_source(source: dict[str, Any]) -> StationInfoExtended | None:
     """Parse DWD weather source."""
     stations = await get_stations(CountryID.Germany)
     source_id = source['wmo_station_id']

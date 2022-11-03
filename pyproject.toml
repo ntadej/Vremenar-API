@@ -5,7 +5,7 @@ description = ""
 authors = ["Tadej Novak <tadej@tano.si>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 astral = "^3.1"
 asyncstdlib = "^3.10.3"
 fastapi = "^0.85.2"
@@ -35,7 +35,7 @@ types-redis = "^4.3.21.3"
 
 [tool.black]
 line-length = 88
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py310', 'py311']
 include = '\.pyi?$'
 skip-string-normalization = true
 exclude = '''

@@ -2,7 +2,6 @@
 
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Optional
 
 from ..definitions import ObservationType
 
@@ -33,7 +32,7 @@ class SupportedMapType(BaseModel):
 
     map_type: MapType = Field(..., example=MapType.Precipitation)
     rendering_type: MapRenderingType = Field(..., example=MapRenderingType.Tiles)
-    has_legend: Optional[bool] = Field(None, example=False)
+    has_legend: bool | None = Field(None, example=False)
 
 
 class MapLayer(BaseModel):
@@ -55,7 +54,7 @@ class MapLayersList(BaseModel):
     map_type: MapType = Field(..., example=MapType.Precipitation)
     rendering: MapRenderingType = Field(..., example=MapRenderingType.Image)
     layers: list[MapLayer]
-    bbox: Optional[list[float]] = Field(None, example=[44.67, 12.1, 47.42, 17.44])
+    bbox: list[float] | None = Field(None, example=[44.67, 12.1, 47.42, 17.44])
 
     @classmethod
     def init(
@@ -81,8 +80,8 @@ class MapLegendItem(BaseModel):
 
     value: str = Field(..., example='30')
     color: str = Field(..., example='#2fef28')
-    placeholder: Optional[bool] = Field(None, example=False)
-    translatable: Optional[bool] = Field(None, example=False)
+    placeholder: bool | None = Field(None, example=False)
+    translatable: bool | None = Field(None, example=False)
 
     class Config:
         """Map legend item model config."""

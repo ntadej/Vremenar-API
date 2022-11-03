@@ -1,7 +1,6 @@
 """MeteoAlarm alerts."""
 from datetime import datetime, timezone
 from json import loads
-from typing import Optional
 
 from ...database.redis import redis
 from ...database.stations import get_stations
@@ -40,8 +39,8 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
 async def list_alerts(
     country: CountryID,
     language: LanguageID,
-    ids: Optional[set[str]] = None,
-    areas: Optional[set[str]] = None,
+    ids: set[str] | None = None,
+    areas: set[str] | None = None,
 ) -> list[AlertInfo]:
     """Get alerts for a specific country."""
     alerts: list[AlertInfo] = []
@@ -80,9 +79,7 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
     return set.union(*response)
 
 
-async def _parse_areas(
-    country: CountryID, areas: Optional[list[str]] = None
-) -> set[str]:
+async def _parse_areas(country: CountryID, areas: list[str] | None = None) -> set[str]:
     """Parse areas from query."""
     areas_to_query: set[str] = set()
     if areas:
@@ -95,7 +92,7 @@ async def _parse_areas(
 
 
 async def _parse_stations(
-    country: CountryID, stations: Optional[list[str]] = None
+    country: CountryID, stations: list[str] | None = None
 ) -> set[str]:
     """Parse stations from query."""
     areas_to_query: set[str] = set()
@@ -113,8 +110,8 @@ async def _parse_stations(
 async def list_alerts_for_critera(
     country: CountryID,
     language: LanguageID = LanguageID.English,
-    stations: Optional[list[str]] = None,
-    areas: Optional[list[str]] = None,
+    stations: list[str] | None = None,
+    areas: list[str] | None = None,
 ) -> list[AlertInfo]:
     """Get list of alerts for criteria."""
     if not stations and not areas:

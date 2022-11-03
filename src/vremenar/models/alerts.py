@@ -1,7 +1,7 @@
 """Alerts models."""
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Any, Optional
+from typing import Any
 
 
 class AlertType(str, Enum):
@@ -129,7 +129,7 @@ class AlertInfo(BaseModel):
 
     event: str = Field(..., example='wind gusts')
     headline: str = Field(..., example='Official WARNING of WIND GUSTS')
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None,
         example=(
             'There is a risk of wind gusts (level 1 of 4).\n'
@@ -137,15 +137,15 @@ class AlertInfo(BaseModel):
             'Increased gusts: in exposed locations < 70 km/h'
         ),
     )
-    instructions: Optional[str] = Field(
+    instructions: str | None = Field(
         None,
         example=(
             'NOTE: Be aware of the following possible dangers: '
             'Twigs or branches could fall down. Watch out for falling debris.'
         ),
     )
-    sender_name: Optional[str] = Field(None, example='Deutscher Wetterdienst')
-    web: Optional[str] = Field(None, example='https://www.wettergefahren.de')
+    sender_name: str | None = Field(None, example='Deutscher Wetterdienst')
+    web: str | None = Field(None, example='https://www.wettergefahren.de')
 
     @classmethod
     def init(
@@ -153,7 +153,7 @@ class AlertInfo(BaseModel):
         info: dict[str, Any],
         localised: dict[str, Any],
         alert_areas: set[str],
-        areas: Optional[dict[str, AlertAreaWithPolygon]] = None,
+        areas: dict[str, AlertAreaWithPolygon] | None = None,
         **kwargs: Any,
     ) -> 'AlertInfo':
         """Initialise from a dictionary."""

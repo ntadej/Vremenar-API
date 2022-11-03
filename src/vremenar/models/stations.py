@@ -1,7 +1,7 @@
 """Station models."""
 
 from pydantic import BaseModel, Field
-from typing import Any, Optional
+from typing import Any
 
 from .common import Coordinate
 
@@ -22,9 +22,9 @@ class StationInfo(StationBase):
 
     name: str = Field(..., example='Bled')
     coordinate: Coordinate
-    zoom_level: Optional[float] = Field(None, example=7.5)
-    forecast_only: Optional[bool] = Field(False, example=False)
-    alerts_area: Optional[str] = Field(None, example='SI007')
+    zoom_level: float | None = Field(None, example=7.5)
+    forecast_only: bool | None = Field(False, example=False)
+    alerts_area: str | None = Field(None, example='SI007')
 
     def base(self) -> StationBase:
         """Return an instance of StationBase."""
@@ -39,7 +39,7 @@ class StationInfo(StationBase):
 class StationInfoExtended(StationInfo):
     """Station extended info model."""
 
-    metadata: Optional[dict[str, Any]] = Field(None)
+    metadata: dict[str, Any] | None = Field(None)
 
     def info(self) -> StationInfo:
         """Return an instance of StationInfo."""
@@ -54,9 +54,9 @@ class StationInfoExtended(StationInfo):
 class StationSearchModel(BaseModel):
     """Station search body model."""
 
-    string: Optional[str] = Field(None, example='Bled')
-    latitude: Optional[float] = Field(None)
-    longitude: Optional[float] = Field(None)
+    string: str | None = Field(None, example='Bled')
+    latitude: float | None = Field(None)
+    longitude: float | None = Field(None)
 
     class Config:
         """Station search body config."""

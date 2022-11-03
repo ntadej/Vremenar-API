@@ -2,7 +2,6 @@
 
 from json import load
 from pathlib import Path
-from typing import Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
@@ -16,8 +15,8 @@ VERSION_INFO: Path = Path.cwd() / 'version.json'
 class VersionInfo(BaseModel):
     """Version info."""
 
-    stable: Optional[str] = Field('', example='1.0.0')
-    beta: Optional[str] = Field('', example='2.0.0')
+    stable: str | None = Field('', example='1.0.0')
+    beta: str | None = Field('', example='2.0.0')
     server: str = Field(__version__, const=True, example='1.0.0')
 
     class Config:

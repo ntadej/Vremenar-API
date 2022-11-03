@@ -1,5 +1,5 @@
 """ARSO weather utils."""
-from typing import Any, Optional
+from typing import Any
 
 from ...definitions import CountryID, ObservationType
 from ...database.stations import get_stations
@@ -46,7 +46,7 @@ def weather_map_response_url(map_type: MapType, path: str) -> str:
     return url
 
 
-async def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended]:
+async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
     """Parse ARSO station."""
     stations = await get_stations(CountryID.Slovenia)
 
@@ -58,14 +58,14 @@ async def parse_station(feature: dict[Any, Any]) -> Optional[StationInfoExtended
 
 async def parse_feature(
     feature: dict[Any, Any], observation: ObservationType
-) -> tuple[Optional[StationInfoExtended], Optional[WeatherCondition]]:
+) -> tuple[StationInfoExtended | None, WeatherCondition | None]:
     """Parse ARSO feature."""
     stations = await get_stations(CountryID.Slovenia)
 
     properties = feature['properties']
 
     station_id = properties['id'].strip('_')
-    station: Optional[StationInfoExtended] = stations.get(station_id, None)
+    station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:  # pragma: no cover
         logger.warning('Unknown ARSO station: %s = %s', station_id, properties['title'])
         return None, None
@@ -76,7 +76,7 @@ async def parse_feature(
 
     if 'txsyn' in timeline:
         temperature: float = float(timeline['txsyn'])
-        temperature_low: Optional[float] = float(timeline['tnsyn'])
+        temperature_low: float | None = float(timeline['tnsyn'])
     else:
         temperature = float(timeline['t'])
         temperature_low = None

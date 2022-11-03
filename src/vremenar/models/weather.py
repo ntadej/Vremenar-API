@@ -1,7 +1,6 @@
 """Weather models."""
 
 from pydantic import BaseModel, Field
-from typing import Optional
 
 from .stations import StationBase, StationInfo
 from ..definitions import ObservationType
@@ -14,7 +13,7 @@ class WeatherCondition(BaseModel):
     timestamp: str = Field(..., example='1604779200000')
     icon: str = Field(..., example='clear_night')
     temperature: float = Field(..., example=13)
-    temperature_low: Optional[float] = Field(None, example=1)
+    temperature_low: float | None = Field(None, example=1)
 
     class Config:
         """Weather condition model config."""

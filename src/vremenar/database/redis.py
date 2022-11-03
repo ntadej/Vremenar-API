@@ -1,7 +1,7 @@
 """Redis utilities."""
 from redis.asyncio import Redis, from_url
 from os import getenv
-from typing import Any, Optional
+from typing import Any
 
 from ..utils import logger
 
@@ -25,7 +25,7 @@ def database_info() -> None:
 class BatchedRedis:
     """Put items to redis in batches."""
 
-    def __init__(self, connection: 'Redis[Any]', limit: Optional[int] = 1000) -> None:
+    def __init__(self, connection: 'Redis[Any]', limit: int | None = 1000) -> None:
         """Initialise with DB."""
         self.connection = connection
         self.queue: list[Any] = []

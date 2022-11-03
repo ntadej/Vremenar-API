@@ -1,6 +1,5 @@
 """Weather alerts API."""
 from fastapi import APIRouter, Query
-from typing import Optional
 
 from .config import defaults
 from ..definitions import CountryID, LanguageID
@@ -36,8 +35,8 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
 async def alerts_list(
     country: CountryID,
     language: LanguageID = LanguageID.English,
-    station: Optional[list[str]] = default_query,
-    area: Optional[list[str]] = default_query,
+    station: list[str] | None = default_query,
+    area: list[str] | None = default_query,
 ) -> list[AlertInfo]:
     """List weather alerts for the criteria."""
     return await list_alerts_for_critera(country, language, station, area)
