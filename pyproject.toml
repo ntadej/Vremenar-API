@@ -8,7 +8,7 @@ authors = ["Tadej Novak <tadej@tano.si>"]
 python = "^3.10"
 astral = "^3.2"
 asyncstdlib = "^3.10.3"
-fastapi = "^0.86.0"
+fastapi = "^0.87.0"
 gunicorn = "^20.1.0"
 httpx = "^0.23.0"
 redis = {extras = ["hiredis"], version = "^4.3.4"}
