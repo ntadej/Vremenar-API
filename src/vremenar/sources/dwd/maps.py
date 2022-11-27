@@ -184,7 +184,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     )
     current_time -= time_delta
     test_time = current_time.isoformat()
-    test_url = f'{MAPS_BASEURL}&layers=dwd:WAWFOR_ieu_temperature_2m&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
+    test_url = f'{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z'  # noqa E501
 
     logger.debug(MESSAGE_MAP_URL, test_url)
 
@@ -199,7 +199,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
         time = current_time + timedelta(hours=i)
         time_string = time.isoformat()
         time += timedelta(seconds=utc_delta)
-        url = f'{MAPS_BASEURL}&layers=dwd:WAWFOR_ieu_temperature_2m&width=512&height=512&time={time_string}.000Z'  # noqa E501
+        url = f'{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&width=512&height=512&time={time_string}.000Z'  # noqa E501
         layers.append(
             MapLayer(
                 url=url,
