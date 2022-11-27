@@ -8,8 +8,8 @@ def test_country_id() -> None:
     slovenia = CountryID.Slovenia
     germany = CountryID.Germany
 
-    assert slovenia.label() == 'Slovenia'
-    assert slovenia.full_name() == 'slovenia'
+    assert slovenia.label() == "Slovenia"
+    assert slovenia.full_name() == "slovenia"
 
-    assert germany.label() == 'Germany'
-    assert germany.full_name() == 'germany'
+    assert germany.label() == "Germany"
+    assert germany.full_name() == "germany"

@@ -17,10 +17,10 @@ router = APIRouter()
 
 
 @router.get(
-    '/stations/list',
-    tags=['stations'],
-    name='List stations',
-    response_description='List of weather stations',
+    "/stations/list",
+    tags=["stations"],
+    name="List stations",
+    response_description="List of weather stations",
     response_model=list[StationInfo] | list[StationInfoExtended],
     **defaults,
 )
@@ -35,10 +35,10 @@ async def stations_list(
 
 
 @router.post(
-    '/stations/find',
-    tags=['stations'],
-    name='Find stations',
-    response_description='List of weather stations',
+    "/stations/find",
+    tags=["stations"],
+    name="Find stations",
+    response_description="List of weather stations",
     response_model=list[StationInfo],
     **defaults,
 )
@@ -50,10 +50,10 @@ async def find(
 
 
 @router.get(
-    '/stations/condition/{station_id}',
-    tags=['stations'],
-    name='Current station condition',
-    response_description='Current weather condition for the chosen station',
+    "/stations/condition/{station_id}",
+    tags=["stations"],
+    name="Current station condition",
+    response_description="Current weather condition for the chosen station",
     response_model=WeatherInfoExtended | WeatherInfo,
     **defaults,
 )
@@ -70,10 +70,10 @@ async def condition(
 
 
 @router.get(
-    '/stations/map/{map_id}',
-    tags=['stations'],
-    name='Weather conditions map',
-    response_description='List of weather information',
+    "/stations/map/{map_id}",
+    tags=["stations"],
+    name="Weather conditions map",
+    response_description="List of weather information",
     response_model=list[WeatherInfo] | list[WeatherInfoExtended],
     **defaults,
 )

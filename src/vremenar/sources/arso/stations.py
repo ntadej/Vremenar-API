@@ -19,25 +19,25 @@ async def list_stations() -> list[StationInfoExtended]:
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
     """Find station by coordinate or string."""
-    url: str = join_url(API_BASEURL, 'locations', trailing_slash=True)
+    url: str = join_url(API_BASEURL, "locations", trailing_slash=True)
 
     if query.string and (query.latitude or query.longitude):
         raise InvalidSearchQueryException(
-            'Either search string or coordinates are required'
+            "Either search string or coordinates are required"
         )
 
     if query.string:
         single = False
-        url += f'?loc={query.string}'
+        url += f"?loc={query.string}"
     elif query.latitude is not None and query.longitude is not None:
         single = True
-        url += f'?lat={query.latitude}&lon={query.longitude}'
+        url += f"?lat={query.latitude}&lon={query.longitude}"
     else:
         raise InvalidSearchQueryException(
-            'Either search string or coordinates are required'
+            "Either search string or coordinates are required"
         )
 
-    logger.debug('ARSO URL: %s', url)
+    logger.debug("ARSO URL: %s", url)
 
     async with AsyncClient() as client:
         response = await client.get(url, timeout=TIMEOUT)
@@ -49,11 +49,11 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         if station:
             return [station]
 
-    if 'features' not in response_body:  # pragma: no cover
+    if "features" not in response_body:  # pragma: no cover
         return []
 
     locations: list[StationInfo] = []
-    for feature in response_body['features']:
+    for feature in response_body["features"]:
         station = await parse_station(feature)
         if station:
             locations.append(station)
@@ -69,19 +69,19 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
         raise UnknownStationException()
 
     url = (
-        join_url(API_BASEURL, 'locations', trailing_slash=True) + f'?loc={station.name}'
+        join_url(API_BASEURL, "locations", trailing_slash=True) + f"?loc={station.name}"
     )
 
-    logger.debug('ARSO URL: %s', url)
+    logger.debug("ARSO URL: %s", url)
 
     async with AsyncClient() as client:
         response = await client.get(url, timeout=TIMEOUT)
 
     response_body = response.json()
-    if 'features' not in response_body:  # pragma: no cover
+    if "features" not in response_body:  # pragma: no cover
         raise UnknownStationException()
 
-    for feature in response_body['features']:
+    for feature in response_body["features"]:
         _, condition = await parse_feature(feature, ObservationType.Recent)
         return WeatherInfoExtended(station=station, condition=condition)
 

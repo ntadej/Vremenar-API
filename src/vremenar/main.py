@@ -11,28 +11,28 @@ debug = False
 
 tags_metadata = [
     {
-        'name': 'version',
-        'description': 'Vremenar version infromation used for update notifications.',
+        "name": "version",
+        "description": "Vremenar version infromation used for update notifications.",
     },
     {
-        'name': 'stations',
-        'description': 'Weather stations information and maps,'
-        'including weather information.',
+        "name": "stations",
+        "description": "Weather stations information and maps,"
+        "including weather information.",
     },
     {
-        'name': 'maps',
-        'description': 'Query available weather maps and their information.',
+        "name": "maps",
+        "description": "Query available weather maps and their information.",
     },
-    {'name': 'alerts', 'description': 'Weather alerts.'},
+    {"name": "alerts", "description": "Weather alerts."},
     {
-        'name': 'copyright',
-        'description': 'Data attribution and copyright.',
+        "name": "copyright",
+        "description": "Data attribution and copyright.",
     },
 ]
 
 app: FastAPI = FastAPI(
-    title='Vremenar API',
-    description='Weather API powering Vremenar application',
+    title="Vremenar API",
+    description="Weather API powering Vremenar application",
     version=__version__,
     openapi_tags=tags_metadata,
 )
@@ -51,4 +51,4 @@ if debug:
 
 database_info()
 
-__all__ = ['app']
+__all__ = ["app"]

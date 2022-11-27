@@ -9,22 +9,22 @@ from ..definitions import ObservationType
 class MapType(str, Enum):
     """Map type enum."""
 
-    WeatherCondition = 'condition'
-    Precipitation = 'precipitation'
-    CloudCoverage = 'cloud'
-    WindSpeed = 'wind'
-    Temperature = 'temperature'
-    HailProbability = 'hail'
-    UVIndexMax = 'uv_index_max'
-    UVDose = 'uv_dose'
+    WeatherCondition = "condition"
+    Precipitation = "precipitation"
+    CloudCoverage = "cloud"
+    WindSpeed = "wind"
+    Temperature = "temperature"
+    HailProbability = "hail"
+    UVIndexMax = "uv_index_max"
+    UVDose = "uv_dose"
 
 
 class MapRenderingType(str, Enum):
     """Map rendering type enum."""
 
-    Image = 'image'
-    Tiles = 'tiles'
-    Icons = 'icons'
+    Image = "image"
+    Tiles = "tiles"
+    Icons = "icons"
 
 
 class SupportedMapType(BaseModel):
@@ -39,13 +39,13 @@ class MapLayer(BaseModel):
     """Map layer model."""
 
     observation: ObservationType = Field(..., example=ObservationType.Recent)
-    url: str = Field(..., example='/stations/map/current?country=si')
-    timestamp: str = Field(..., example='1604779200000')
+    url: str = Field(..., example="/stations/map/current?country=si")
+    timestamp: str = Field(..., example="1604779200000")
 
     class Config:
         """Map layer model config."""
 
-        title: str = 'Map layer'
+        title: str = "Map layer"
 
 
 class MapLayersList(BaseModel):
@@ -59,7 +59,7 @@ class MapLayersList(BaseModel):
     @classmethod
     def init(
         cls, map_type: MapType, bbox: list[float], layers: list[MapLayer]
-    ) -> 'MapLayersList':
+    ) -> "MapLayersList":
         """Initialise map response model."""
         rendering: MapRenderingType = (
             MapRenderingType.Image if bbox else MapRenderingType.Tiles
@@ -72,21 +72,21 @@ class MapLayersList(BaseModel):
     class Config:
         """Map layers list model config."""
 
-        title: str = 'Map layers list'
+        title: str = "Map layers list"
 
 
 class MapLegendItem(BaseModel):
     """Map legend item model."""
 
-    value: str = Field(..., example='30')
-    color: str = Field(..., example='#2fef28')
+    value: str = Field(..., example="30")
+    color: str = Field(..., example="#2fef28")
     placeholder: bool | None = Field(None, example=False)
     translatable: bool | None = Field(None, example=False)
 
     class Config:
         """Map legend item model config."""
 
-        title: str = 'Map legend item'
+        title: str = "Map legend item"
 
 
 class MapLegend(BaseModel):
@@ -98,4 +98,4 @@ class MapLegend(BaseModel):
     class Config:
         """Map legend model config."""
 
-        title: str = 'Map legend'
+        title: str = "Map legend"

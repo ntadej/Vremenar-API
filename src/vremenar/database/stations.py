@@ -14,14 +14,14 @@ async def load_stations(
     """Load stations from redis."""
     stations: dict[str, dict[str, str | int | float]] = {}
     async with redis.client() as connection:
-        ids: set[str] = await redis.smembers(f'station:{country.value}')
+        ids: set[str] = await redis.smembers(f"station:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for id in ids:
-                pipeline.hgetall(f'station:{country.value}:{id}')
+                pipeline.hgetall(f"station:{country.value}:{id}")
             response = await pipeline.execute()
 
     for station in response:
-        stations[station['id']] = station
+        stations[station["id"]] = station
 
     return stations
 
@@ -32,14 +32,14 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     stations_raw: dict[str, dict[str, str | int | float]] = await load_stations(country)
     stations: dict[str, StationInfoExtended] = {}
     base_keys: set[str] = {
-        'id',
-        'name',
-        'latitude',
-        'longitude',
-        'altitude',
-        'zoom_level',
-        'forecast_only',
-        'alerts_area',
+        "id",
+        "name",
+        "latitude",
+        "longitude",
+        "altitude",
+        "zoom_level",
+        "forecast_only",
+        "alerts_area",
     }
 
     for id, station in stations_raw.items():
@@ -48,15 +48,15 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
 
         stations[id] = StationInfoExtended(
             id=id,
-            name=station['name'],
+            name=station["name"],
             coordinate=Coordinate(
-                latitude=station['latitude'],
-                longitude=station['longitude'],
-                altitude=station['altitude'],
+                latitude=station["latitude"],
+                longitude=station["longitude"],
+                altitude=station["altitude"],
             ),
-            zoom_level=station['zoom_level'],
-            forecast_only=station['forecast_only'],
-            alerts_area=station['alerts_area'] if 'alerts_area' in station else None,
+            zoom_level=station["zoom_level"],
+            forecast_only=station["forecast_only"],
+            alerts_area=station["alerts_area"] if "alerts_area" in station else None,
             metadata=metadata if metadata else None,
         )
     return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}

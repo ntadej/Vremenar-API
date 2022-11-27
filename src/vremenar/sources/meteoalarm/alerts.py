@@ -20,18 +20,18 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
     areas: dict[str, AlertAreaWithPolygon] = {}
 
     async with redis.client() as connection:
-        codes = await connection.smembers(f'alerts_area:{country.value}')
+        codes = await connection.smembers(f"alerts_area:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for code in codes:
-                pipeline.hgetall(f'alerts_area:{country.value}:{code}:info')
+                pipeline.hgetall(f"alerts_area:{country.value}:{code}:info")
             response = await pipeline.execute()
 
         for area in response:
-            areas[area['code']] = AlertAreaWithPolygon(
-                id=area['code'], name=area['name'], polygons=loads(area['polygons'])
+            areas[area["code"]] = AlertAreaWithPolygon(
+                id=area["code"], name=area["name"], polygons=loads(area["polygons"])
             )
 
-    logger.debug('Read %s alerts areas from the database', len(areas))
+    logger.debug("Read %s alerts areas from the database", len(areas))
 
     return {k: v for k, v in sorted(areas.items(), key=lambda item: item[1].id)}
 
@@ -47,14 +47,14 @@ async def list_alerts(
 
     async with redis.client() as connection:
         if ids is None:
-            ids = await connection.smembers(f'alert:{country.value}')
+            ids = await connection.smembers(f"alert:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for id in ids:
-                pipeline.hgetall(f'alert:{country.value}:{id}:info')
+                pipeline.hgetall(f"alert:{country.value}:{id}:info")
                 pipeline.hgetall(
-                    f'alert:{country.value}:{id}:localised_{language.value}'
+                    f"alert:{country.value}:{id}:localised_{language.value}"
                 )
-                pipeline.smembers(f'alert:{country.value}:{id}:areas')
+                pipeline.smembers(f"alert:{country.value}:{id}:areas")
             response = await pipeline.execute()
 
         areas_dict = await list_alerts_areas(country)
@@ -65,7 +65,7 @@ async def list_alerts(
             if parse_timestamp(alert.ending) > datetime.now(tz=timezone.utc):
                 alerts.append(alert)
 
-    logger.debug('Read %s alerts from the database', len(alerts))
+    logger.debug("Read %s alerts from the database", len(alerts))
 
     return alerts
 
@@ -74,7 +74,7 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
     """Get alert IDs for requested areas."""
     async with redis.pipeline() as pipeline:
         for area in areas:
-            pipeline.smembers(f'alerts_area:{country.value}:{area}:alerts')
+            pipeline.smembers(f"alerts_area:{country.value}:{area}:alerts")
         response = await pipeline.execute()
     return set.union(*response)
 
@@ -115,7 +115,7 @@ async def list_alerts_for_critera(
 ) -> list[AlertInfo]:
     """Get list of alerts for criteria."""
     if not stations and not areas:
-        raise InvalidSearchQueryException('At least one station or area required')
+        raise InvalidSearchQueryException("At least one station or area required")
 
     areas_to_query: set[str] = await _parse_areas(
         country, areas

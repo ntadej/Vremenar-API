@@ -6,4 +6,4 @@ from .maps import router as maps
 from .alerts import router as alerts
 from .copyright import router as copyright
 
-__all__ = ['version', 'stations', 'maps', 'alerts', 'copyright']
+__all__ = ["version", "stations", "maps", "alerts", "copyright"]

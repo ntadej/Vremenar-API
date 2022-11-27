@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from .models.common import Coordinate
 
 
-logger: Logger = getLogger('uvicorn.error')
+logger: Logger = getLogger("uvicorn.error")
 
 
 def chunker(container: list[Any], size: int) -> Iterable[list[Any]]:
@@ -20,9 +20,9 @@ def chunker(container: list[Any], size: int) -> Iterable[list[Any]]:
 
 def join_url(*args: str, trailing_slash: bool = False) -> str:
     """Join url."""
-    url = '/'.join(arg.strip('/') for arg in args)
+    url = "/".join(arg.strip("/") for arg in args)
     if trailing_slash:
-        return f'{url}/'
+        return f"{url}/"
     return url
 
 
@@ -41,14 +41,14 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
             coordinate.latitude, coordinate.longitude, time.date()
         )
     except ValueError as e:  # pragma: no cover
-        return 'day' if 'above' in e.args[0] else 'night'
+        return "day" if "above" in e.args[0] else "night"
     else:
-        return 'day' if sunrise <= time <= sunset else 'night'
+        return "day" if sunrise <= time <= sunset else "night"
 
 
 def parse_time(time: str) -> datetime:
     """Parse time from standard string."""
-    return datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
+    return datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
 
 
 def parse_timestamp(timestamp: str) -> datetime:
@@ -58,4 +58,4 @@ def parse_timestamp(timestamp: str) -> datetime:
 
 def to_timestamp(time: datetime) -> str:
     """Dump timestamp in ms."""
-    return f'{int(time.timestamp())}000'
+    return f"{int(time.timestamp())}000"

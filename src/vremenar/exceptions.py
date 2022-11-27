@@ -9,7 +9,7 @@ class UnsupportedCountryException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unsupported country',
+            detail="Unsupported country",
         )
 
 
@@ -20,7 +20,7 @@ class UnsupportedMapTypeException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unsupported or unknown map type',
+            detail="Unsupported or unknown map type",
         )
 
 
@@ -31,7 +31,7 @@ class UnrecognisedMapIDException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Map ID is not recognised',
+            detail="Map ID is not recognised",
         )
 
 
@@ -42,7 +42,7 @@ class UnknownAlertAreaException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown alert area',
+            detail="Unknown alert area",
         )
 
 
@@ -53,7 +53,7 @@ class UnknownStationAlertAreaException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Station has no assigned alerts area',
+            detail="Station has no assigned alerts area",
         )
 
 
@@ -64,7 +64,7 @@ class UnknownStationException(HTTPException):
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Unknown station',
+            detail="Unknown station",
         )
 
 

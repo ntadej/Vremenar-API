@@ -9,5 +9,5 @@ client = TestClient(app)
 
 def test_copyright() -> None:
     """Test copyright."""
-    response = client.get('/copyright')
+    response = client.get("/copyright")
     assert response.status_code == 200

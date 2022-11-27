@@ -33,4 +33,4 @@ def test_exceptions() -> None:
         raise UnknownStationException()
 
     with raises(InvalidSearchQueryException):
-        raise InvalidSearchQueryException('Test message')
+        raise InvalidSearchQueryException("Test message")

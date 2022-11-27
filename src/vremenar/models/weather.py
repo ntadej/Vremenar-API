@@ -10,15 +10,15 @@ class WeatherCondition(BaseModel):
     """Weather condition model."""
 
     observation: ObservationType = Field(..., example=ObservationType.Recent)
-    timestamp: str = Field(..., example='1604779200000')
-    icon: str = Field(..., example='clear_night')
+    timestamp: str = Field(..., example="1604779200000")
+    icon: str = Field(..., example="clear_night")
     temperature: float = Field(..., example=13)
     temperature_low: float | None = Field(None, example=1)
 
     class Config:
         """Weather condition model config."""
 
-        title: str = 'Weather condition'
+        title: str = "Weather condition"
 
 
 class WeatherInfo(BaseModel):
@@ -30,7 +30,7 @@ class WeatherInfo(BaseModel):
     class Config:
         """Weather info model config."""
 
-        title: str = 'Weather information'
+        title: str = "Weather information"
 
 
 class WeatherInfoExtended(WeatherInfo):
@@ -45,4 +45,4 @@ class WeatherInfoExtended(WeatherInfo):
     class Config:
         """Weather extended info model config."""
 
-        title: str = 'Weather information with extended station information'
+        title: str = "Weather information with extended station information"

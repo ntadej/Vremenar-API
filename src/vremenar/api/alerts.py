@@ -12,10 +12,10 @@ default_query = Query(None)
 
 
 @router.get(
-    '/alerts/areas',
-    tags=['alerts'],
-    name='List weather alert areas',
-    response_description='List of weather alert areas for a country',
+    "/alerts/areas",
+    tags=["alerts"],
+    name="List weather alert areas",
+    response_description="List of weather alert areas for a country",
     response_model=list[AlertAreaWithPolygon],
     **defaults,
 )
@@ -25,10 +25,10 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
 
 
 @router.get(
-    '/alerts/list',
-    tags=['alerts'],
-    name='List weather alerts',
-    response_description='List of weather alerts',
+    "/alerts/list",
+    tags=["alerts"],
+    name="List weather alerts",
+    response_description="List of weather alerts",
     response_model=list[AlertInfo],
     **defaults,
 )
@@ -43,10 +43,10 @@ async def alerts_list(
 
 
 @router.get(
-    '/alerts/full_list',
-    tags=['alerts'],
-    name='List all weather alerts',
-    response_description='List of all weather alerts for a country',
+    "/alerts/full_list",
+    tags=["alerts"],
+    name="List all weather alerts",
+    response_description="List of all weather alerts for a country",
     response_model=list[AlertInfo],
     **defaults,
 )

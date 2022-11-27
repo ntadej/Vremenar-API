@@ -16,9 +16,9 @@ router = APIRouter()
 
 
 @router.get(
-    '/maps/types',
-    tags=['maps'],
-    response_description='Get the supported map types',
+    "/maps/types",
+    tags=["maps"],
+    response_description="Get the supported map types",
     response_model=list[SupportedMapType],
     **defaults,
 )
@@ -28,9 +28,9 @@ async def supported_map_types(country: CountryID) -> list[SupportedMapType]:
 
 
 @router.get(
-    '/maps/list/{map_type}',
-    tags=['maps'],
-    response_description='Get list of maps per type',
+    "/maps/list/{map_type}",
+    tags=["maps"],
+    response_description="Get list of maps per type",
     response_model=MapLayersList,
     **defaults,
 )
@@ -41,9 +41,9 @@ async def map_layers(country: CountryID, map_type: MapType) -> MapLayersList:
 
 
 @router.get(
-    '/maps/legend',
-    tags=['maps'],
-    response_description='Get the legend for all map types',
+    "/maps/legend",
+    tags=["maps"],
+    response_description="Get the legend for all map types",
     response_model=list[MapLegend],
     **defaults,
 )
@@ -53,9 +53,9 @@ async def all_map_legends(country: CountryID) -> list[MapLegend]:
 
 
 @router.get(
-    '/maps/legend/{map_type}',
-    tags=['maps'],
-    response_description='Get the legend for a map type',
+    "/maps/legend/{map_type}",
+    tags=["maps"],
+    response_description="Get the legend for a map type",
     response_model=MapLegend,
     **defaults,
 )

@@ -8,39 +8,39 @@ from ...models.stations import StationInfoExtended
 from ...models.weather import WeatherCondition
 from ...utils import join_url, logger, parse_time, to_timestamp
 
-BASEURL: str = 'https://vreme.arso.gov.si'
-API_BASEURL: str = 'https://vreme.arso.gov.si/api/1.0/'
+BASEURL: str = "https://vreme.arso.gov.si"
+API_BASEURL: str = "https://vreme.arso.gov.si/api/1.0/"
 TIMEOUT: int = 15
 
 
 def weather_map_url(map_id: str) -> str:
     """Generate forecast map URL."""
-    if map_id == 'current':
-        return f'{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json'
+    if map_id == "current":
+        return f"{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json"
 
-    if map_id[0] == 'd':
+    if map_id[0] == "d":
         return (
-            f'{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json'
+            f"{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json"
         )
 
-    return ''
+    return ""
 
 
 def weather_map_response_url(map_type: MapType, path: str) -> str:
     """Generate forecast map response URL."""
     if map_type == MapType.WeatherCondition:
-        if 'nowcast' in path:
+        if "nowcast" in path:
             url = path.replace(
-                '/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json',
-                '/stations/map/current',
+                "/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json",
+                "/stations/map/current",
             )
         else:
             url = path.replace(
-                '/uploads/probase/www/fproduct/json/sl/forecast_si_',
-                '/stations/map/',
+                "/uploads/probase/www/fproduct/json/sl/forecast_si_",
+                "/stations/map/",
             )
-            url = url.replace('.json', '')
-        url += f'?country={CountryID.Slovenia}'
+            url = url.replace(".json", "")
+        url += f"?country={CountryID.Slovenia}"
     else:
         url = join_url(BASEURL, path)
     return url
@@ -50,9 +50,9 @@ async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
     """Parse ARSO station."""
     stations = await get_stations(CountryID.Slovenia)
 
-    properties = feature['properties']
+    properties = feature["properties"]
 
-    station_id = properties['id'].strip('_')
+    station_id = properties["id"].strip("_")
     return stations.get(station_id, None)
 
 
@@ -62,23 +62,23 @@ async def parse_feature(
     """Parse ARSO feature."""
     stations = await get_stations(CountryID.Slovenia)
 
-    properties = feature['properties']
+    properties = feature["properties"]
 
-    station_id = properties['id'].strip('_')
+    station_id = properties["id"].strip("_")
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:  # pragma: no cover
-        logger.warning('Unknown ARSO station: %s = %s', station_id, properties['title'])
+        logger.warning("Unknown ARSO station: %s = %s", station_id, properties["title"])
         return None, None
 
-    timeline = properties['days'][0]['timeline'][0]
-    time = parse_time(timeline['valid'])
-    icon = timeline['clouds_icon_wwsyn_icon']
+    timeline = properties["days"][0]["timeline"][0]
+    time = parse_time(timeline["valid"])
+    icon = timeline["clouds_icon_wwsyn_icon"]
 
-    if 'txsyn' in timeline:
-        temperature: float = float(timeline['txsyn'])
-        temperature_low: float | None = float(timeline['tnsyn'])
+    if "txsyn" in timeline:
+        temperature: float = float(timeline["txsyn"])
+        temperature_low: float | None = float(timeline["tnsyn"])
     else:
-        temperature = float(timeline['t'])
+        temperature = float(timeline["t"])
         temperature_low = None
 
     condition = WeatherCondition(
