@@ -1,11 +1,11 @@
 """Helper utilities."""
 
 from astral import Observer, sun
-from collections.abc import Generator
 from datetime import date, datetime, timezone
 from functools import lru_cache
 from logging import Logger, getLogger
-from typing import cast, Any
+from typing import Any
+from collections.abc import Iterable
 
 from .models.common import Coordinate
 
@@ -13,7 +13,7 @@ from .models.common import Coordinate
 logger: Logger = getLogger('uvicorn.error')
 
 
-def chunker(container: list[Any], size: int) -> Generator[list[Any], None, None]:
+def chunker(container: list[Any], size: int) -> Iterable[list[Any]]:
     """Loop over a container in chunks."""
     return (container[pos : pos + size] for pos in range(0, len(container), size))
 
@@ -31,10 +31,7 @@ def sunrise_sunset(
     latitude: float, longitude: float, date: date
 ) -> tuple[datetime, datetime]:
     """Get sunrise and sunset."""
-    return cast(
-        tuple[datetime, datetime],
-        sun.daylight(Observer(latitude, longitude), date),
-    )
+    return sun.daylight(Observer(latitude, longitude), date)
 
 
 def day_or_night(coordinate: Coordinate, time: datetime) -> str:
