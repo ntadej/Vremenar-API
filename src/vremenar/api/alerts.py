@@ -16,7 +16,6 @@ default_query = Query(None)
     tags=["alerts"],
     name="List weather alert areas",
     response_description="List of weather alert areas for a country",
-    response_model=list[AlertAreaWithPolygon],
     **defaults,
 )
 async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
@@ -29,7 +28,6 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
     tags=["alerts"],
     name="List weather alerts",
     response_description="List of weather alerts",
-    response_model=list[AlertInfo],
     **defaults,
 )
 async def alerts_list(
@@ -47,7 +45,6 @@ async def alerts_list(
     tags=["alerts"],
     name="List all weather alerts",
     response_description="List of all weather alerts for a country",
-    response_model=list[AlertInfo],
     **defaults,
 )
 async def alerts_full_list(

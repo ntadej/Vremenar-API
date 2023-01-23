@@ -29,7 +29,6 @@ class VersionInfo(BaseModel):
     "/version",
     tags=["version"],
     response_description="Get Vremenar versions",
-    response_model=VersionInfo,
 )
 async def version() -> VersionInfo:
     """Get app and server versions."""

@@ -21,7 +21,6 @@ router = APIRouter()
     tags=["stations"],
     name="List stations",
     response_description="List of weather stations",
-    response_model=list[StationInfo] | list[StationInfoExtended],
     **defaults,
 )
 async def stations_list(
@@ -39,7 +38,6 @@ async def stations_list(
     tags=["stations"],
     name="Find stations",
     response_description="List of weather stations",
-    response_model=list[StationInfo],
     **defaults,
 )
 async def find(
@@ -54,7 +52,6 @@ async def find(
     tags=["stations"],
     name="Current station condition",
     response_description="Current weather condition for the chosen station",
-    response_model=WeatherInfoExtended | WeatherInfo,
     **defaults,
 )
 async def condition(
@@ -74,7 +71,6 @@ async def condition(
     tags=["stations"],
     name="Weather conditions map",
     response_description="List of weather information",
-    response_model=list[WeatherInfo] | list[WeatherInfoExtended],
     **defaults,
 )
 async def conditions_map(

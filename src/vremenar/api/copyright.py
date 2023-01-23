@@ -19,7 +19,6 @@ class CopyrightInfo(BaseModel):
     "/copyright",
     tags=["copyright"],
     response_description="Get data copyright",
-    response_model=dict[CountryID, CopyrightInfo],
 )
 async def copyright() -> dict[CountryID, CopyrightInfo]:
     """Get data copyright."""
