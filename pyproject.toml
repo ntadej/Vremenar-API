@@ -20,7 +20,7 @@ coverage = {extras = ["toml"], version = "^7.0.5"}
 fastapi-profiler = "^1.1.0"
 flake8 = "^6.0.0"
 flake8-bugbear = "^23.1.20"
-flake8-docstrings = "^1.6.0"
+flake8-docstrings = "^1.7.0"
 flake8-pyproject = "^1.2.2"
 mypy = "^0.991"
 pep8-naming = "^0.13.3"
