@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from .. import __version__
+from vremenar import __version__
 
 router = APIRouter()
 VERSION_INFO: Path = Path.cwd() / "version.json"

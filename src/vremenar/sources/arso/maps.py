@@ -1,9 +1,9 @@
 """ARSO weather maps."""
 from httpx import AsyncClient
 
-from ...definitions import ObservationType
-from ...exceptions import UnsupportedMapTypeException, UnrecognisedMapIDException
-from ...models.maps import (
+from vremenar.definitions import ObservationType
+from vremenar.exceptions import UnrecognisedMapIDException, UnsupportedMapTypeException
+from vremenar.models.maps import (
     MapLayer,
     MapLegend,
     MapLegendItem,
@@ -11,15 +11,15 @@ from ...models.maps import (
     MapType,
     SupportedMapType,
 )
-from ...models.weather import WeatherInfoExtended
-from ...utils import join_url, logger, parse_time, to_timestamp
+from vremenar.models.weather import WeatherInfoExtended
+from vremenar.utils import join_url, logger, parse_time, to_timestamp
 
 from .utils import (
     API_BASEURL,
     TIMEOUT,
     parse_feature,
-    weather_map_url,
     weather_map_response_url,
+    weather_map_url,
 )
 
 MAP_URL = {

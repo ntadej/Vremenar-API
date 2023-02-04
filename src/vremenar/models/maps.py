@@ -1,9 +1,10 @@
 """Map models."""
 
 from enum import Enum
+
 from pydantic import BaseModel, Field
 
-from ..definitions import ObservationType
+from vremenar.definitions import ObservationType
 
 
 class MapType(str, Enum):

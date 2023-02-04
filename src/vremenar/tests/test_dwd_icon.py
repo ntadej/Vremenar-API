@@ -1,6 +1,6 @@
 """DWD weather icon tests."""
 
-from ..sources.dwd.utils import get_icon_base, get_icon_condition
+from vremenar.sources.dwd.utils import get_icon_base, get_icon_condition
 
 
 def test_icon_base() -> None:

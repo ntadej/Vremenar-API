@@ -1,12 +1,12 @@
 """ARSO weather utils."""
 from typing import Any
 
-from ...definitions import CountryID, ObservationType
-from ...database.stations import get_stations
-from ...models.maps import MapType
-from ...models.stations import StationInfoExtended
-from ...models.weather import WeatherCondition
-from ...utils import join_url, logger, parse_time, to_timestamp
+from vremenar.database.stations import get_stations
+from vremenar.definitions import CountryID, ObservationType
+from vremenar.models.maps import MapType
+from vremenar.models.stations import StationInfoExtended
+from vremenar.models.weather import WeatherCondition
+from vremenar.utils import join_url, logger, parse_time, to_timestamp
 
 BASEURL: str = "https://vreme.arso.gov.si"
 API_BASEURL: str = "https://vreme.arso.gov.si/api/1.0/"

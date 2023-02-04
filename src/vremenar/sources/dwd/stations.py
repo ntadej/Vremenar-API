@@ -1,13 +1,18 @@
 """DWD weather stations."""
 from datetime import datetime, timedelta, timezone
+
 from httpx import AsyncClient
 
-from ...database.stations import get_stations
-from ...definitions import CountryID, ObservationType
-from ...exceptions import UnknownStationException, InvalidSearchQueryException
-from ...models.stations import StationInfo, StationInfoExtended, StationSearchModel
-from ...models.weather import WeatherCondition, WeatherInfoExtended
-from ...utils import join_url, logger, parse_time, to_timestamp
+from vremenar.database.stations import get_stations
+from vremenar.definitions import CountryID, ObservationType
+from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException
+from vremenar.models.stations import (
+    StationInfo,
+    StationInfoExtended,
+    StationSearchModel,
+)
+from vremenar.models.weather import WeatherCondition, WeatherInfoExtended
+from vremenar.utils import join_url, logger, parse_time, to_timestamp
 
 from .utils import get_icon, parse_source
 

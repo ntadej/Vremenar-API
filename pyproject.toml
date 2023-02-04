@@ -67,7 +67,7 @@ select = [
   "E",   # pycodestyle
   "W",   # pycodestyle
   "C90", # mccabe (complexity)
-  # "I",   # isort
+  "I",   # isort
   "N",   # pep8-naming
   "D",   # pydocstyle
   "UP",  # pyupgrade
@@ -84,7 +84,7 @@ select = [
   "Q",   # flake8-quotes
   "RET", # flake8-return
   "SIM", # flake8-simplify
-  # "TID", # flake8-tidy-imports
+  "TID", # flake8-tidy-imports
   "PTH", # flake8-use-pathlib
   "PL",  # pylint
   "RUF", # ruff

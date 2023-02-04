@@ -1,10 +1,11 @@
 """DWD weather maps."""
 from datetime import datetime, timedelta, timezone
+
 from httpx import AsyncClient
 
-from ...definitions import CountryID, ObservationType
-from ...exceptions import UnsupportedMapTypeException, UnrecognisedMapIDException
-from ...models.maps import (
+from vremenar.definitions import CountryID, ObservationType
+from vremenar.exceptions import UnrecognisedMapIDException, UnsupportedMapTypeException
+from vremenar.models.maps import (
     MapLayer,
     MapLegend,
     MapLegendItem,
@@ -12,8 +13,8 @@ from ...models.maps import (
     MapType,
     SupportedMapType,
 )
-from ...models.weather import WeatherInfoExtended
-from ...utils import logger, to_timestamp
+from vremenar.models.weather import WeatherInfoExtended
+from vremenar.utils import logger, to_timestamp
 
 from .utils import get_mosmix_ids_for_timestamp, get_mosmix_records, parse_record
 

@@ -1,10 +1,10 @@
 """Tests configuration."""
 import asyncio
-import pytest
-
 from collections.abc import AsyncGenerator, Generator
-from httpx import AsyncClient
 from typing import Any
+
+import pytest
+from httpx import AsyncClient
 
 
 @pytest.fixture(scope="session")

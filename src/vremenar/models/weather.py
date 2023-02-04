@@ -2,8 +2,8 @@
 
 from pydantic import BaseModel, Field
 
-from .stations import StationBase, StationInfo
-from ..definitions import ObservationType
+from vremenar.definitions import ObservationType
+from vremenar.models.stations import StationBase, StationInfo
 
 
 class WeatherCondition(BaseModel):

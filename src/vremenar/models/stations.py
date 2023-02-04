@@ -1,9 +1,10 @@
 """Station models."""
 
-from pydantic import BaseModel, Field
 from typing import Any
 
-from .common import Coordinate
+from pydantic import BaseModel, Field
+
+from vremenar.models.common import Coordinate
 
 
 class StationBase(BaseModel):

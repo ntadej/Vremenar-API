@@ -1,7 +1,7 @@
 """Stations API tests."""
-import pytest
-
 from datetime import datetime, timedelta, timezone
+
+import pytest
 from httpx import AsyncClient
 
 

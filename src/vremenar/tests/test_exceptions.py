@@ -1,14 +1,14 @@
 """Exceptions tests."""
 import pytest
 
-from ..exceptions import (
-    UnsupportedCountryException,
-    UnsupportedMapTypeException,
-    UnrecognisedMapIDException,
+from vremenar.exceptions import (
+    InvalidSearchQueryException,
     UnknownAlertAreaException,
     UnknownStationAlertAreaException,
     UnknownStationException,
-    InvalidSearchQueryException,
+    UnrecognisedMapIDException,
+    UnsupportedCountryException,
+    UnsupportedMapTypeException,
 )
 
 

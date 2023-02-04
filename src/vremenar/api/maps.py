@@ -2,15 +2,16 @@
 
 from fastapi import APIRouter
 
-from .config import defaults
-from ..definitions import CountryID
-from ..models.maps import MapLayersList, MapLegend, MapType, SupportedMapType
-from ..sources import (
+from vremenar.definitions import CountryID
+from vremenar.models.maps import MapLayersList, MapLegend, MapType, SupportedMapType
+from vremenar.sources import (
+    get_all_map_legends,
     get_all_supported_map_types,
     get_map_layers,
     get_map_legend,
-    get_all_map_legends,
 )
+
+from .config import defaults
 
 router = APIRouter()
 

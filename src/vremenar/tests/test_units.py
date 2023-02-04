@@ -1,6 +1,6 @@
 """Units tests."""
 
-from ..units import celsius_to_kelvin, kelvin_to_celsius
+from vremenar.units import celsius_to_kelvin, kelvin_to_celsius
 
 
 def test_temperature() -> None:

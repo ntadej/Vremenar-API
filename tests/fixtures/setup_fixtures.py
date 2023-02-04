@@ -2,10 +2,11 @@
 """Setup test database."""
 from asyncio import run
 from datetime import datetime, timedelta, timezone
+from typing import Any
+
 from vremenar.database.redis import redis
 from vremenar.definitions import CountryID, LanguageID
 from vremenar.utils import to_timestamp
-from typing import Any
 
 
 async def store_station(country: CountryID, station: dict[str, Any]) -> None:

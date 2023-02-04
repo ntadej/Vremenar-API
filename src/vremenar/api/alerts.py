@@ -1,10 +1,11 @@
 """Weather alerts API."""
 from fastapi import APIRouter, Query
 
+from vremenar.definitions import CountryID, LanguageID
+from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
+from vremenar.sources import list_alert_areas, list_alerts, list_alerts_for_critera
+
 from .config import defaults
-from ..definitions import CountryID, LanguageID
-from ..models.alerts import AlertAreaWithPolygon, AlertInfo
-from ..sources import list_alerts, list_alerts_for_critera, list_alert_areas
 
 router = APIRouter()
 

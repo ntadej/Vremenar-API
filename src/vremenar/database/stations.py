@@ -1,9 +1,9 @@
 """Stations database helpers."""
 import asyncstdlib as a
 
-from ..definitions import CountryID
-from ..models.common import Coordinate
-from ..models.stations import StationInfoExtended
+from vremenar.definitions import CountryID
+from vremenar.models.common import Coordinate
+from vremenar.models.stations import StationInfoExtended
 
 from .redis import redis
 

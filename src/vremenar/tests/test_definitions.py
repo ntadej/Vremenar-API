@@ -1,6 +1,6 @@
 """Definitions tests."""
 
-from ..definitions import CountryID
+from vremenar.definitions import CountryID
 
 
 def test_country_id() -> None:

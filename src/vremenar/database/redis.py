@@ -1,8 +1,9 @@
 """Redis utilities."""
-from redis.asyncio import Redis, from_url
 from os import getenv
 
-from ..utils import logger
+from redis.asyncio import Redis, from_url
+
+from vremenar.utils import logger
 
 db_env: str = getenv("VREMENAR_DATABASE", "staging")
 database: int = {

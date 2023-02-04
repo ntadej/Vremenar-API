@@ -2,16 +2,21 @@
 
 from fastapi import APIRouter
 
-from .config import defaults
-from ..definitions import CountryID
-from ..models.stations import StationInfo, StationInfoExtended, StationSearchModel
-from ..models.weather import WeatherInfo, WeatherInfoExtended
-from ..sources import (
+from vremenar.definitions import CountryID
+from vremenar.models.stations import (
+    StationInfo,
+    StationInfoExtended,
+    StationSearchModel,
+)
+from vremenar.models.weather import WeatherInfo, WeatherInfoExtended
+from vremenar.sources import (
     current_station_condition,
     find_station,
     get_weather_map,
     list_stations,
 )
+
+from .config import defaults
 
 router = APIRouter()
 

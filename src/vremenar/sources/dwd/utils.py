@@ -2,13 +2,13 @@
 from datetime import datetime
 from typing import Any
 
-from ...database.redis import redis
-from ...database.stations import get_stations
-from ...definitions import CountryID, ObservationType
-from ...models.stations import StationBase, StationInfo, StationInfoExtended
-from ...models.weather import WeatherCondition
-from ...units import kelvin_to_celsius
-from ...utils import chunker, day_or_night, parse_timestamp
+from vremenar.database.redis import redis
+from vremenar.database.stations import get_stations
+from vremenar.definitions import CountryID, ObservationType
+from vremenar.models.stations import StationBase, StationInfo, StationInfoExtended
+from vremenar.models.weather import WeatherCondition
+from vremenar.units import kelvin_to_celsius
+from vremenar.utils import chunker, day_or_night, parse_timestamp
 
 
 async def get_mosmix_ids_for_timestamp(timestamp: str) -> set[str]:

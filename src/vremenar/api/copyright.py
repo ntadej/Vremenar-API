@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
-from ..definitions import CountryID
+from vremenar.definitions import CountryID
 
 router = APIRouter()
 

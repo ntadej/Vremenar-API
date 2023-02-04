@@ -2,17 +2,17 @@
 from datetime import datetime, timezone
 from json import loads
 
-from ...database.redis import redis
-from ...database.stations import get_stations
-from ...definitions import CountryID, LanguageID
-from ...exceptions import (
-    UnknownAlertAreaException,
-    UnknownStationException,
-    UnknownStationAlertAreaException,
+from vremenar.database.redis import redis
+from vremenar.database.stations import get_stations
+from vremenar.definitions import CountryID, LanguageID
+from vremenar.exceptions import (
     InvalidSearchQueryException,
+    UnknownAlertAreaException,
+    UnknownStationAlertAreaException,
+    UnknownStationException,
 )
-from ...models.alerts import AlertAreaWithPolygon, AlertInfo
-from ...utils import chunker, logger, parse_timestamp
+from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
+from vremenar.utils import chunker, logger, parse_timestamp
 
 
 async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygon]:

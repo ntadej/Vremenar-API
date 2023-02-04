@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 
 from . import __version__
-from .api import version, stations, maps, alerts, copyright
+from .api import alerts, copyright, maps, stations, version
 from .database import database_info
 
 # Should not be enabled in production!
