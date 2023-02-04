@@ -59,20 +59,20 @@ pre-commit run --all
 
 ## Copyright info
 
-Copyright (C) 2020-2022 Tadej Novak
+Copyright (C) 2020-2023 Tadej Novak
 
 This project may be used under the terms of the
 GNU Affero General Public License version 3.0 as published by the
 Free Software Foundation and appearing in the file [LICENSE](LICENSE).
 
-[web]: https://vremenar.tano.si
+[web]: https://vremenar.app
 [release]: https://github.com/ntadej/Vremenar-API/releases/latest
 [license]: https://github.com/ntadej/Vremenar-API/blob/main/LICENSE
 [ci]: https://github.com/ntadej/Vremenar-API/actions
 [black]: https://github.com/psf/black
 [codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=main
 [codefactor]: https://www.codefactor.io/repository/github/ntadej/vremenar-api
-[web-img]: https://img.shields.io/badge/web-vremenar.tano.si-yellow.svg
+[web-img]: https://img.shields.io/badge/web-vremenar.app-yellow.svg
 [release-img]: https://img.shields.io/github/release/ntadej/Vremenar-API.svg
 [license-img]: https://img.shields.io/github/license/ntadej/Vremenar-API.svg
 [ci-img]: https://github.com/ntadej/Vremenar-API/workflows/Continuous%20Integration/badge.svg
