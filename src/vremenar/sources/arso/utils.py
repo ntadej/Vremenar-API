@@ -40,7 +40,7 @@ def weather_map_response_url(map_type: MapType, path: str) -> str:
                 "/stations/map/",
             )
             url = url.replace(".json", "")
-        url += f"?country={CountryID.Slovenia}"
+        url += f"?country={CountryID.Slovenia.value}"
     else:
         url = join_url(BASEURL, path)
     return url
