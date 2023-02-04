@@ -7,8 +7,7 @@ config = Config()
 
 
 class ConfigurableWorker(UvicornWorker):
-    """
-    Define a UvicornWorker that can be configured by modifying its class attribute.
+    """Define a UvicornWorker that can be configured by modifying its class attribute.
 
     All of the command line options for uvicorn are potential configuration options
     (see https://www.uvicorn.org/settings/ for the complete list).

@@ -9,7 +9,7 @@ from .common import Coordinate
 class StationBase(BaseModel):
     """Station base model."""
 
-    id: str = Field(..., title="Identifier", example="METEO-0038")
+    id: str = Field(..., title="Identifier", example="METEO-0038")  # noqa: A003
 
     class Config:
         """Station base model config."""

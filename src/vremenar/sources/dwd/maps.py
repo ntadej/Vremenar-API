@@ -17,7 +17,10 @@ from ...utils import logger, to_timestamp
 
 from .utils import get_mosmix_ids_for_timestamp, get_mosmix_records, parse_record
 
-MAPS_BASEURL = "https://maps.dwd.de/geoserver/dwd/ows?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true"  # noqa E501
+MAPS_BASEURL = (
+    "https://maps.dwd.de/geoserver/dwd/ows"
+    "?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true"
+)
 
 MESSAGE_MAP_URL = "DWD Map URL: %s"
 MESSAGE_NOT_AVAILABLE_YET = "Map not available yet"
@@ -27,7 +30,8 @@ def get_supported_map_types() -> list[SupportedMapType]:
     """Get DWD supported map types."""
     return [
         SupportedMapType(
-            map_type=MapType.WeatherCondition, rendering_type=MapRenderingType.Icons
+            map_type=MapType.WeatherCondition,
+            rendering_type=MapRenderingType.Icons,
         ),
         SupportedMapType(
             map_type=MapType.Precipitation,
@@ -66,7 +70,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
             url=f"/stations/map/current{country_suffix}",
             timestamp=to_timestamp(now),
             observation=ObservationType.Recent,
-        )
+        ),
     )
 
     # Forecast
@@ -77,7 +81,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
             url=f"/stations/map/{soon_timestamp}{country_suffix}",
             timestamp=soon_timestamp,
             observation=ObservationType.Forecast,
-        )
+        ),
     )
 
     # Today
@@ -92,7 +96,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
                 url=f"/stations/map/{timestamp}{country_suffix}",
                 timestamp=timestamp,
                 observation=ObservationType.Forecast,
-            )
+            ),
         )
 
     # 7 days
@@ -105,7 +109,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
                 url=f"/stations/map/{timestamp}{country_suffix}",
                 timestamp=timestamp,
                 observation=ObservationType.Forecast,
-            )
+            ),
         )
 
     return layers, []
@@ -115,9 +119,12 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     """Get DWD precipitation map layers."""
     layers: list[MapLayer] = []
 
-    current_time = datetime.utcnow()
-    current_now = datetime.now()
-    utc_delta = (current_now - current_time).seconds
+    current_time = datetime.now(tz=timezone.utc)
+    current_now = current_time.astimezone()
+    utc_delta = current_now.utcoffset()
+    utc_delta_seconds = 0.0
+    if utc_delta:
+        utc_delta_seconds = utc_delta.seconds
     time_delta = timedelta(
         minutes=current_time.minute % 5,
         seconds=current_time.second,
@@ -127,7 +134,10 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     if time_delta.seconds < 100:  # buffer for recent image # pragma: no cover
         current_time -= timedelta(minutes=5)
     test_time = current_time.isoformat()
-    test_url = f"{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z"  # noqa E501
+    test_url = (
+        f"{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51"
+        f"&width=100&height=100&time={test_time}.000Z"
+    )
 
     logger.debug(MESSAGE_MAP_URL, test_url)
 
@@ -142,8 +152,11 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     for i in range(18, -1, -1):
         time = current_time - timedelta(minutes=5 * i)
         time_string = time.isoformat()
-        time += timedelta(seconds=utc_delta)
-        url = f"{MAPS_BASEURL}&layers=dwd:RX-Produkt&width=512&height=512&time={time_string}.000Z"  # noqa E501
+        time += timedelta(seconds=utc_delta_seconds)
+        url = (
+            f"{MAPS_BASEURL}&layers=dwd:RX-Produkt&width=512&height=512"
+            f"&time={time_string}.000Z"
+        )
         layers.append(
             MapLayer(
                 url=url,
@@ -151,20 +164,23 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
                 observation=ObservationType.Historical
                 if i != 0
                 else ObservationType.Recent,
-            )
+            ),
         )
     # forecast
     for i in range(1, 19, 1):
         time = current_time + timedelta(minutes=5 * i)
         time_string = time.isoformat()
-        time += timedelta(seconds=utc_delta)
-        url = f"{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512&time={time_string}.000Z"  # noqa E501
+        time += timedelta(seconds=utc_delta_seconds)
+        url = (
+            f"{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512"
+            f"&time={time_string}.000Z"
+        )
         layers.append(
             MapLayer(
                 url=url,
                 timestamp=to_timestamp(time),
                 observation=ObservationType.Forecast,
-            )
+            ),
         )
 
     return layers, []
@@ -174,9 +190,12 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     """Get DWD temperature map layers."""
     layers: list[MapLayer] = []
 
-    current_time = datetime.utcnow()
-    current_now = datetime.now()
-    utc_delta = (current_now - current_time).seconds
+    current_time = datetime.now(tz=timezone.utc)
+    current_now = current_time.astimezone()
+    utc_delta = current_now.utcoffset()
+    utc_delta_seconds = 0.0
+    if utc_delta:
+        utc_delta_seconds = utc_delta.seconds
     time_delta = timedelta(
         minutes=current_time.minute,
         seconds=current_time.second,
@@ -184,7 +203,10 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     )
     current_time -= time_delta
     test_time = current_time.isoformat()
-    test_url = f"{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z"  # noqa E501
+    test_url = (
+        f"{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&bbox=5,50,6,51"
+        f"&width=100&height=100&time={test_time}.000Z"
+    )
 
     logger.debug(MESSAGE_MAP_URL, test_url)
 
@@ -198,14 +220,18 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     for i in range(24):
         time = current_time + timedelta(hours=i)
         time_string = time.isoformat()
-        time += timedelta(seconds=utc_delta)
-        url = f"{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&width=512&height=512&time={time_string}.000Z"  # noqa E501
+        time += timedelta(seconds=utc_delta_seconds)
+        url = (
+            f"{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&width=512&height=512"
+            f"&time={time_string}.000Z"
+        )
+
         layers.append(
             MapLayer(
                 url=url,
                 timestamp=to_timestamp(time),
                 observation=ObservationType.Forecast,
-            )
+            ),
         )
 
     return layers, []
@@ -218,12 +244,18 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     map_name = "dwd:UVIndex" if map_type == MapType.UVIndexMax else "dwd:UV_Dosis_EU_CL"
     map_style = "uvi_cs" if map_type == MapType.UVIndexMax else ""
 
-    current_time = datetime.utcnow()
-    current_now = datetime.now()
-    utc_delta = (current_now - current_time).seconds
+    current_time = datetime.now(tz=timezone.utc)
+    current_now = current_time.astimezone()
+    utc_delta = current_now.utcoffset()
+    utc_delta_seconds = 0.0
+    if utc_delta:
+        utc_delta_seconds = utc_delta.seconds
     current_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
     test_time = current_time.isoformat()
-    test_url = f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}&bbox=5,50,6,51&width=100&height=100&time={test_time}.000Z"  # noqa E501
+    test_url = (
+        f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}&bbox=5,50,6,51"
+        f"&width=100&height=100&time={test_time}.000Z"
+    )
 
     logger.debug(MESSAGE_MAP_URL, test_url)
 
@@ -238,14 +270,17 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     for i in range(0, 3):
         time = current_time + timedelta(days=i)
         time_string = time.isoformat()
-        url = f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}&width=512&height=512&time={time_string}.000Z"  # noqa E501
-        time += timedelta(seconds=utc_delta)
+        url = (
+            f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}"
+            f"&width=512&height=512&time={time_string}.000Z"
+        )
+        time += timedelta(seconds=utc_delta_seconds)
         layers.append(
             MapLayer(
                 url=url,
                 timestamp=to_timestamp(time),
                 observation=ObservationType.Forecast,
-            )
+            ),
         )
 
     return layers, []
@@ -268,7 +303,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     raise UnsupportedMapTypeException()
 
 
-def get_map_legend(map_type: MapType) -> MapLegend:
+def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
     """Get DWD map legend."""
     if map_type == MapType.Precipitation:
         items = []
@@ -344,7 +379,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         items.append(MapLegendItem(value="8.75", color="#FF96FF"))
         items.append(MapLegendItem(value="10.0", color="#FFC5FF"))
         items.append(
-            MapLegendItem(value="kJ/m²", color="transparent", placeholder=True)
+            MapLegendItem(value="kJ/m²", color="transparent", placeholder=True),
         )
         return MapLegend(map_type=map_type, items=items)
 
@@ -382,7 +417,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
         if not station:
             continue
         conditions_list.append(
-            WeatherInfoExtended(station=station, condition=condition)
+            WeatherInfoExtended(station=station, condition=condition),
         )
 
     return conditions_list

@@ -14,10 +14,10 @@ async def load_stations(
     """Load stations from redis."""
     stations: dict[str, dict[str, str | int | float]] = {}
     async with redis.client() as connection:
-        ids: set[str] = await redis.smembers(f"station:{country.value}")
+        station_ids: set[str] = await redis.smembers(f"station:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
-            for id in ids:
-                pipeline.hgetall(f"station:{country.value}:{id}")
+            for station_id in station_ids:
+                pipeline.hgetall(f"station:{country.value}:{station_id}")
             response = await pipeline.execute()
 
     for station in response:
@@ -42,12 +42,12 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
         "alerts_area",
     }
 
-    for id, station in stations_raw.items():
+    for station_id, station in stations_raw.items():
         extra_keys = set(station.keys()).difference(base_keys)
         metadata = {key: station[key] for key in extra_keys}
 
-        stations[id] = StationInfoExtended(
-            id=id,
+        stations[station_id] = StationInfoExtended(
+            id=station_id,
             name=station["name"],
             coordinate=Coordinate(
                 latitude=station["latitude"],

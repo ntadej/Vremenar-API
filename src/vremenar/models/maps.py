@@ -58,7 +58,10 @@ class MapLayersList(BaseModel):
 
     @classmethod
     def init(
-        cls, map_type: MapType, bbox: list[float], layers: list[MapLayer]
+        cls,
+        map_type: MapType,
+        bbox: list[float],
+        layers: list[MapLayer],
     ) -> "MapLayersList":
         """Initialise map response model."""
         rendering: MapRenderingType = (

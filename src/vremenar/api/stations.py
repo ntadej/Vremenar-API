@@ -24,7 +24,8 @@ router = APIRouter()
     **defaults,
 )
 async def stations_list(
-    country: CountryID, extended: bool = False
+    country: CountryID,
+    extended: bool = False,
 ) -> list[StationInfo] | list[StationInfoExtended]:
     """List weather stations."""
     if extended:
@@ -41,7 +42,9 @@ async def stations_list(
     **defaults,
 )
 async def find(
-    country: CountryID, query: StationSearchModel, include_forecast_only: bool = False
+    country: CountryID,
+    query: StationSearchModel,
+    include_forecast_only: bool = False,
 ) -> list[StationInfo]:
     """Find weather station."""
     return await find_station(country, query, include_forecast_only)
@@ -55,7 +58,9 @@ async def find(
     **defaults,
 )
 async def condition(
-    country: CountryID, station_id: str, extended: bool = False
+    country: CountryID,
+    station_id: str,
+    extended: bool = False,
 ) -> WeatherInfoExtended | WeatherInfo:
     """Get current station condition."""
     condition = await current_station_condition(country, station_id)
@@ -74,7 +79,9 @@ async def condition(
     **defaults,
 )
 async def conditions_map(
-    country: CountryID, map_id: str, extended: bool = True
+    country: CountryID,
+    map_id: str,
+    extended: bool = True,
 ) -> list[WeatherInfo] | list[WeatherInfoExtended]:
     """Get weather conditions map for a specific ID."""
     weather_map = await get_weather_map(country, map_id)

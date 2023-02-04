@@ -24,8 +24,8 @@ async def get_mosmix_records(ids: set[str]) -> list[dict[str, Any]]:
     async with redis.client() as connection:
         for batch in chunker(list(ids), 100):
             async with connection.pipeline(transaction=False) as pipeline:
-                for id in batch:
-                    pipeline.hgetall(id)
+                for record_id in batch:
+                    pipeline.hgetall(record_id)
                 response = await pipeline.execute()
             result.extend(response)
 
@@ -42,9 +42,9 @@ def get_icon_base(weather: dict[str, Any]) -> str:
     cloud_cover_fraction = cloud_cover / 100
     if cloud_cover_fraction < 1 / 8:
         return "clear"
-    elif 1 / 8 <= cloud_cover_fraction < 4 / 8:
+    if 1 / 8 <= cloud_cover_fraction < 4 / 8:
         return "partCloudy"
-    elif 4 / 8 <= cloud_cover_fraction < 7 / 8:
+    if 4 / 8 <= cloud_cover_fraction < 7 / 8:
         return "prevCloudy"
     return "overcast"
 
@@ -54,7 +54,7 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
     weather_condition = weather.get("condition", None)
 
     precipitation_intensity = float(
-        weather.get("precipitation_60", weather.get("precipitation", 0))
+        weather.get("precipitation_60", weather.get("precipitation", 0)),
     )
     if precipitation_intensity <= 0 or weather_condition == "dry":
         return None
@@ -113,7 +113,8 @@ def get_icon(weather: dict[str, Any], station: StationInfo, time: datetime) -> s
 
 
 async def parse_record(
-    record: dict[str, Any], observation: ObservationType
+    record: dict[str, Any],
+    observation: ObservationType,
 ) -> tuple[StationBase | None, WeatherCondition | None]:
     """Parse DWD record."""
     station_id = record["station_id"]

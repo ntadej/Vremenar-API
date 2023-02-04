@@ -22,9 +22,8 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
     url: str = join_url(API_BASEURL, "locations", trailing_slash=True)
 
     if query.string and (query.latitude or query.longitude):
-        raise InvalidSearchQueryException(
-            "Either search string or coordinates are required"
-        )
+        err = "Either search string or coordinates are required"
+        raise InvalidSearchQueryException(err)
 
     if query.string:
         single = False
@@ -33,9 +32,8 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
         single = True
         url += f"?lat={query.latitude}&lon={query.longitude}"
     else:
-        raise InvalidSearchQueryException(
-            "Either search string or coordinates are required"
-        )
+        err = "Either search string or coordinates are required"
+        raise InvalidSearchQueryException(err)
 
     logger.debug("ARSO URL: %s", url)
 

@@ -27,7 +27,9 @@ def join_url(*args: str, trailing_slash: bool = False) -> str:
 
 @lru_cache
 def sunrise_sunset(
-    latitude: float, longitude: float, date: date
+    latitude: float,
+    longitude: float,
+    date: date,
 ) -> tuple[datetime, datetime]:
     """Get sunrise and sunset."""
     return sun.daylight(Observer(latitude, longitude), date)
@@ -37,7 +39,9 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
     """Get part of day for a specific place."""
     try:
         sunrise, sunset = sunrise_sunset(
-            coordinate.latitude, coordinate.longitude, time.date()
+            coordinate.latitude,
+            coordinate.longitude,
+            time.date(),
         )
     except ValueError as e:  # pragma: no cover
         return "day" if "above" in e.args[0] else "night"

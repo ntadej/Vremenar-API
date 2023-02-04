@@ -18,12 +18,7 @@ uvicorn = "^0.20.0"
 black = "^23.1.0"
 coverage = {extras = ["toml"], version = "^7.1.0"}
 fastapi-profiler = "^1.1.0"
-flake8 = "^6.0.0"
-flake8-bugbear = "^23.1.20"
-flake8-docstrings = "^1.7.0"
-flake8-pyproject = "^1.2.2"
 mypy = "^0.991"
-pep8-naming = "^0.13.3"
 pre-commit = "^3.0.4"
 pre-commit-hooks = "^4.4.0"
 pytest = "^7.2.1"
@@ -31,6 +26,7 @@ pytest-asyncio = "^0.20.3"
 pytest-cov = "^4.0.0"
 pyupgrade = "^3.3.1"
 requests = "^2.28.1"
+ruff = "^0.0.241"
 types-python-dateutil = "^2.8.19.6"
 types-redis = "^4.4.0.6"
 
@@ -65,10 +61,42 @@ omit = [
   "tests/*",
 ]
 
-[tool.flake8]
-select = ["B", "C", "D", "E", "F", "N", "Q", "T", "W"]
-ignore = ["E203", "W503"]
-max-line-length = 88
+[tool.ruff]
+select = [
+  "F",   # pyflakes
+  "E",   # pycodestyle
+  "W",   # pycodestyle
+  "C90", # mccabe (complexity)
+  # "I",   # isort
+  "N",   # pep8-naming
+  "D",   # pydocstyle
+  "UP",  # pyupgrade
+  "ANN", # flake8-annotations
+  "B",   # flake8-bugbear
+  "A",   # flake8-builtins
+  "COM", # flake8-commas
+  "C4",  # flake8-comprehensions
+  "DTZ", # flake8-datetimez
+  "EM",  # flake8-errmsg
+  "EXE", # flake8-executable
+  "G",   # flake8-logging-format
+  "PT",  # flake8-pytest-style
+  "Q",   # flake8-quotes
+  "RET", # flake8-return
+  "SIM", # flake8-simplify
+  # "TID", # flake8-tidy-imports
+  "PTH", # flake8-use-pathlib
+  "PL",  # pylint
+  "RUF", # ruff
+]
+ignore = [
+  "ANN101",  # missing-type-self
+  "ANN102",  # missing-type-cls
+  "PLR2004", # magic-value-comparison
+  "D203",    # one-blank-line-before-class
+  "D213",    # multi-line-summary-second-line
+]
+line-length = 88
 
 [tool.mypy]
 check_untyped_defs = true

@@ -28,7 +28,9 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
 
         for area in response:
             areas[area["code"]] = AlertAreaWithPolygon(
-                id=area["code"], name=area["name"], polygons=loads(area["polygons"])
+                id=area["code"],
+                name=area["name"],
+                polygons=loads(area["polygons"]),
             )
 
     logger.debug("Read %s alerts areas from the database", len(areas))
@@ -39,22 +41,22 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
 async def list_alerts(
     country: CountryID,
     language: LanguageID,
-    ids: set[str] | None = None,
+    alert_ids: set[str] | None = None,
     areas: set[str] | None = None,
 ) -> list[AlertInfo]:
     """Get alerts for a specific country."""
     alerts: list[AlertInfo] = []
 
     async with redis.client() as connection:
-        if ids is None:
-            ids = await connection.smembers(f"alert:{country.value}")
+        if alert_ids is None:
+            alert_ids = await connection.smembers(f"alert:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
-            for id in ids:
-                pipeline.hgetall(f"alert:{country.value}:{id}:info")
+            for alert_id in alert_ids:
+                pipeline.hgetall(f"alert:{country.value}:{alert_id}:info")
                 pipeline.hgetall(
-                    f"alert:{country.value}:{id}:localised_{language.value}"
+                    f"alert:{country.value}:{alert_id}:localised_{language.value}",
                 )
-                pipeline.smembers(f"alert:{country.value}:{id}:areas")
+                pipeline.smembers(f"alert:{country.value}:{alert_id}:areas")
             response = await pipeline.execute()
 
         areas_dict = await list_alerts_areas(country)
@@ -92,7 +94,8 @@ async def _parse_areas(country: CountryID, areas: list[str] | None = None) -> se
 
 
 async def _parse_stations(
-    country: CountryID, stations: list[str] | None = None
+    country: CountryID,
+    stations: list[str] | None = None,
 ) -> set[str]:
     """Parse stations from query."""
     areas_to_query: set[str] = set()
@@ -116,10 +119,12 @@ async def list_alerts_for_critera(
 ) -> list[AlertInfo]:
     """Get list of alerts for criteria."""
     if not stations and not areas:
-        raise InvalidSearchQueryException("At least one station or area required")
+        err = "At least one station or area required"
+        raise InvalidSearchQueryException(err)
 
     areas_to_query: set[str] = await _parse_areas(
-        country, areas
+        country,
+        areas,
     ) | await _parse_stations(country, stations)
 
     # get unique alert IDs
@@ -127,12 +132,14 @@ async def list_alerts_for_critera(
 
     # get alert info
     alerts: list[AlertInfo] = await list_alerts(
-        country, language, alert_ids, areas_to_query
+        country,
+        language,
+        alert_ids,
+        areas_to_query,
     )
-    # sort the output by time
-    alerts = sorted(alerts, key=lambda a: a.onset)
 
-    return alerts
+    # sort the output by time and return
+    return sorted(alerts, key=lambda a: a.onset)
 
 
 async def list_alert_areas(country: CountryID) -> list[AlertAreaWithPolygon]:

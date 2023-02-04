@@ -43,7 +43,9 @@ async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) ->
 
 
 async def store_alert_record(
-    country: CountryID, record: dict[str, Any], record_localised: dict[str, Any]
+    country: CountryID,
+    record: dict[str, Any],
+    record_localised: dict[str, Any],
 ) -> None:
     """Store alert record to redis."""
     record_id = record["id"]
@@ -244,13 +246,19 @@ async def alerts_fixtures() -> None:
 
     await store_alerts_areas(CountryID.Germany, [area_germany_1, area_germany_2])
     await store_alert_record(
-        CountryID.Germany, alert_germany_1, alert_germany_1_localised
+        CountryID.Germany,
+        alert_germany_1,
+        alert_germany_1_localised,
     )
     await store_alert_record(
-        CountryID.Germany, alert_germany_2, alert_germany_2_localised
+        CountryID.Germany,
+        alert_germany_2,
+        alert_germany_2_localised,
     )
     await store_alert_record(
-        CountryID.Slovenia, alert_slovenia_1, alert_slovenia_1_localised
+        CountryID.Slovenia,
+        alert_slovenia_1,
+        alert_slovenia_1_localised,
     )
 
 

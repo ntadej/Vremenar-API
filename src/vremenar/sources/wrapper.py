@@ -22,7 +22,8 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
 
 
 async def get_map_layers(
-    country: CountryID, map_type: MapType
+    country: CountryID,
+    map_type: MapType,
 ) -> tuple[list[MapLayer], list[float]]:
     """Get map layers for the chosen country."""
     if country == CountryID.Slovenia:
@@ -74,7 +75,9 @@ async def list_stations(country: CountryID) -> list[StationInfoExtended]:
 
 
 async def find_station(
-    country: CountryID, query: StationSearchModel, include_forecast_only: bool
+    country: CountryID,
+    query: StationSearchModel,
+    include_forecast_only: bool,
 ) -> list[StationInfo]:
     """Find weather station by coordinate or string."""
     if country == CountryID.Slovenia:
@@ -86,7 +89,8 @@ async def find_station(
 
 
 async def current_station_condition(
-    country: CountryID, station_id: str
+    country: CountryID,
+    station_id: str,
 ) -> WeatherInfoExtended:
     """Get current station weather condition."""
     if country == CountryID.Slovenia:

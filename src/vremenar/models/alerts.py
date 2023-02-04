@@ -66,7 +66,7 @@ class AlertCertainty(str, Enum):
 class AlertArea(BaseModel):
     """Weather alert area model."""
 
-    id: str = Field(..., example="SI801")
+    id: str = Field(..., example="SI801")  # noqa: A003
     name: str = Field(..., example="Obala Slovenije")
 
     class Config:
@@ -90,7 +90,7 @@ class AlertAreaWithPolygon(AlertArea):
                 [13.384515640404798, 45.56587815045958],
                 [13.628708047547093, 45.63156076582936],
                 [13.725456655646438, 45.6015000758004],
-            ]
+            ],
         ],
     )
 
@@ -107,7 +107,7 @@ class AlertAreaWithPolygon(AlertArea):
 class AlertInfo(BaseModel):
     """Weather alert info model."""
 
-    id: str = Field(
+    id: str = Field(  # noqa: A003
         ...,
         title="Identifier",
         example=(
@@ -116,7 +116,7 @@ class AlertInfo(BaseModel):
         ),
     )
 
-    type: AlertType = Field(..., example=AlertType.Wind)
+    type: AlertType = Field(..., example=AlertType.Wind)  # noqa: A003
     urgency: AlertUrgency = Field(..., example=AlertUrgency.Immediate)
     severity: AlertSeverity = Field(..., example=AlertSeverity.Moderate)
     certainty: AlertCertainty = Field(..., example=AlertCertainty.Likely)
@@ -154,12 +154,13 @@ class AlertInfo(BaseModel):
         localised: dict[str, Any],
         alert_areas: set[str],
         areas: dict[str, AlertAreaWithPolygon] | None = None,
-        **kwargs: Any,
+        **kwargs: dict[str, Any] | list[AlertArea],
     ) -> "AlertInfo":
         """Initialise from a dictionary."""
         # translatable values
         kwargs.setdefault(
-            "event", localised["event"][0].upper() + localised["event"][1:]
+            "event",
+            localised["event"][0].upper() + localised["event"][1:],
         )
         kwargs.setdefault("headline", localised["headline"])
 

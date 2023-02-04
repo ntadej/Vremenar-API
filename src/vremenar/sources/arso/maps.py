@@ -36,7 +36,8 @@ def get_supported_map_types() -> list[SupportedMapType]:
     """Get ARSO supported map types."""
     return [
         SupportedMapType(
-            map_type=MapType.WeatherCondition, rendering_type=MapRenderingType.Icons
+            map_type=MapType.WeatherCondition,
+            rendering_type=MapRenderingType.Icons,
         ),
         SupportedMapType(
             map_type=MapType.Precipitation,
@@ -44,7 +45,8 @@ def get_supported_map_types() -> list[SupportedMapType]:
             has_legend=True,
         ),
         SupportedMapType(
-            map_type=MapType.CloudCoverage, rendering_type=MapRenderingType.Image
+            map_type=MapType.CloudCoverage,
+            rendering_type=MapRenderingType.Image,
         ),
         SupportedMapType(
             map_type=MapType.WindSpeed,
@@ -88,7 +90,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
                 observation=ObservationType.Historical
                 if layer["mode"] == "ANL"
                 else ObservationType.Forecast,
-            )
+            ),
         )
 
         if not bbox and "bbox" in layer:
@@ -105,7 +107,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     return layers, bbox
 
 
-def get_map_legend(map_type: MapType) -> MapLegend:
+def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
     """Get ARSO map legend."""
     if map_type == MapType.Precipitation:
         items = []
@@ -191,7 +193,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         items.append(MapLegendItem(value="", color="transparent"))
         items.append(MapLegendItem(value="low", color="#fae100", translatable=True))
         items.append(
-            MapLegendItem(value="moderate", color="#fa7d00", translatable=True)
+            MapLegendItem(value="moderate", color="#fa7d00", translatable=True),
         )
         items.append(MapLegendItem(value="large", color="#fa0000", translatable=True))
         items.append(
@@ -200,7 +202,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
                 color="transparent",
                 translatable=True,
                 placeholder=True,
-            )
+            ),
         )
         return MapLegend(map_type=map_type, items=items)
 
@@ -239,7 +241,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
         )
         if station and condition:
             conditions_list.append(
-                WeatherInfoExtended(station=station, condition=condition)
+                WeatherInfoExtended(station=station, condition=condition),
             )
 
     return conditions_list

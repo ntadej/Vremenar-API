@@ -1,5 +1,5 @@
 """DWD weather stations."""
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 from httpx import AsyncClient
 
 from ...database.stations import get_stations
@@ -43,26 +43,31 @@ async def _process_find_station(url: str) -> list[StationInfo]:
 
 
 async def find_station(
-    query: StationSearchModel, include_forecast_only: bool
+    query: StationSearchModel,
+    include_forecast_only: bool,
 ) -> list[StationInfo]:
     """Find station by coordinate or string."""
     url_forecast: str = join_url(BRIGHTSKY_BASEURL, "weather", trailing_slash=False)
     url_current: str = join_url(
-        BRIGHTSKY_BASEURL, "current_weather", trailing_slash=False
+        BRIGHTSKY_BASEURL,
+        "current_weather",
+        trailing_slash=False,
     )
 
     if query.string:
-        raise InvalidSearchQueryException("Only coordinates are required")
+        err = "Only coordinates are required"
+        raise InvalidSearchQueryException(err)
 
     if query.latitude is not None and query.longitude is not None:
         url_forecast += f"?lat={query.latitude}&lon={query.longitude}"
         url_current += f"?lat={query.latitude}&lon={query.longitude}"
     else:
-        raise InvalidSearchQueryException("Only coordinates are required")
+        err = "Only coordinates are required"
+        raise InvalidSearchQueryException(err)
 
     locations: list[StationInfo] = []
     if include_forecast_only:
-        today = date.today()
+        today = datetime.now(tz=timezone.utc).date()
         target_date = today + timedelta(days=2)
         url_forecast += (
             f'&date={target_date.strftime("%Y-%m-%d")}'

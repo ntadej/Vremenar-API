@@ -41,9 +41,9 @@ def weather_map_response_url(map_type: MapType, path: str) -> str:
             )
             url = url.replace(".json", "")
         url += f"?country={CountryID.Slovenia.value}"
-    else:
-        url = join_url(BASEURL, path)
-    return url
+        return url
+
+    return join_url(BASEURL, path)
 
 
 async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
@@ -57,7 +57,8 @@ async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
 
 
 async def parse_feature(
-    feature: dict[Any, Any], observation: ObservationType
+    feature: dict[Any, Any],
+    observation: ObservationType,
 ) -> tuple[StationInfoExtended | None, WeatherCondition | None]:
     """Parse ARSO feature."""
     stations = await get_stations(CountryID.Slovenia)

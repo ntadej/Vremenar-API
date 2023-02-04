@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from httpx import AsyncClient
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_list(client: AsyncClient) -> None:
     """Test stations list."""
     response = await client.get("/stations/list?country=si")
@@ -15,7 +15,7 @@ async def test_stations_list(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_details(client: AsyncClient) -> None:
     """Test stations details."""
     response = await client.get("/stations/list?country=si")
@@ -31,7 +31,7 @@ async def test_stations_details(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_find_string(client: AsyncClient) -> None:
     """Test stations find by string."""
     response = await client.post("/stations/find?country=si", json={"string": "Bled"})
@@ -41,13 +41,14 @@ async def test_stations_find_string(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.post(
-        "/stations/find?country=de", json={"string": "Hamburg"}
+        "/stations/find?country=de",
+        json={"string": "Hamburg"},
     )
     assert response.status_code == 422
     assert response.json()["detail"] == "Only coordinates are required"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_find_coordinate(client: AsyncClient) -> None:
     """Test stations find by coordinate."""
     # Bled
@@ -101,7 +102,7 @@ async def test_stations_find_coordinate(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_find_errors(client: AsyncClient) -> None:
     """Test stations find errors."""
     response = await client.get("/stations/find?country=si")
@@ -137,7 +138,7 @@ async def test_stations_find_errors(client: AsyncClient) -> None:
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_condition(client: AsyncClient) -> None:
     """Test stations condition."""
     response = await client.get("/stations/condition/METEO-0038?country=si")
@@ -147,7 +148,7 @@ async def test_stations_condition(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.get(
-        "/stations/condition/METEO-0038?country=si&extended=true"
+        "/stations/condition/METEO-0038?country=si&extended=true",
     )
     assert response.status_code == 200
 
@@ -155,7 +156,7 @@ async def test_stations_condition(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_condition_error(client: AsyncClient) -> None:
     """Test stations condition errors."""
     response = await client.get("/stations/condition?country=si")
@@ -171,7 +172,7 @@ async def test_stations_condition_error(client: AsyncClient) -> None:
     assert response.json()["detail"] == "Unknown station"
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_map(client: AsyncClient) -> None:
     """Test stations map."""
     response = await client.get("/stations/map/current?country=si&extended=false")
@@ -200,7 +201,7 @@ async def test_stations_map(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_stations_errors(client: AsyncClient) -> None:
     """Test stations map errors."""
     response = await client.get("/stations/map/abc?country=si")

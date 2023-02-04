@@ -20,13 +20,15 @@ class CopyrightInfo(BaseModel):
     tags=["copyright"],
     response_description="Get data copyright",
 )
-async def copyright() -> dict[CountryID, CopyrightInfo]:
+async def copyright() -> dict[CountryID, CopyrightInfo]:  # noqa: A001
     """Get data copyright."""
     return {
         CountryID.Slovenia: CopyrightInfo(
-            provider="Slovenian Environment Agency", url="https://meteo.arso.gov.si"
+            provider="Slovenian Environment Agency",
+            url="https://meteo.arso.gov.si",
         ),
         CountryID.Germany: CopyrightInfo(
-            provider="Deutscher Wetterdienst", url="https://dwd.de"
+            provider="Deutscher Wetterdienst",
+            url="https://dwd.de",
         ),
     }

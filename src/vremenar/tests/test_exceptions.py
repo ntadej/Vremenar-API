@@ -1,5 +1,5 @@
 """Exceptions tests."""
-from pytest import raises
+import pytest
 
 from ..exceptions import (
     UnsupportedCountryException,
@@ -14,23 +14,24 @@ from ..exceptions import (
 
 def test_exceptions() -> None:
     """Test exceptions."""
-    with raises(UnsupportedCountryException):
+    with pytest.raises(UnsupportedCountryException):
         raise UnsupportedCountryException()
 
-    with raises(UnsupportedMapTypeException):
+    with pytest.raises(UnsupportedMapTypeException):
         raise UnsupportedMapTypeException()
 
-    with raises(UnrecognisedMapIDException):
+    with pytest.raises(UnrecognisedMapIDException):
         raise UnrecognisedMapIDException()
 
-    with raises(UnknownAlertAreaException):
+    with pytest.raises(UnknownAlertAreaException):
         raise UnknownAlertAreaException()
 
-    with raises(UnknownStationAlertAreaException):
+    with pytest.raises(UnknownStationAlertAreaException):
         raise UnknownStationAlertAreaException()
 
-    with raises(UnknownStationException):
+    with pytest.raises(UnknownStationException):
         raise UnknownStationException()
 
-    with raises(InvalidSearchQueryException):
-        raise InvalidSearchQueryException("Test message")
+    err = "Test message"
+    with pytest.raises(InvalidSearchQueryException):
+        raise InvalidSearchQueryException(err)

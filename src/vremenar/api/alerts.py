@@ -48,7 +48,8 @@ async def alerts_list(
     **defaults,
 )
 async def alerts_full_list(
-    country: CountryID, language: LanguageID = LanguageID.English
+    country: CountryID,
+    language: LanguageID = LanguageID.English,
 ) -> list[AlertInfo]:
     """List weather alerts for a country."""
     return await list_alerts(country, language)
