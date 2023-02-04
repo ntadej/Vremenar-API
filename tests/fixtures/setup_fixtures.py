@@ -1,9 +1,10 @@
+# type: ignore
 """Setup test database."""
 from asyncio import run
 from datetime import datetime, timedelta, timezone
-from vremenar.database.redis import redis  # type: ignore
-from vremenar.definitions import CountryID, LanguageID  # type: ignore
-from vremenar.utils import to_timestamp  # type: ignore
+from vremenar.database.redis import redis
+from vremenar.definitions import CountryID, LanguageID
+from vremenar.utils import to_timestamp
 from typing import Any
 
 

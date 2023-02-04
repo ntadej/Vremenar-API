@@ -11,8 +11,9 @@ database: int = {
     "test": 2,
 }.get(db_env, 0)
 
-redis: Redis = from_url(  # type: ignore
-    f"redis://localhost/{database}", decode_responses=True
+redis: "Redis[str]" = from_url(
+    f"redis://localhost/{database}",
+    decode_responses=True,
 )
 
 

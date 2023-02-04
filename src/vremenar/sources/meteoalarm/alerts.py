@@ -101,9 +101,10 @@ async def _parse_stations(
         for s in stations:
             if s not in stations_list:
                 raise UnknownStationException()
-            if not stations_list[s].alerts_area:
+            area = stations_list[s].alerts_area
+            if not area:
                 raise UnknownStationAlertAreaException()  # pragma: no cover
-            areas_to_query.add(stations_list[s].alerts_area)  # type: ignore
+            areas_to_query.add(area)
     return areas_to_query
 
 
