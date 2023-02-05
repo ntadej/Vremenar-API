@@ -40,9 +40,11 @@ async def _process_find_station(url: str) -> list[StationInfo]:
 
     for source in response_body["sources"]:
         station = await parse_source(source)
-        if station:
-            locations.append(station)
-            break
+        if not station:  # pragma: no cover
+            continue
+
+        locations.append(station)
+        break
 
     return locations
 

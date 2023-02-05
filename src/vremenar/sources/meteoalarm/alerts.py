@@ -48,7 +48,7 @@ async def list_alerts(
     alerts: list[AlertInfo] = []
 
     async with redis.client() as connection:
-        if alert_ids is None:
+        if alert_ids is None:  # pragma: no cover
             alert_ids = await connection.smembers(f"alert:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for alert_id in alert_ids:

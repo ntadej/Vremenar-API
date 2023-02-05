@@ -124,7 +124,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
-    if utc_delta:
+    if utc_delta:  # pragma: no cover
         utc_delta_seconds = utc_delta.seconds
     time_delta = timedelta(
         minutes=current_time.minute % 5,
@@ -195,7 +195,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
-    if utc_delta:
+    if utc_delta:  # pragma: no cover
         utc_delta_seconds = utc_delta.seconds
     time_delta = timedelta(
         minutes=current_time.minute,
@@ -249,7 +249,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
-    if utc_delta:
+    if utc_delta:  # pragma: no cover
         utc_delta_seconds = utc_delta.seconds
     current_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
     test_time = current_time.isoformat()

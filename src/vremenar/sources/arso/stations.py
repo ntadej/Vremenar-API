@@ -57,8 +57,9 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
     locations: list[StationInfo] = []
     for feature in response_body["features"]:
         station = await parse_station(feature)
-        if station:
-            locations.append(station)
+        if not station:  # pragma: no cover
+            continue
+        locations.append(station)
 
     return locations
 

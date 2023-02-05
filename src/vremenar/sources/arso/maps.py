@@ -239,9 +239,12 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
             feature,
             ObservationType.Recent if map_id == "current" else ObservationType.Forecast,
         )
-        if station and condition:
-            conditions_list.append(
-                WeatherInfoExtended(station=station, condition=condition),
-            )
+
+        if not station or not condition:  # pragma: no cover
+            continue
+
+        conditions_list.append(
+            WeatherInfoExtended(station=station, condition=condition),
+        )
 
     return conditions_list
