@@ -61,9 +61,10 @@ async def list_alerts(
 
         areas_dict = await list_alerts_areas(country)
         for info, localised, alert_areas in chunker(response, 3):
+            alert_areas_filtered = alert_areas
             if areas is not None:
-                alert_areas = {area for area in alert_areas if area in areas}
-            alert = AlertInfo.init(info, localised, alert_areas, areas_dict)
+                alert_areas_filtered = {area for area in alert_areas if area in areas}
+            alert = AlertInfo.init(info, localised, alert_areas_filtered, areas_dict)
             if parse_timestamp(alert.ending) > datetime.now(tz=timezone.utc):
                 alerts.append(alert)
 
