@@ -35,7 +35,7 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
 
     logger.debug("Read %s alerts areas from the database", len(areas))
 
-    return {k: v for k, v in sorted(areas.items(), key=lambda item: item[1].id)}
+    return dict(sorted(areas.items(), key=lambda item: item[1].id))
 
 
 async def list_alerts(

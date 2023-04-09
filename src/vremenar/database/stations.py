@@ -1,5 +1,6 @@
 """Stations database helpers."""
 import asyncstdlib as a
+from typing_extensions import TypedDict
 
 from vremenar.definitions import CountryID
 from vremenar.models.common import Coordinate
@@ -8,11 +9,22 @@ from vremenar.models.stations import StationInfoExtended
 from .redis import redis
 
 
-async def load_stations(
-    country: CountryID,
-) -> dict[str, dict[str, str | int | float]]:
+class StationDict(TypedDict, total=False):
+    """Station dictionary."""
+
+    id: str  # noqa: A003
+    name: str
+    latitude: float
+    longitude: float
+    altitude: float
+    zoom_level: float
+    forecast_only: bool
+    alerts_area: str
+
+
+async def load_stations(country: CountryID) -> dict[str, StationDict]:
     """Load stations from redis."""
-    stations: dict[str, dict[str, str | int | float]] = {}
+    stations: dict[str, StationDict] = {}
     async with redis.client() as connection:
         station_ids: set[str] = await redis.smembers(f"station:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
@@ -29,7 +41,7 @@ async def load_stations(
 @a.lru_cache
 async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported stations for a country."""
-    stations_raw: dict[str, dict[str, str | int | float]] = await load_stations(country)
+    stations_raw: dict[str, StationDict] = await load_stations(country)
     stations: dict[str, StationInfoExtended] = {}
     base_keys: set[str] = {
         "id",
@@ -43,8 +55,8 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     }
 
     for station_id, station in stations_raw.items():
-        extra_keys = set(station.keys()).difference(base_keys)
-        metadata = {key: station[key] for key in extra_keys}
+        extra_keys: set[str] = set(station.keys()).difference(base_keys)
+        metadata = {key: station[key] for key in extra_keys}  # type: ignore
 
         stations[station_id] = StationInfoExtended(
             id=station_id,
@@ -59,4 +71,4 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
             alerts_area=station["alerts_area"] if "alerts_area" in station else None,
             metadata=metadata if metadata else None,
         )
-    return {k: v for k, v in sorted(stations.items(), key=lambda item: item[1].name)}
+    return dict(sorted(stations.items(), key=lambda item: item[1].name))
