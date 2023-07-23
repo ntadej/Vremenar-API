@@ -1,4 +1,5 @@
 """Common backend definitions."""
+from __future__ import annotations
 
 from enum import Enum
 
@@ -9,7 +10,7 @@ class CountryID(str, Enum):
     Slovenia = "si"
     Germany = "de"
 
-    def label(self) -> str:
+    def label(self: CountryID) -> str:
         """Get country label."""
         if self is CountryID.Slovenia:
             return "Slovenia"
@@ -17,7 +18,7 @@ class CountryID(str, Enum):
             return "Germany"
         raise RuntimeError()  # pragma: no cover
 
-    def full_name(self) -> str:
+    def full_name(self: CountryID) -> str:
         """Get country full name."""
         if self is CountryID.Slovenia:
             return "slovenia"

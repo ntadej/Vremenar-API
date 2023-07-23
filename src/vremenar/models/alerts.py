@@ -1,4 +1,6 @@
 """Alerts models."""
+from __future__ import annotations
+
 from enum import Enum
 from typing import Any
 
@@ -90,7 +92,7 @@ class AlertAreaWithPolygon(AlertArea):
 
     polygons: list[list[list[float]]]
 
-    def base(self) -> AlertArea:
+    def base(self: AlertAreaWithPolygon) -> AlertArea:
         """Return an instance of AlertArea."""
         data = self.model_dump(exclude={"polyons"})
         return AlertArea.model_validate(data)
@@ -150,7 +152,7 @@ class AlertInfo(BaseModel):
         alert_areas: set[str],
         areas: dict[str, AlertAreaWithPolygon] | None = None,
         **kwargs: dict[str, Any] | list[AlertArea],
-    ) -> "AlertInfo":
+    ) -> AlertInfo:
         """Initialise from a dictionary."""
         # translatable values
         kwargs.setdefault(

@@ -1,11 +1,13 @@
 """Common Vremenar exceptions."""
+from __future__ import annotations
+
 from fastapi import HTTPException, status
 
 
 class UnsupportedCountryException(HTTPException):
     """Unsupported country exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnsupportedCountryException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -16,7 +18,7 @@ class UnsupportedCountryException(HTTPException):
 class UnsupportedMapTypeException(HTTPException):
     """Unsupported map type exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnsupportedMapTypeException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -27,7 +29,7 @@ class UnsupportedMapTypeException(HTTPException):
 class UnrecognisedMapIDException(HTTPException):
     """Unrecognised map ID exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnrecognisedMapIDException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -38,7 +40,7 @@ class UnrecognisedMapIDException(HTTPException):
 class UnknownAlertAreaException(HTTPException):
     """Unknown alert area exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnknownAlertAreaException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -49,7 +51,7 @@ class UnknownAlertAreaException(HTTPException):
 class UnknownStationAlertAreaException(HTTPException):
     """Unknown station alert area exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnknownStationAlertAreaException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -60,7 +62,7 @@ class UnknownStationAlertAreaException(HTTPException):
 class UnknownStationException(HTTPException):
     """Unknown station exception."""
 
-    def __init__(self) -> None:
+    def __init__(self: UnknownStationException) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -71,7 +73,7 @@ class UnknownStationException(HTTPException):
 class InvalidSearchQueryException(HTTPException):
     """Invalid query exception."""
 
-    def __init__(self, detail: str) -> None:
+    def __init__(self: InvalidSearchQueryException, detail: str) -> None:
         """Init exception."""
         super().__init__(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

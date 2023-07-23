@@ -1,9 +1,10 @@
 """Weather models."""
+from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import ObservationType
-from vremenar.models.stations import StationBase, StationInfo
+from vremenar.models.stations import StationBase, StationInfo  # noqa: TCH001
 
 
 class WeatherCondition(BaseModel):
@@ -45,7 +46,7 @@ class WeatherInfoExtended(WeatherInfo):
 
     station: StationInfo
 
-    def base(self) -> WeatherInfo:
+    def base(self: WeatherInfoExtended) -> WeatherInfo:
         """Return an instance of WeatherInfo."""
         return WeatherInfo(station=self.station.base(), condition=self.condition)
 

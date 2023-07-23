@@ -103,13 +103,12 @@ select = [
   "RUF",   # ruff
 ]
 ignore = [
-  "ANN101",  # missing-type-self
-  "ANN102",  # missing-type-cls
-  "PLR2004", # magic-value-comparison
-  "D203",    # one-blank-line-before-class
-  "D213",    # multi-line-summary-second-line
-  "FBT001",  # boolean-positional-arg-in-function-definition
-  "FBT002",  # boolean-default-value-in-function-definition
+  "ANN102",  # missing-type-cls (not working for the moment)
+  "PLR2004", # magic-value-comparison (not wanted)
+  "D203",    # one-blank-line-before-class (conflicting with no-blank-line-before-class)
+  "D213",    # multi-line-summary-second-line (conflicting with multi-line-summary-first-line)
+  "FBT001",  # boolean-positional-arg-in-function-definition (not wanted)
+  "FBT002",  # boolean-default-value-in-function-definition (not wanted)
 ]
 line-length = 88
 
