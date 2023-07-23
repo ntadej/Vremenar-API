@@ -13,7 +13,7 @@ class ConfigurableWorker(UvicornWorker):
     """
 
     #: dict: Set the equivalent of uvicorn command line options as keys.
-    CONFIG_KWARGS = {
+    CONFIG_KWARGS = {  # noqa: RUF012
         "root_path": config("SCRIPT_NAME", default=""),
         "proxy_headers": "True",
     }

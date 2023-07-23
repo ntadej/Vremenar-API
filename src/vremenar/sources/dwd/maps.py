@@ -298,7 +298,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     if map_type == MapType.Temperature:
         return await get_map_temperature()
 
-    if map_type == MapType.UVIndexMax or map_type == MapType.UVDose:
+    if map_type in (MapType.UVIndexMax, MapType.UVDose):
         return await get_map_uv(map_type)
 
     raise UnsupportedMapTypeException()

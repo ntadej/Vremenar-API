@@ -12,7 +12,7 @@ from .redis import redis
 class StationDict(TypedDict, total=False):
     """Station dictionary."""
 
-    id: str  # noqa: A003
+    id: str
     name: str
     latitude: float
     longitude: float

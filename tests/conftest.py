@@ -9,7 +9,7 @@ from httpx import AsyncClient
 
 @pytest.fixture(scope="session")
 def event_loop(
-    request: Any,  # noqa: ANN401
+    request: Any,  # noqa: ANN401, ARG001
 ) -> Generator[asyncio.AbstractEventLoop, None, None]:
     """Create an instance of the default event loop for each test case."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -18,7 +18,6 @@ def event_loop(
 
 
 @pytest.fixture(scope="module")
-# @pytest.fixture()
 async def client() -> AsyncGenerator[AsyncClient, None]:
     """Async testing client for unit tests."""
     from vremenar.main import app

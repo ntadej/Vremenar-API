@@ -84,8 +84,7 @@ async def find_station(
         locations = await _process_find_station(url_forecast)
 
     if not locations or locations[0].forecast_only:
-        for location in await _process_find_station(url_current):
-            locations.append(location)
+        locations += await _process_find_station(url_current)
 
     return locations
 
