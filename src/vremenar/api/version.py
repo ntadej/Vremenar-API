@@ -4,7 +4,7 @@ from json import load
 from pathlib import Path
 
 from fastapi import APIRouter
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 from vremenar import __version__
 
@@ -15,14 +15,22 @@ VERSION_INFO: Path = Path.cwd() / "version.json"
 class VersionInfo(BaseModel):
     """Version info."""
 
-    stable: str | None = Field("", example="1.0.0")
-    beta: str | None = Field("", example="2.0.0")
-    server: str = Field(__version__, const=True, example="1.0.0")
+    stable: str = ""
+    beta: str = ""
+    server: str = __version__
 
-    class Config:
-        """Version info config."""
-
-        title: str = "Version info"
+    model_config = ConfigDict(
+        title="Version info",
+        json_schema_extra={
+            "examples": [
+                {
+                    "stable": "1.0.0",
+                    "beta": "2.0.0",
+                    "server": "1.0.0",
+                },
+            ],
+        },
+    )
 
 
 @router.get(

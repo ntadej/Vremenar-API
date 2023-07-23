@@ -1,11 +1,24 @@
 """Common models and data structures."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 
 class Coordinate(BaseModel):
     """Coordinate model."""
 
-    latitude: float = Field(..., example=46.364444)
-    longitude: float = Field(..., example=14.094722)
-    altitude: float | None = Field(None, example=487)
+    latitude: float
+    longitude: float
+    altitude: float | None = None
+
+    model_config = ConfigDict(
+        title="Coordinate",
+        json_schema_extra={
+            "examples": [
+                {
+                    "latitude": 46.364444,
+                    "longitude": 14.094722,
+                    "altitude": 487,
+                },
+            ],
+        },
+    )

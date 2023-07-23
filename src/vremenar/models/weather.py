@@ -1,6 +1,6 @@
 """Weather models."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import ObservationType
 from vremenar.models.stations import StationBase, StationInfo
@@ -9,16 +9,26 @@ from vremenar.models.stations import StationBase, StationInfo
 class WeatherCondition(BaseModel):
     """Weather condition model."""
 
-    observation: ObservationType = Field(..., example=ObservationType.Recent)
-    timestamp: str = Field(..., example="1604779200000")
-    icon: str = Field(..., example="clear_night")
-    temperature: float = Field(..., example=13)
-    temperature_low: float | None = Field(None, example=1)
+    observation: ObservationType
+    timestamp: str
+    icon: str
+    temperature: float
+    temperature_low: float | None = None
 
-    class Config:
-        """Weather condition model config."""
-
-        title: str = "Weather condition"
+    model_config = ConfigDict(
+        title="Weather condition",
+        json_schema_extra={
+            "examples": [
+                {
+                    "observation": ObservationType.Recent,
+                    "timestamp": "1604779200000",
+                    "icon": "clear_night",
+                    "temperature": 13,
+                    "temperature_low": 1,
+                },
+            ],
+        },
+    )
 
 
 class WeatherInfo(BaseModel):
@@ -27,10 +37,7 @@ class WeatherInfo(BaseModel):
     station: StationBase
     condition: WeatherCondition
 
-    class Config:
-        """Weather info model config."""
-
-        title: str = "Weather information"
+    model_config = ConfigDict(title="Weather information")
 
 
 class WeatherInfoExtended(WeatherInfo):
@@ -42,7 +49,6 @@ class WeatherInfoExtended(WeatherInfo):
         """Return an instance of WeatherInfo."""
         return WeatherInfo(station=self.station.base(), condition=self.condition)
 
-    class Config:
-        """Weather extended info model config."""
-
-        title: str = "Weather information with extended station information"
+    model_config = ConfigDict(
+        title="Weather information with extended station information",
+    )

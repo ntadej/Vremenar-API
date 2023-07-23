@@ -9,8 +9,6 @@ from .config import defaults
 
 router = APIRouter()
 
-default_query = Query(None)
-
 
 @router.get(
     "/alerts/areas",
@@ -34,8 +32,8 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
 async def alerts_list(
     country: CountryID,
     language: LanguageID = LanguageID.English,
-    station: list[str] | None = default_query,
-    area: list[str] | None = default_query,
+    station: list[str] | None = Query(None),  # noqa: B008
+    area: list[str] | None = Query(None),  # noqa: B008
 ) -> list[AlertInfo]:
     """List weather alerts for the criteria."""
     return await list_alerts_for_critera(country, language, station, area)

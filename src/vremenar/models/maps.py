@@ -2,9 +2,11 @@
 
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import ObservationType
+
+from . import get_examples
 
 
 class MapType(str, Enum):
@@ -31,31 +33,52 @@ class MapRenderingType(str, Enum):
 class SupportedMapType(BaseModel):
     """Supported map type model."""
 
-    map_type: MapType = Field(..., example=MapType.Precipitation)
-    rendering_type: MapRenderingType = Field(..., example=MapRenderingType.Tiles)
-    has_legend: bool | None = Field(None, example=False)
+    map_type: MapType
+    rendering_type: MapRenderingType
+    has_legend: bool | None = None
+
+    model_config = ConfigDict(
+        title="Supported map type",
+        json_schema_extra={
+            "examples": [
+                {
+                    "map_type": MapType.Precipitation,
+                    "rendering_type": MapRenderingType.Tiles,
+                    "has_legend": False,
+                },
+            ],
+        },
+    )
 
 
 class MapLayer(BaseModel):
     """Map layer model."""
 
-    observation: ObservationType = Field(..., example=ObservationType.Recent)
-    url: str = Field(..., example="/stations/map/current?country=si")
-    timestamp: str = Field(..., example="1604779200000")
+    observation: ObservationType
+    url: str
+    timestamp: str
 
-    class Config:
-        """Map layer model config."""
-
-        title: str = "Map layer"
+    model_config = ConfigDict(
+        title="Map layer",
+        json_schema_extra={
+            "examples": [
+                {
+                    "observation": ObservationType.Recent,
+                    "url": "/stations/map/current?country=si",
+                    "timestamp": "1604779200000",
+                },
+            ],
+        },
+    )
 
 
 class MapLayersList(BaseModel):
     """Map layers list model."""
 
-    map_type: MapType = Field(..., example=MapType.Precipitation)
-    rendering: MapRenderingType = Field(..., example=MapRenderingType.Image)
+    map_type: MapType
+    rendering: MapRenderingType
     layers: list[MapLayer]
-    bbox: list[float] | None = Field(None, example=[44.67, 12.1, 47.42, 17.44])
+    bbox: list[float] | None = None
 
     @classmethod
     def init(
@@ -73,33 +96,58 @@ class MapLayersList(BaseModel):
 
         return cls(map_type=map_type, rendering=rendering, layers=layers, bbox=bbox)
 
-    class Config:
-        """Map layers list model config."""
-
-        title: str = "Map layers list"
+    model_config = ConfigDict(
+        title="Map layers list",
+        json_schema_extra={
+            "examples": [
+                {
+                    "map_type": MapType.Precipitation,
+                    "rendering": MapRenderingType.Image,
+                    "layers": get_examples(MapLayer.model_config),
+                    "bbox": [44.67, 12.1, 47.42, 17.44],
+                },
+            ],
+        },
+    )
 
 
 class MapLegendItem(BaseModel):
     """Map legend item model."""
 
-    value: str = Field(..., example="30")
-    color: str = Field(..., example="#2fef28")
-    placeholder: bool | None = Field(None, example=False)
-    translatable: bool | None = Field(None, example=False)
+    value: str
+    color: str
+    placeholder: bool | None = None
+    translatable: bool | None = None
 
-    class Config:
-        """Map legend item model config."""
-
-        title: str = "Map legend item"
+    model_config = ConfigDict(
+        title="Map legend item",
+        json_schema_extra={
+            "examples": [
+                {
+                    "value": "30",
+                    "color": "#2fef28",
+                    "placeholder": False,
+                    "translatable": False,
+                },
+            ],
+        },
+    )
 
 
 class MapLegend(BaseModel):
     """Map legend model."""
 
-    map_type: MapType = Field(..., example=MapType.Precipitation)
+    map_type: MapType
     items: list[MapLegendItem]
 
-    class Config:
-        """Map legend model config."""
-
-        title: str = "Map legend"
+    model_config = ConfigDict(
+        title="Map legend",
+        json_schema_extra={
+            "examples": [
+                {
+                    "map_type": MapType.Precipitation,
+                    "items": get_examples(MapLegendItem.model_config),
+                },
+            ],
+        },
+    )

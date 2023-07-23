@@ -102,7 +102,7 @@ def test_maps_invalid() -> None:
     """Test maps invalid map type."""
     response = client.get("/maps/list/invalid?country=si")
     assert response.status_code == 422
-    assert response.json()["detail"][0]["type"] == "type_error.enum"
+    assert response.json()["detail"][0]["type"] == "enum"
     assert response.json()["detail"][0]["loc"] == ["path", "map_type"]
 
 
@@ -110,7 +110,7 @@ def test_maps_no_country() -> None:
     """Test maps list without country."""
     response = client.get("/maps/list/condition")
     assert response.status_code == 422
-    assert response.json()["detail"][0]["type"] == "value_error.missing"
+    assert response.json()["detail"][0]["type"] == "missing"
     assert response.json()["detail"][0]["loc"] == ["query", "country"]
 
 

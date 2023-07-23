@@ -2,7 +2,9 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
+
+from . import extend_examples, get_examples
 
 
 class AlertType(str, Enum):
@@ -67,86 +69,78 @@ class AlertCertainty(str, Enum):
 class AlertArea(BaseModel):
     """Weather alert area model."""
 
-    id: str = Field(..., example="SI801")  # noqa: A003
-    name: str = Field(..., example="Obala Slovenije")
+    id: str  # noqa: A003
+    name: str
 
-    class Config:
-        """Weather alert area model config."""
-
-        title: str = "Alert area"
+    model_config = ConfigDict(
+        title="Alert area",
+        json_schema_extra={
+            "examples": [
+                {
+                    "id": "SI801",
+                    "name": "Obala Slovenije",
+                },
+            ],
+        },
+    )
 
 
 class AlertAreaWithPolygon(AlertArea):
     """Weather alert area model with polygon(s)."""
 
-    polygons: list[list[list[float]]] = Field(
-        ...,
-        example=[
-            [
-                [13.725456655646438, 45.6015000758004],
-                [13.725431248605672, 45.59967654614104],
-                [13.581904223456036, 45.4818292464459],
-                [13.579022245313693, 45.48186228804809],
-                [13.509123210003622, 45.51205472154453],
-                [13.384515640404798, 45.56587815045958],
-                [13.628708047547093, 45.63156076582936],
-                [13.725456655646438, 45.6015000758004],
-            ],
-        ],
-    )
+    polygons: list[list[list[float]]]
 
     def base(self) -> AlertArea:
         """Return an instance of AlertArea."""
-        return self.copy(exclude={"polygons"})
+        data = self.model_dump(exclude={"polyons"})
+        return AlertArea.model_validate(data)
 
-    class Config:
-        """Weather alert area model with polygon(s) config."""
-
-        title: str = "Alert area with polygons"
+    model_config = ConfigDict(
+        title="Alert area with polygons",
+        json_schema_extra={
+            "examples": extend_examples(
+                AlertArea.model_config,
+                {
+                    "polygons": [
+                        [
+                            [13.725456655646438, 45.6015000758004],
+                            [13.725431248605672, 45.59967654614104],
+                            [13.581904223456036, 45.4818292464459],
+                            [13.579022245313693, 45.48186228804809],
+                            [13.509123210003622, 45.51205472154453],
+                            [13.384515640404798, 45.56587815045958],
+                            [13.628708047547093, 45.63156076582936],
+                            [13.725456655646438, 45.6015000758004],
+                        ],
+                    ],
+                },
+            ),
+        },
+    )
 
 
 class AlertInfo(BaseModel):
     """Weather alert info model."""
 
-    id: str = Field(  # noqa: A003
-        ...,
-        title="Identifier",
-        example=(
-            "2.49.0.0.276.0.DWD.PVW.1645128360000"
-            ".42042cce-2a7e-43ae-a64c-3fb693ea1495.MUL"
-        ),
-    )
+    id: str  # noqa: A003
 
-    type: AlertType = Field(..., example=AlertType.Wind)  # noqa: A003
-    urgency: AlertUrgency = Field(..., example=AlertUrgency.Immediate)
-    severity: AlertSeverity = Field(..., example=AlertSeverity.Moderate)
-    certainty: AlertCertainty = Field(..., example=AlertCertainty.Likely)
-    response_type: AlertResponseType = Field(..., example=AlertResponseType.Prepare)
+    type: AlertType  # noqa: A003
+    urgency: AlertUrgency
+    severity: AlertSeverity
+    certainty: AlertCertainty
+    response_type: AlertResponseType
 
-    areas: list[AlertArea] = Field(..., example=[])
+    areas: list[AlertArea]
 
-    onset: str = Field(..., example="1645286400000")
-    ending: str = Field(..., example="1645311600000")
+    onset: str
+    ending: str
 
-    event: str = Field(..., example="wind gusts")
-    headline: str = Field(..., example="Official WARNING of WIND GUSTS")
-    description: str | None = Field(
-        None,
-        example=(
-            "There is a risk of wind gusts (level 1 of 4).\n"
-            "Max. gusts: ~ 60 km/h; Wind direction: south-west; "
-            "Increased gusts: in exposed locations < 70 km/h"
-        ),
-    )
-    instructions: str | None = Field(
-        None,
-        example=(
-            "NOTE: Be aware of the following possible dangers: "
-            "Twigs or branches could fall down. Watch out for falling debris."
-        ),
-    )
-    sender_name: str | None = Field(None, example="Deutscher Wetterdienst")
-    web: str | None = Field(None, example="https://www.wettergefahren.de")
+    event: str
+    headline: str
+    description: str | None = None
+    instructions: str | None = None
+    sender_name: str | None = None
+    web: str | None = None
 
     @classmethod
     def init(
@@ -198,7 +192,38 @@ class AlertInfo(BaseModel):
             **kwargs,
         )
 
-    class Config:
-        """Weather alert extended info model config."""
-
-        title: str = "Alert information"
+    model_config = ConfigDict(
+        title="Alert information",
+        json_schema_extra={
+            "examples": [
+                {
+                    "id": (
+                        "2.49.0.0.276.0.DWD.PVW.1645128360000"
+                        ".42042cce-2a7e-43ae-a64c-3fb693ea1495.MUL"
+                    ),
+                    "type": AlertType.Wind,
+                    "urgency": AlertUrgency.Immediate,
+                    "severity": AlertSeverity.Severe,
+                    "certainty": AlertCertainty.Likely,
+                    "response_type": AlertResponseType.Prepare,
+                    "areas": get_examples(AlertArea.model_config),
+                    "onset": "1645286400000",
+                    "ending": "1645311600000",
+                    "event": "wind gusts",
+                    "headline": "Official WARNING of WIND GUSTS",
+                    "description": (
+                        "There is a risk of wind gusts (level 1 of 4).\n"
+                        "Max. gusts: ~ 60 km/h; Wind direction: south-west; "
+                        "Increased gusts: in exposed locations < 70 km/h"
+                    ),
+                    "instructions": (
+                        "NOTE: Be aware of the following possible dangers: "
+                        "Twigs or branches could fall down. "
+                        "Watch out for falling debris."
+                    ),
+                    "sender_name": "Deutscher Wetterdienst",
+                    "web": "https://www.wettergefahren.de",
+                },
+            ],
+        },
+    )

@@ -111,7 +111,7 @@ async def test_stations_find_errors(client: AsyncClient) -> None:
 
     response = await client.post("/stations/find?country=si")
     assert response.status_code == 422
-    assert response.json()["detail"][0]["type"] == "value_error.missing"
+    assert response.json()["detail"][0]["type"] == "missing"
     assert response.json()["detail"][0]["loc"] == ["body"]
 
     response = await client.post("/stations/find?country=si", json={})

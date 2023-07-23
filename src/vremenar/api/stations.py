@@ -1,6 +1,7 @@
 """Weather stations API."""
+from typing import Annotated
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from vremenar.definitions import CountryID
 from vremenar.models.stations import (
@@ -86,12 +87,9 @@ async def condition(
 async def conditions_map(
     country: CountryID,
     map_id: str,
-    extended: bool = True,
-) -> list[WeatherInfo] | list[WeatherInfoExtended]:
+    extended: Annotated[bool, Query(include_in_schema=False)] = False,  # noqa: ARG001
+) -> list[WeatherInfo]:
     """Get weather conditions map for a specific ID."""
     weather_map = await get_weather_map(country, map_id)
-
-    if extended:
-        return weather_map
 
     return [condition.base() for condition in weather_map]

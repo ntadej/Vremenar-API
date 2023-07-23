@@ -1,65 +1,90 @@
 """Station models."""
-
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 from vremenar.models.common import Coordinate
+
+from . import extend_examples, get_examples
 
 
 class StationBase(BaseModel):
     """Station base model."""
 
-    id: str = Field(..., title="Identifier", example="METEO-0038")  # noqa: A003
+    id: str  # noqa: A003
 
-    class Config:
-        """Station base model config."""
-
-        title: str = "Weather station base"
+    model_config = ConfigDict(
+        title="Weather station base",
+        json_schema_extra={
+            "examples": [
+                {"id": "METEO-0038"},
+            ],
+        },
+    )
 
 
 class StationInfo(StationBase):
     """Station info model."""
 
-    name: str = Field(..., example="Bled")
+    name: str
     coordinate: Coordinate
-    zoom_level: float | None = Field(None, example=7.5)
-    forecast_only: bool | None = Field(False, example=False)
-    alerts_area: str | None = Field(None, example="SI007")
+    zoom_level: float | None = None
+    forecast_only: bool | None = False
+    alerts_area: str | None = None
 
     def base(self) -> StationBase:
         """Return an instance of StationBase."""
-        return self.copy(include={"id"})
+        data = self.model_dump(include={"id"})
+        return StationBase.model_validate(data)
 
-    class Config:
-        """Station info model config."""
-
-        title: str = "Weather station information"
+    model_config = ConfigDict(
+        title="Weather station information",
+        json_schema_extra={
+            "examples": extend_examples(
+                StationBase.model_config,
+                {
+                    "name": "Bled",
+                    "coordinate": get_examples(Coordinate.model_config)[0],
+                    "zoom_level": 7.5,
+                    "forecast_only": False,
+                    "alerts_area": "SI007",
+                },
+            ),
+        },
+    )
 
 
 class StationInfoExtended(StationInfo):
     """Station extended info model."""
 
-    metadata: dict[str, Any] | None = Field(None)
+    metadata: dict[str, Any] | None = None
 
     def info(self) -> StationInfo:
         """Return an instance of StationInfo."""
-        return self.copy(exclude={"metadata"})
+        data = self.model_dump(exclude={"metadata"})
+        return StationInfo.model_validate(data)
 
-    class Config:
-        """Station extended info model config."""
-
-        title: str = "Weather station extended information"
+    model_config = ConfigDict(title="Weather station extended information")
 
 
 class StationSearchModel(BaseModel):
     """Station search body model."""
 
-    string: str | None = Field(None, example="Bled")
-    latitude: float | None = Field(None)
-    longitude: float | None = Field(None)
+    string: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
-    class Config:
-        """Station search body config."""
-
-        title: str = "Station search body"
+    model_config = ConfigDict(
+        title="Station search body",
+        json_schema_extra={
+            "examples": [
+                {
+                    "string": "Bled",
+                },
+                {
+                    "latitude": 46.364444,
+                    "longitude": 14.094722,
+                },
+            ],
+        },
+    )
