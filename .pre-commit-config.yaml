@@ -1,28 +1,32 @@
 repos:
-  - repo: local
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.1
+    hooks:
+      - id: mypy
+        args: []
+        additional_dependencies:
+          - astral
+          - asyncstdlib
+          - fastapi
+          - httpx
+          - pydantic
+          - pytest
+          - types-python-dateutil
+          - types-redis
+          - uvicorn
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.9.0
+    hooks:
+      - id: pyupgrade
+        args: ["--py310-plus"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.280
     hooks:
       - id: ruff
-        name: ruff
-        entry: ruff
-        language: system
-        types: [python]
-      - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        types: [python]
-        require_serial: true
-      - id: black
-        name: black
-        entry: black
-        language: system
-        types: [python]
-      - id: pyupgrade
-        name: pyupgrade
-        args: ["--py310-plus"]
-        entry: pyupgrade
-        language: system
-        types: [python]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -31,13 +35,17 @@ repos:
       - id: check-builtin-literals
       - id: check-case-conflict
       - id: check-docstring-first
-      - id: check-executables-have-shebangs
       - id: check-json
       - id: check-shebang-scripts-are-executable
-      - id: check-symlinks
+      - id: check-merge-conflict
       - id: check-toml
+      - id: check-vcs-permalinks
       - id: check-yaml
       - id: destroyed-symlinks
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: trailing-whitespace
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes

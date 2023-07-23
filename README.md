@@ -4,6 +4,7 @@
 [![License][license-img]][license] [![Black][black-img]][black]
 [![Continuous Integration][ci-img]][ci]
 [![codecov.io][codecov-img]][codecov] [![CodeFactor][codefactor-img]][codefactor]
+[![pre-commit][pre-commit-img]][pre-commit]
 
 A simple API server for [ARSO](https://meteo.arso.gov.si)
 and [DWD](https://dwd.de/EN/) weather data.
@@ -72,6 +73,7 @@ Free Software Foundation and appearing in the file [LICENSE](LICENSE).
 [black]: https://github.com/psf/black
 [codecov]: https://codecov.io/github/ntadej/Vremenar-API?branch=main
 [codefactor]: https://www.codefactor.io/repository/github/ntadej/vremenar-api
+[pre-commit]: https://results.pre-commit.ci/latest/github/ntadej/Vremenar-API/main
 [web-img]: https://img.shields.io/badge/web-vremenar.app-yellow.svg
 [release-img]: https://img.shields.io/github/release/ntadej/Vremenar-API.svg
 [license-img]: https://img.shields.io/github/license/ntadej/Vremenar-API.svg
@@ -79,3 +81,4 @@ Free Software Foundation and appearing in the file [LICENSE](LICENSE).
 [black-img]: https://img.shields.io/badge/code%20style-black-000000.svg
 [codecov-img]: https://codecov.io/github/ntadej/Vremenar-API/coverage.svg?branch=main
 [codefactor-img]: https://www.codefactor.io/repository/github/ntadej/vremenar-api/badge
+[pre-commit-img]: https://results.pre-commit.ci/badge/github/ntadej/Vremenar-API/main.svg
