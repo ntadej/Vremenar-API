@@ -34,7 +34,7 @@ class SupportedMapType(BaseModel):
     """Supported map type model."""
 
     map_type: MapType
-    rendering_type: MapRenderingType
+    rendering: MapRenderingType
     has_legend: bool | None = None
 
     model_config = ConfigDict(
@@ -43,7 +43,7 @@ class SupportedMapType(BaseModel):
             "examples": [
                 {
                     "map_type": MapType.Precipitation,
-                    "rendering_type": MapRenderingType.Tiles,
+                    "rendering": MapRenderingType.Tiles,
                     "has_legend": False,
                 },
             ],

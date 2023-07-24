@@ -37,30 +37,30 @@ def get_supported_map_types() -> list[SupportedMapType]:
     return [
         SupportedMapType(
             map_type=MapType.WeatherCondition,
-            rendering_type=MapRenderingType.Icons,
+            rendering=MapRenderingType.Icons,
         ),
         SupportedMapType(
             map_type=MapType.Precipitation,
-            rendering_type=MapRenderingType.Image,
+            rendering=MapRenderingType.Image,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.CloudCoverage,
-            rendering_type=MapRenderingType.Image,
+            rendering=MapRenderingType.Image,
         ),
         SupportedMapType(
             map_type=MapType.WindSpeed,
-            rendering_type=MapRenderingType.Image,
+            rendering=MapRenderingType.Image,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.Temperature,
-            rendering_type=MapRenderingType.Image,
+            rendering=MapRenderingType.Image,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.HailProbability,
-            rendering_type=MapRenderingType.Image,
+            rendering=MapRenderingType.Image,
             has_legend=True,
         ),
     ]

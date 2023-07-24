@@ -32,26 +32,26 @@ def get_supported_map_types() -> list[SupportedMapType]:
     return [
         SupportedMapType(
             map_type=MapType.WeatherCondition,
-            rendering_type=MapRenderingType.Icons,
+            rendering=MapRenderingType.Icons,
         ),
         SupportedMapType(
             map_type=MapType.Precipitation,
-            rendering_type=MapRenderingType.Tiles,
+            rendering=MapRenderingType.Tiles,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.Temperature,
-            rendering_type=MapRenderingType.Tiles,
+            rendering=MapRenderingType.Tiles,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.UVIndexMax,
-            rendering_type=MapRenderingType.Tiles,
+            rendering=MapRenderingType.Tiles,
             has_legend=True,
         ),
         SupportedMapType(
             map_type=MapType.UVDose,
-            rendering_type=MapRenderingType.Tiles,
+            rendering=MapRenderingType.Tiles,
             has_legend=True,
         ),
     ]
