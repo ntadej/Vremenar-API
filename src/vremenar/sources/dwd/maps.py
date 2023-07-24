@@ -134,7 +134,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     current_time -= time_delta
     if time_delta.seconds < 100:  # buffer for recent image # pragma: no cover
         current_time -= timedelta(minutes=5)
-    test_time = current_time.isoformat()
+    test_time = current_time.replace(tzinfo=None).isoformat()
     test_url = (
         f"{MAPS_BASEURL}&layers=dwd:RX-Produkt&bbox=5,50,6,51"
         f"&width=100&height=100&time={test_time}.000Z"
@@ -152,6 +152,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     # historical data + recent
     for i in range(18, -1, -1):
         time = current_time - timedelta(minutes=5 * i)
+        time = time.replace(tzinfo=None)
         time_string = time.isoformat()
         time += timedelta(seconds=utc_delta_seconds)
         url = (
@@ -167,14 +168,16 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
                 else ObservationType.Recent,
             ),
         )
+        most_recent = time_string
     # forecast
     for i in range(1, 19, 1):
         time = current_time + timedelta(minutes=5 * i)
+        time = time.replace(tzinfo=None)
         time_string = time.isoformat()
         time += timedelta(seconds=utc_delta_seconds)
         url = (
             f"{MAPS_BASEURL}&layers=dwd:WN-Produkt&width=512&height=512"
-            f"&time={time_string}.000Z"
+            f"&time={time_string}.000Z&cache={most_recent}.000Z"
         )
         layers.append(
             MapLayer(
@@ -203,7 +206,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
         microseconds=current_time.microsecond,
     )
     current_time -= time_delta
-    test_time = current_time.isoformat()
+    test_time = current_time.replace(tzinfo=None).isoformat()
     test_url = (
         f"{MAPS_BASEURL}&layers=dwd:Icon-eu_reg00625_fd_gl_T&bbox=5,50,6,51"
         f"&width=100&height=100&time={test_time}.000Z"
@@ -220,6 +223,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
 
     for i in range(24):
         time = current_time + timedelta(hours=i)
+        time = time.replace(tzinfo=None)
         time_string = time.isoformat()
         time += timedelta(seconds=utc_delta_seconds)
         url = (
@@ -252,7 +256,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     if utc_delta:  # pragma: no cover
         utc_delta_seconds = utc_delta.seconds
     current_time = current_time.replace(hour=0, minute=0, second=0, microsecond=0)
-    test_time = current_time.isoformat()
+    test_time = current_time.replace(tzinfo=None).isoformat()
     test_url = (
         f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}&bbox=5,50,6,51"
         f"&width=100&height=100&time={test_time}.000Z"
@@ -270,6 +274,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     # forecast
     for i in range(0, 3):
         time = current_time + timedelta(days=i)
+        time = time.replace(tzinfo=None)
         time_string = time.isoformat()
         url = (
             f"{MAPS_BASEURL}&layers={map_name}&styles={map_style}"
