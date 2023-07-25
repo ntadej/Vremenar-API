@@ -10,6 +10,11 @@ from vremenar.models.maps import (
     SupportedMapType,
 )
 from vremenar.models.weather import WeatherInfoExtended
+from vremenar.sources.rainviewer import (
+    get_global_map_cloud_infrared,
+    get_global_map_precipitation,
+    get_rainviewer_map_legend,
+)
 from vremenar.utils import logger
 
 from .utils import (
@@ -34,8 +39,17 @@ def get_supported_map_types() -> list[SupportedMapType]:
             has_legend=True,
         ),
         SupportedMapType(
+            map_type=MapType.PrecipitationGlobal,
+            rendering=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+        SupportedMapType(
             map_type=MapType.CloudCoverage,
             rendering=MapRenderingType.Image,
+        ),
+        SupportedMapType(
+            map_type=MapType.CloudCoverageInfraredGlobal,
+            rendering=MapRenderingType.Tiles,
         ),
         SupportedMapType(
             map_type=MapType.WindSpeed,
@@ -57,6 +71,12 @@ def get_supported_map_types() -> list[SupportedMapType]:
 
 async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     """Get ARSO map layers."""
+    if map_type == MapType.PrecipitationGlobal:
+        return await get_global_map_precipitation()
+
+    if map_type == MapType.CloudCoverageInfraredGlobal:
+        return await get_global_map_cloud_infrared()
+
     bbox: list[float] = []
     if map_type is not MapType.WeatherCondition:
         bbox = [44.67, 12.1, 47.42, 17.44]
@@ -82,6 +102,9 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
 
 def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
     """Get ARSO map legend."""
+    if map_type == MapType.PrecipitationGlobal:
+        return get_rainviewer_map_legend(map_type)
+
     if map_type == MapType.Precipitation:
         items = []
         items.append(MapLegendItem(value="", color="transparent", placeholder=True))
