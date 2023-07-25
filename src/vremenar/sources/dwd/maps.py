@@ -15,6 +15,11 @@ from vremenar.models.maps import (
     SupportedMapType,
 )
 from vremenar.models.weather import WeatherInfoExtended
+from vremenar.sources.rainviewer import (
+    get_global_map_cloud_infrared,
+    get_global_map_precipitation,
+    get_rainviewer_map_legend,
+)
 from vremenar.utils import logger, to_timestamp
 
 from .utils import get_mosmix_ids_for_timestamp, get_weather_records, parse_record
@@ -39,6 +44,15 @@ def get_supported_map_types() -> list[SupportedMapType]:
             map_type=MapType.Precipitation,
             rendering=MapRenderingType.Tiles,
             has_legend=True,
+        ),
+        SupportedMapType(
+            map_type=MapType.PrecipitationGlobal,
+            rendering=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+        SupportedMapType(
+            map_type=MapType.CloudCoverageInfraredGlobal,
+            rendering=MapRenderingType.Tiles,
         ),
         SupportedMapType(
             map_type=MapType.Temperature,
@@ -301,6 +315,12 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     if map_type == MapType.Precipitation:
         return await get_map_precipitation()
 
+    if map_type == MapType.PrecipitationGlobal:
+        return await get_global_map_precipitation()
+
+    if map_type == MapType.CloudCoverageInfraredGlobal:
+        return await get_global_map_cloud_infrared()
+
     if map_type == MapType.Temperature:
         return await get_map_temperature()
 
@@ -312,6 +332,9 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
 
 def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
     """Get DWD map legend."""
+    if map_type == MapType.PrecipitationGlobal:
+        return get_rainviewer_map_legend(map_type)
+
     if map_type == MapType.Precipitation:
         items = []
         items.append(MapLegendItem(value="", color="transparent", placeholder=True))
