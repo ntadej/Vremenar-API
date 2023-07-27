@@ -5,18 +5,18 @@ description = ""
 authors = ["Tadej Novak <tadej@tano.si>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 astral = "^3.2"
 asyncstdlib = "^3.10.8"
 fastapi = "^0.100.0"
 gunicorn = "^21.2.0"
 httpx = "^0.24.1"
-redis = {extras = ["hiredis"], version = "^4.6.0"}
+redis = { extras = ["hiredis"], version = "^4.6.0" }
 uvicorn = "^0.23.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
-coverage = {extras = ["toml"], version = "^7.2.7"}
+coverage = { extras = ["toml"], version = "^7.2.7" }
 fastapi-profiler = "^1.2.0"
 mypy = "^1.4.1"
 pre-commit = "^3.3.3"
@@ -32,7 +32,7 @@ types-redis = "^4.6.0.3"
 
 [tool.black]
 line-length = 88
-target-version = ['py310', 'py311']
+target-version = ['py311']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -56,10 +56,7 @@ exclude_lines = [
   "if __name__ == .__main__.:",
 ]
 ignore_errors = true
-omit = [
-  "src/vremenar/tests/*",
-  "tests/*",
-]
+omit = ["src/vremenar/tests/*", "tests/*"]
 
 [tool.ruff]
 select = [
@@ -143,10 +140,7 @@ ignore_errors = true
 minversion = "6.0"
 addopts = "--ignore=src/vremenar/tests/ --cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage"
 asyncio_mode = "auto"
-testpaths = [
-  "src/vremenar/tests",
-  "tests",
-]
+testpaths = ["src/vremenar/tests", "tests"]
 
 [build-system]
 requires = ["poetry-core>=1.2.0"]
