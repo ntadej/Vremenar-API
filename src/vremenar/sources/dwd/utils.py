@@ -53,9 +53,14 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
     """Get icon condition from weather data."""
     weather_condition = weather.get("condition", None)
 
-    precipitation_intensity = float(
-        weather.get("precipitation_60", weather.get("precipitation", 0)),
+    precipitation_value = weather.get(
+        "precipitation_60",
+        weather.get("precipitation", 0),
     )
+    if precipitation_value is None:
+        precipitation_value = 0
+
+    precipitation_intensity = float(precipitation_value)
     if precipitation_intensity <= 0 or weather_condition == "dry":
         return None
 
