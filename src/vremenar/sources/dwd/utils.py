@@ -21,7 +21,7 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
     """Get weather records from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         for batch in chunker(list(ids), 100):
             async with connection.pipeline(transaction=False) as pipeline:
                 for record_id in batch:

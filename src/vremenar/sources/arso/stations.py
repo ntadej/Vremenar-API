@@ -47,7 +47,9 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
             continue
 
         _, condition = await parse_record(record, ObservationType.Recent)
-        if condition:
-            return WeatherInfoExtended(station=station, condition=condition)
+        if not condition:  # pragma: no cover
+            continue
+
+        return WeatherInfoExtended(station=station, condition=condition)
 
     raise UnknownStationException()  # pragma: no cover

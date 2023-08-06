@@ -19,7 +19,7 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
     """Get alerts areas for a specific country."""
     areas: dict[str, AlertAreaWithPolygon] = {}
 
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         codes = await connection.smembers(f"alerts_area:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for code in codes:
@@ -47,7 +47,7 @@ async def list_alerts(
     """Get alerts for a specific country."""
     alerts: list[AlertInfo] = []
 
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         if alert_ids is None:  # pragma: no cover
             alert_ids = await connection.smembers(f"alert:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:

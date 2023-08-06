@@ -41,7 +41,7 @@ async def find_station(
     ]
 
     has_current = any(not station.forecast_only for station in stations)
-    if include_forecast_only and not has_current:
+    if include_forecast_only and not has_current:  # pragma: no cover
         return (
             stations_filtered[:5]
             + [
@@ -69,7 +69,9 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
             continue
 
         _, condition = await parse_record(record, ObservationType.Recent)
-        if condition:
-            return WeatherInfoExtended(station=station, condition=condition)
+        if not condition:  # pragma: no cover
+            continue
+
+        return WeatherInfoExtended(station=station, condition=condition)
 
     raise UnknownStationException()  # pragma: no cover

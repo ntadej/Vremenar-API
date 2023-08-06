@@ -17,14 +17,6 @@ def chunker(container: list[Any], size: int) -> Iterable[list[Any]]:
     return (container[pos : pos + size] for pos in range(0, len(container), size))
 
 
-def join_url(*args: str, trailing_slash: bool = False) -> str:
-    """Join url."""
-    url = "/".join(arg.strip("/") for arg in args)
-    if trailing_slash:
-        return f"{url}/"
-    return url
-
-
 @lru_cache
 def sunrise_sunset(
     latitude: float,
@@ -47,11 +39,6 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
         return "day" if "above" in e.args[0] else "night"
     else:
         return "day" if sunrise <= time <= sunset else "night"
-
-
-def parse_time(time: str) -> datetime:
-    """Parse time from standard string."""
-    return datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
 
 
 def parse_timestamp(timestamp: str) -> datetime:

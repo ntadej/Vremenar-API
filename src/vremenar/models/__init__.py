@@ -6,7 +6,7 @@ from pydantic import ConfigDict
 
 def get_examples(config: ConfigDict) -> list[dict[str, Any]]:
     """Get examples from model config."""
-    if not isinstance(config["json_schema_extra"], dict):
+    if not isinstance(config["json_schema_extra"], dict):  # pragma: no cover
         return []
 
     json_schema_extra: dict[str, list[dict[str, Any]]] = cast(

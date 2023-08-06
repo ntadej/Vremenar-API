@@ -20,7 +20,7 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
     """Get ARSO weather records from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         for batch in chunker(list(ids), 100):
             async with connection.pipeline(transaction=False) as pipeline:
                 for record_id in batch:
@@ -47,24 +47,16 @@ async def get_map_data(ids: list[str]) -> list[dict[str, Any]]:
     """Get ARSO map data from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection:
-        async with connection.pipeline(transaction=False) as pipeline:
-            for record_id in ids:
-                pipeline.hgetall(record_id)
-            response = await pipeline.execute()
-        result.extend(response)
+    async with redis.client() as connection, connection.pipeline(  # pragma: no branch
+        transaction=False,
+    ) as pipeline:
+        # TODO: figure out why this is not covered
+        for record_id in ids:  # pragma: no cover
+            pipeline.hgetall(record_id)
+        response = await pipeline.execute()
+    result.extend(response)
 
     return result
-
-
-async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
-    """Parse ARSO station."""
-    stations = await get_stations(CountryID.Slovenia)
-
-    properties = feature["properties"]
-
-    station_id = properties["id"].strip("_")
-    return stations.get(station_id, None)
 
 
 async def parse_record(

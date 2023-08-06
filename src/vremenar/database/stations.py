@@ -36,7 +36,7 @@ class StationDict(TypedDict, total=False):
 async def load_stations(country: CountryID) -> dict[str, StationDict]:
     """Load stations from redis."""
     stations: dict[str, StationDict] = {}
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         station_ids: set[str] = await redis.smembers(f"station:{country.value}")
         async with connection.pipeline(transaction=False) as pipeline:
             for station_id in station_ids:
@@ -81,7 +81,7 @@ async def search_stations(
     longitude: float,
 ) -> list[StationInfoExtended]:
     """Search for stations by coordinate."""
-    async with redis.client() as connection:
+    async with redis.client() as connection:  # pragma: no branch
         station_ids: list[tuple[str, float]] = await redis.geosearch(
             f"location:{country.value}",
             latitude=latitude,

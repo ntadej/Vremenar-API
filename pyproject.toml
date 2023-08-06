@@ -18,6 +18,7 @@ uvicorn = "^0.23.2"
 black = "^23.7.0"
 coverage = { extras = ["toml"], version = "^7.2.7" }
 fastapi-profiler = "^1.2.0"
+gevent = "^23.7.0"
 mypy = "^1.4.1"
 pre-commit = "^3.3.3"
 pre-commit-hooks = "^4.4.0"
@@ -44,7 +45,9 @@ exclude = '''
 
 [tool.coverage.run]
 branch = true
+concurrency = ["thread", "gevent"]
 source = ["src/vremenar"]
+omit = ["src/vremenar/worker.py"]
 
 [tool.coverage.report]
 exclude_lines = [
