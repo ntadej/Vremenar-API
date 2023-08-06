@@ -4,9 +4,20 @@ from typing_extensions import TypedDict
 
 from vremenar.definitions import CountryID
 from vremenar.models.common import Coordinate
-from vremenar.models.stations import StationInfo, StationInfoExtended
+from vremenar.models.stations import StationInfoExtended
 
 from .redis import redis
+
+STATION_BASE_KEYS: set[str] = {
+    "id",
+    "name",
+    "latitude",
+    "longitude",
+    "altitude",
+    "zoom_level",
+    "forecast_only",
+    "alerts_area",
+}
 
 
 class StationDict(TypedDict, total=False):
@@ -43,19 +54,9 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported stations for a country."""
     stations_raw: dict[str, StationDict] = await load_stations(country)
     stations: dict[str, StationInfoExtended] = {}
-    base_keys: set[str] = {
-        "id",
-        "name",
-        "latitude",
-        "longitude",
-        "altitude",
-        "zoom_level",
-        "forecast_only",
-        "alerts_area",
-    }
 
     for station_id, station in stations_raw.items():
-        extra_keys: set[str] = set(station.keys()).difference(base_keys)
+        extra_keys: set[str] = set(station.keys()).difference(STATION_BASE_KEYS)
         metadata = {key: station[key] for key in extra_keys}  # type: ignore
 
         stations[station_id] = StationInfoExtended(
@@ -78,7 +79,7 @@ async def search_stations(
     country: CountryID,
     latitude: float,
     longitude: float,
-) -> list[StationInfo]:
+) -> list[StationInfoExtended]:
     """Search for stations by coordinate."""
     async with redis.client() as connection:
         station_ids: list[tuple[str, float]] = await redis.geosearch(
@@ -92,22 +93,31 @@ async def search_stations(
         )
 
         async with connection.pipeline(transaction=False) as pipeline:
-            for station_id, _ in station_ids[:5]:
+            for station_id, _ in station_ids:
                 pipeline.hgetall(f"station:{country.value}:{station_id}")
             response = await pipeline.execute()
 
-    return [
-        StationInfo(
-            id=station["id"],
-            name=station["name"],
-            coordinate=Coordinate(
-                latitude=station["latitude"],
-                longitude=station["longitude"],
-                altitude=station["altitude"],
+    stations: list[StationInfoExtended] = []
+    for station in response:
+        extra_keys: set[str] = set(station.keys()).difference(STATION_BASE_KEYS)
+        metadata = {key: station[key] for key in extra_keys}
+
+        stations.append(
+            StationInfoExtended(
+                id=station["id"],
+                name=station["name"],
+                coordinate=Coordinate(
+                    latitude=station["latitude"],
+                    longitude=station["longitude"],
+                    altitude=station["altitude"],
+                ),
+                zoom_level=station["zoom_level"],
+                forecast_only=station["forecast_only"],
+                alerts_area=station["alerts_area"]
+                if "alerts_area" in station
+                else None,
+                metadata=metadata if metadata else None,
             ),
-            zoom_level=station["zoom_level"],
-            forecast_only=station["forecast_only"],
-            alerts_area=station["alerts_area"] if "alerts_area" in station else None,
         )
-        for station in response
-    ]
+
+    return stations

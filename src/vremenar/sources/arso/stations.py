@@ -19,16 +19,18 @@ async def list_stations() -> list[StationInfoExtended]:
 
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
-    """Find station by coordinate or string."""
+    """Find station by coordinate."""
     if query.latitude is None or query.longitude is None:
         err = "Coordinates are required"
         raise InvalidSearchQueryException(err)
 
-    return await search_stations(
+    stations = await search_stations(
         CountryID.Slovenia,
         query.latitude,
         query.longitude,
     )
+
+    return [station.info() for station in stations][:5]
 
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:

@@ -16,7 +16,7 @@ from vremenar.models.maps import (
 from vremenar.models.weather import WeatherInfoExtended
 from vremenar.utils import logger, to_timestamp
 
-from .utils import get_mosmix_ids_for_timestamp, get_mosmix_records, parse_record
+from .utils import get_mosmix_ids_for_timestamp, get_weather_records, parse_record
 
 MAPS_BASEURL = (
     "https://maps.dwd.de/geoserver/dwd/ows"
@@ -412,7 +412,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     if not ids:
         raise UnrecognisedMapIDException()
 
-    records = await get_mosmix_records(ids)
+    records = await get_weather_records(ids)
 
     conditions_list = []
     for record in records:

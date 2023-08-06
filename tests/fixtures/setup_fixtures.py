@@ -66,6 +66,15 @@ async def store_mosmix_record(record: dict[str, Any]) -> None:
         await pipeline.execute()
 
 
+async def store_dwd_weather_record(record: dict[str, Any]) -> None:
+    """Store a DWD weather record to redis."""
+    key = f"dwd:current:{record['station_id']}"
+
+    async with redis.pipeline() as pipeline:
+        pipeline.hset(key, mapping=record)
+        await pipeline.execute()
+
+
 async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) -> None:
     """Store alerts areas to redis."""
     async with redis.client() as connection:
@@ -199,6 +208,31 @@ async def arso_fixtures() -> None:
         MapType.HailProbability,
     ]:
         await store_arso_map_record(map_record, map_type.value)
+
+
+async def dwd_fixtures() -> None:
+    """Create and setup DWD fixtures."""
+    now = datetime.now(tz=timezone.utc)
+    now = now.replace(minute=0, second=0, microsecond=0)
+    timestamp = to_timestamp(now)
+
+    record = {
+        "station_id": "10147",
+        "timestamp": timestamp,
+        "wind_direction": 148.0,
+        "wind_speed": 7.2,
+        "wind_gust_speed": 11.83,
+        "cloud_cover": 100.0,
+        "pressure_msl": 97880.0,
+        "precipitation": 50.0,
+        "sunshine": 0.0,
+        "dew_point": 274.65,
+        "temperature": 276.55,
+        "visibility": 13900.0,
+        "condition": "rain",
+    }
+
+    await store_dwd_weather_record(record)
 
 
 async def mosmix_fixtures() -> None:
@@ -358,6 +392,7 @@ async def setup_fixtures() -> None:
     """Create and setup fixtures."""
     await stations_fixtures()
     await arso_fixtures()
+    await dwd_fixtures()
     await mosmix_fixtures()
     await alerts_fixtures()
 

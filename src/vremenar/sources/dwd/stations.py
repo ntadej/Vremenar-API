@@ -1,9 +1,5 @@
 """DWD weather stations."""
-from datetime import datetime, timedelta, timezone
-
-from httpx import AsyncClient
-
-from vremenar.database.stations import get_stations
+from vremenar.database.stations import get_stations, search_stations
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException
 from vremenar.models.stations import (
@@ -11,12 +7,9 @@ from vremenar.models.stations import (
     StationInfoExtended,
     StationSearchModel,
 )
-from vremenar.models.weather import WeatherCondition, WeatherInfoExtended
-from vremenar.utils import join_url, logger, parse_time, to_timestamp
+from vremenar.models.weather import WeatherInfoExtended
 
-from .utils import get_icon, parse_source
-
-BRIGHTSKY_BASEURL = "https://api.brightsky.dev"
+from .utils import get_weather_records, parse_record
 
 
 async def list_stations() -> list[StationInfoExtended]:
@@ -25,101 +18,58 @@ async def list_stations() -> list[StationInfoExtended]:
     return list(stations.values())
 
 
-async def _process_find_station(url: str) -> list[StationInfo]:
-    """Process find station request."""
-    logger.debug("Brightsky URL: %s", url)
-
-    locations: list[StationInfo] = []
-
-    async with AsyncClient() as client:
-        response = await client.get(url)
-
-    response_body = response.json()
-    if "sources" not in response_body:  # pragma: no cover
-        raise UnknownStationException()
-
-    for source in response_body["sources"]:
-        station = await parse_source(source)
-        if not station:  # pragma: no cover
-            continue
-
-        locations.append(station)
-        break
-
-    return locations
-
-
 async def find_station(
     query: StationSearchModel,
     include_forecast_only: bool,
 ) -> list[StationInfo]:
-    """Find station by coordinate or string."""
-    url_forecast: str = join_url(BRIGHTSKY_BASEURL, "weather", trailing_slash=False)
-    url_current: str = join_url(
-        BRIGHTSKY_BASEURL,
-        "current_weather",
-        trailing_slash=False,
-    )
-
+    """Find station by coordinate."""
     if query.latitude is None or query.longitude is None:
         err = "Coordinates are required"
         raise InvalidSearchQueryException(err)
 
-    url_forecast += f"?lat={query.latitude}&lon={query.longitude}"
-    url_current += f"?lat={query.latitude}&lon={query.longitude}"
+    stations = await search_stations(
+        CountryID.Germany,
+        query.latitude,
+        query.longitude,
+    )
 
-    locations: list[StationInfo] = []
-    if include_forecast_only:
-        today = datetime.now(tz=timezone.utc).date()
-        target_date = today + timedelta(days=2)
-        url_forecast += (
-            f'&date={target_date.strftime("%Y-%m-%d")}'
-            f'&last_date={target_date.strftime("%Y-%m-%d")}'
+    stations_filtered = [
+        station.info()
+        for station in stations
+        if (include_forecast_only or not station.forecast_only)
+        and not (station.metadata and station.metadata["status"] != "1")
+    ]
+
+    has_current = any(not station.forecast_only for station in stations)
+    if include_forecast_only and not has_current:
+        return (
+            stations_filtered[:5]
+            + [
+                station.info()
+                for station in stations
+                if not station.forecast_only
+                and not (station.metadata and station.metadata["status"] != "1")
+            ][:1]
         )
 
-        locations = await _process_find_station(url_forecast)
-
-    if not locations or locations[0].forecast_only:
-        locations += await _process_find_station(url_current)
-
-    return locations
+    return stations_filtered[:5]
 
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
     stations = await get_stations(CountryID.Germany)
     station: StationInfoExtended | None = stations.get(station_id, None)
-    if not station:
+    if not station or station.forecast_only:
         raise UnknownStationException()
 
-    url: str = join_url(BRIGHTSKY_BASEURL, "current_weather", trailing_slash=False)
-    url += f"?lat={station.coordinate.latitude}&lon={station.coordinate.longitude}"
+    records = await get_weather_records({f"dwd:current:{station_id}"})
 
-    logger.debug("Brightsky URL: %s", url)
+    for record in records:
+        if not record:  # pragma: no cover
+            continue
 
-    async with AsyncClient() as client:
-        response = await client.get(url)
+        _, condition = await parse_record(record, ObservationType.Recent)
+        if condition:
+            return WeatherInfoExtended(station=station, condition=condition)
 
-    response_body = response.json()
-    if "sources" not in response_body:  # pragma: no cover
-        raise UnknownStationException()
-
-    for source in response_body["sources"]:
-        station = await parse_source(source)
-        break
-
-    if not station:  # pragma: no cover
-        raise UnknownStationException()
-
-    weather = response_body["weather"]
-
-    time = parse_time(weather["timestamp"])
-
-    condition = WeatherCondition(
-        observation=ObservationType.Recent,
-        timestamp=to_timestamp(time),
-        icon=get_icon(weather, station, time),
-        temperature=weather["temperature"],
-    )
-
-    return WeatherInfoExtended(station=station, condition=condition)
+    raise UnknownStationException()  # pragma: no cover

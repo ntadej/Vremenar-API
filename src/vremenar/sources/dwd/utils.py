@@ -17,8 +17,8 @@ async def get_mosmix_ids_for_timestamp(timestamp: str) -> set[str]:
     return ids
 
 
-async def get_mosmix_records(ids: set[str]) -> list[dict[str, Any]]:
-    """Get MOSMIX records from redis."""
+async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
+    """Get weather records from redis."""
     result: list[dict[str, Any]] = []
 
     async with redis.client() as connection:
@@ -143,10 +143,3 @@ async def parse_record(
     )
 
     return station, condition
-
-
-async def parse_source(source: dict[str, Any]) -> StationInfoExtended | None:
-    """Parse DWD weather source."""
-    stations = await get_stations(CountryID.Germany)
-    source_id = source["wmo_station_id"]
-    return stations.get(source_id, None)
