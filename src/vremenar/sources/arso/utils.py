@@ -1,49 +1,64 @@
 """ARSO weather utils."""
 from typing import Any
 
+from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.models.maps import MapType
-from vremenar.models.stations import StationInfoExtended
+from vremenar.models.stations import StationBase, StationInfoExtended
 from vremenar.models.weather import WeatherCondition
-from vremenar.utils import join_url, logger, parse_time, to_timestamp
+from vremenar.utils import chunker, logger, parse_time, to_timestamp
 
 BASEURL: str = "https://vreme.arso.gov.si"
 API_BASEURL: str = "https://vreme.arso.gov.si/api/1.0/"
 TIMEOUT: int = 15
 
 
-def weather_map_url(map_id: str) -> str:
-    """Generate forecast map URL."""
-    if map_id == "current":
-        return f"{BASEURL}/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json"
+async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
+    """Get ARSO weather IDs for timestamp from redis."""
+    ids: set[str] = await redis.smembers(f"arso:weather:{timestamp}")
+    return ids
 
-    if map_id[0] == "d":
-        return (
-            f"{BASEURL}/uploads/probase/www/fproduct/json/sl/forecast_si_{map_id}.json"
+
+async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
+    """Get ARSO weather records from redis."""
+    result: list[dict[str, Any]] = []
+
+    async with redis.client() as connection:
+        for batch in chunker(list(ids), 100):
+            async with connection.pipeline(transaction=False) as pipeline:
+                for record_id in batch:
+                    pipeline.hgetall(record_id)
+                response = await pipeline.execute()
+            result.extend(response)
+
+    return result
+
+
+async def get_map_ids_for_type(map_type: MapType) -> list[str]:
+    """Get ARSO map IDs for type from redis."""
+    ids: list[str] = [
+        map_id
+        async for map_id in redis.scan_iter(
+            match=f"arso:map:{map_type.value}:*",
+            count=1000,
         )
+    ]
+    return ids
 
-    return ""
 
+async def get_map_data(ids: list[str]) -> list[dict[str, Any]]:
+    """Get ARSO map data from redis."""
+    result: list[dict[str, Any]] = []
 
-def weather_map_response_url(map_type: MapType, path: str) -> str:
-    """Generate forecast map response URL."""
-    if map_type == MapType.WeatherCondition:
-        if "nowcast" in path:
-            url = path.replace(
-                "/uploads/probase/www/fproduct/json/sl/nowcast_si_latest.json",
-                "/stations/map/current",
-            )
-        else:
-            url = path.replace(
-                "/uploads/probase/www/fproduct/json/sl/forecast_si_",
-                "/stations/map/",
-            )
-            url = url.replace(".json", "")
-        url += f"?country={CountryID.Slovenia.value}"
-        return url
+    async with redis.client() as connection:
+        async with connection.pipeline(transaction=False) as pipeline:
+            for record_id in ids:
+                pipeline.hgetall(record_id)
+            response = await pipeline.execute()
+        result.extend(response)
 
-    return join_url(BASEURL, path)
+    return result
 
 
 async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
@@ -54,6 +69,34 @@ async def parse_station(feature: dict[Any, Any]) -> StationInfoExtended | None:
 
     station_id = properties["id"].strip("_")
     return stations.get(station_id, None)
+
+
+async def parse_record(
+    record: dict[str, Any],
+    observation: ObservationType,
+) -> tuple[StationBase | None, WeatherCondition | None]:
+    """Parse ARSO weather record."""
+    station_id = record["station_id"]
+    stations = await get_stations(CountryID.Slovenia)
+
+    if station_id not in stations:  # pragma: no cover
+        return None, None
+
+    station: StationInfoExtended | None = stations.get(station_id, None)
+    if not station:  # pragma: no cover
+        return None, None
+
+    condition = WeatherCondition(
+        observation=observation,
+        timestamp=record["timestamp"],
+        icon=record["icon"],
+        temperature=float(record["temperature"]),
+        temperature_low=float(record["temperature_low"])
+        if "temperature_low" in record
+        else None,
+    )
+
+    return station, condition
 
 
 async def parse_feature(

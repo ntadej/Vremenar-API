@@ -175,16 +175,18 @@ async def test_stations_condition_error(client: AsyncClient) -> None:
 @pytest.mark.asyncio()
 async def test_stations_map(client: AsyncClient) -> None:
     """Test stations map."""
+    now = datetime.now(tz=timezone.utc)
+    now = now.replace(minute=0, second=0, microsecond=0)
+    soon = now + timedelta(hours=1)
+    soon_timestamp = f"{int(soon.timestamp())}000"
+
     response = await client.get("/stations/map/current?country=si&extended=false")
     assert response.status_code == 200
 
     response = await client.get("/stations/map/current?country=si&extended=true")
     assert response.status_code == 200
 
-    response = await client.get("/stations/map/d2h00?country=si")
-    assert response.status_code == 200
-
-    response = await client.get("/stations/map/d7?country=si")
+    response = await client.get(f"/stations/map/{soon_timestamp}?country=si")
     assert response.status_code == 200
 
     response = await client.get("/stations/map/current?country=de&extended=false")
@@ -193,10 +195,6 @@ async def test_stations_map(client: AsyncClient) -> None:
     response = await client.get("/stations/map/current?country=de&extended=true")
     assert response.status_code == 200
 
-    now = datetime.now(tz=timezone.utc)
-    now = now.replace(minute=0, second=0, microsecond=0)
-    soon = now + timedelta(hours=1)
-    soon_timestamp = f"{int(soon.timestamp())}000"
     response = await client.get(f"/stations/map/{soon_timestamp}?country=de")
     assert response.status_code == 200
 

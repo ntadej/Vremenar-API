@@ -1,6 +1,4 @@
 """ARSO weather maps."""
-from httpx import AsyncClient
-
 from vremenar.definitions import ObservationType
 from vremenar.exceptions import UnrecognisedMapIDException, UnsupportedMapTypeException
 from vremenar.models.maps import (
@@ -12,24 +10,15 @@ from vremenar.models.maps import (
     SupportedMapType,
 )
 from vremenar.models.weather import WeatherInfoExtended
-from vremenar.utils import join_url, logger, parse_time, to_timestamp
+from vremenar.utils import logger
 
 from .utils import (
-    API_BASEURL,
-    TIMEOUT,
-    parse_feature,
-    weather_map_response_url,
-    weather_map_url,
+    get_map_data,
+    get_map_ids_for_type,
+    get_weather_ids_for_timestamp,
+    get_weather_records,
+    parse_record,
 )
-
-MAP_URL = {
-    MapType.WeatherCondition: "/forecast_si_data/",
-    MapType.Precipitation: "/inca_precip_data/",
-    MapType.CloudCoverage: "/inca_cloud_data/",
-    MapType.WindSpeed: "/inca_wind_data/",
-    MapType.Temperature: "/inca_t2m_data/",
-    MapType.HailProbability: "/inca_hail_data/",
-}
 
 
 def get_supported_map_types() -> list[SupportedMapType]:
@@ -68,41 +57,25 @@ def get_supported_map_types() -> list[SupportedMapType]:
 
 async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     """Get ARSO map layers."""
-    url: str = MAP_URL.get(map_type, "")
-    if not url:
+    bbox: list[float] = []
+    if map_type is not MapType.WeatherCondition:
+        bbox = [44.67, 12.1, 47.42, 17.44]
+
+    ids = await get_map_ids_for_type(map_type)
+    if not ids:
         raise UnsupportedMapTypeException()
 
-    url = join_url(API_BASEURL, url, trailing_slash=True)
-    logger.debug("ARSO URL: %s", url)
+    data = await get_map_data(ids)
+    data.sort(key=lambda x: x["timestamp"])
 
-    async with AsyncClient() as client:
-        response = await client.get(url, timeout=TIMEOUT)
-
-    layers: list[MapLayer] = []
-    bbox: list[float] = []
-    for layer in response.json():
-        url = weather_map_response_url(map_type, layer["path"])
-        time = parse_time(layer["valid"])
-        layers.append(
-            MapLayer(
-                url=url,
-                timestamp=to_timestamp(time),
-                observation=ObservationType.Historical
-                if layer["mode"] == "ANL"
-                else ObservationType.Forecast,
-            ),
+    layers: list[MapLayer] = [
+        MapLayer(
+            url=record["url"],
+            timestamp=record["timestamp"],
+            observation=ObservationType(record["observation"]),
         )
-
-        if not bbox and "bbox" in layer:
-            bbox = [float(b) for b in layer["bbox"].split(",")]
-
-    for i in range(1, len(layers)):
-        if layers[i].observation != layers[i - 1].observation:
-            layers[i - 1].observation = ObservationType.Recent
-            break
-
-        if i == len(layers) - 1:
-            layers[i].observation = ObservationType.Recent
+        for record in data
+    ]
 
     return layers, bbox
 
@@ -217,32 +190,24 @@ def get_all_map_legends() -> list[MapLegend]:
 
 async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
-    url: str = weather_map_url(map_id)
-    if not url:
+    timestamp = map_id
+
+    logger.debug("ARSO weather timestamp: %s", timestamp)
+
+    ids: set[str] = await get_weather_ids_for_timestamp(timestamp)
+    if not ids:
         raise UnrecognisedMapIDException()
 
-    logger.debug("ARSO URL: %s", url)
-
-    async with AsyncClient() as client:
-        response = await client.get(url)
-
-    if response.status_code == 404:
-        raise UnrecognisedMapIDException()
-
-    response_body = response.json()
-    if "features" not in response_body:  # pragma: no cover
-        return []
+    records = await get_weather_records(ids)
 
     conditions_list = []
-    for feature in response_body["features"]:
-        station, condition = await parse_feature(
-            feature,
+    for record in records:
+        station, condition = await parse_record(
+            record,
             ObservationType.Recent if map_id == "current" else ObservationType.Forecast,
         )
-
-        if not station or not condition:  # pragma: no cover
+        if not station:
             continue
-
         conditions_list.append(
             WeatherInfoExtended(station=station, condition=condition),
         )

@@ -6,6 +6,7 @@ from typing import Any
 
 from vremenar.database.redis import redis
 from vremenar.definitions import CountryID, LanguageID
+from vremenar.models.maps import MapType
 from vremenar.utils import to_timestamp
 
 
@@ -16,6 +17,37 @@ async def store_station(country: CountryID, station: dict[str, Any]) -> None:
     async with redis.pipeline() as pipeline:
         pipeline.sadd(f"station:{country.value}", station_id)
         pipeline.hset(f"station:{country.value}:{station_id}", mapping=station)
+        await pipeline.execute()
+
+
+async def store_arso_weather_record(
+    record: dict[str, Any],
+    key_override: str = "",
+) -> None:
+    """Store an ARSO weather record to redis."""
+    if not key_override:
+        key_override = record["timestamp"]
+    set_key = f"arso:weather:{key_override}"
+    key = f"arso:weather:{key_override}:{record['station_id']}"
+
+    async with redis.pipeline() as pipeline:
+        pipeline.sadd(set_key, key)
+        pipeline.hset(key, mapping=record)
+        await pipeline.execute()
+
+
+async def store_arso_map_record(
+    record: dict[str, Any],
+    map_type: str,
+    key_override: str = "",
+) -> None:
+    """Store an ARSO map record to redis."""
+    if not key_override:
+        key_override = record["timestamp"]
+    key = f"arso:map:{map_type}:{key_override}"
+
+    async with redis.pipeline() as pipeline:
+        pipeline.hset(key, mapping=record)
         await pipeline.execute()
 
 
@@ -108,6 +140,61 @@ async def stations_fixtures() -> None:
     await store_station(CountryID.Germany, germany)
     await store_station(CountryID.Germany, germany_forecast_only)
     await store_station(CountryID.Slovenia, slovenia)
+
+
+async def arso_fixtures() -> None:
+    """Create and setup ARSO fixtures."""
+    source = "ARSO:current:00:00.000Z"
+    now = datetime.now(tz=timezone.utc)
+    now = now.replace(minute=0, second=0, microsecond=0)
+    soon = now + timedelta(hours=1)
+    timestamp = to_timestamp(now)
+    timestamp_soon = to_timestamp(soon)
+
+    record = {
+        "source": source,
+        "station_id": "METEO-0038",
+        "timestamp": timestamp,
+        "icon": "prevCloudy_day",
+        "temperature": 12,
+    }
+
+    record_soon = {
+        "source": source,
+        "station_id": "METEO-0038",
+        "timestamp": timestamp_soon,
+        "icon": "overcast_lightRA_day",
+        "temperature": 32,
+        "temperature_low": 13,
+    }
+
+    record_unknown = {
+        "source": source,
+        "station_id": "NULL",
+        "timestamp": timestamp,
+        "icon": "prevCloudy_day",
+        "temperature": 12,
+    }
+
+    await store_arso_weather_record(record, "current")
+    await store_arso_weather_record(record_soon)
+    await store_arso_weather_record(record_unknown)
+
+    map_record = {
+        "timestamp": timestamp,
+        "url": "foo",
+        "observation": "recent",
+    }
+    await store_arso_map_record(map_record, MapType.WeatherCondition.value, "current")
+
+    for map_type in [
+        MapType.Precipitation,
+        MapType.CloudCoverage,
+        MapType.WindSpeed,
+        MapType.Temperature,
+        MapType.HailProbability,
+    ]:
+        await store_arso_map_record(map_record, map_type.value)
 
 
 async def mosmix_fixtures() -> None:
@@ -266,6 +353,7 @@ async def alerts_fixtures() -> None:
 async def setup_fixtures() -> None:
     """Create and setup fixtures."""
     await stations_fixtures()
+    await arso_fixtures()
     await mosmix_fixtures()
     await alerts_fixtures()
 

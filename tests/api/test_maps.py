@@ -1,149 +1,161 @@
 """Maps API tests."""
 
-from fastapi.testclient import TestClient
-from vremenar.main import app
-
-client = TestClient(app)
+import pytest
+from httpx import AsyncClient
 
 
-def test_maps_types() -> None:
+@pytest.mark.asyncio()
+async def test_maps_types(client: AsyncClient) -> None:
     """Test maps types."""
-    response = client.get("/maps/types?country=si")
+    response = await client.get("/maps/types?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/types?country=de")
+    response = await client.get("/maps/types?country=de")
     assert response.status_code == 200
 
 
-def test_maps_list_condition() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_condition(client: AsyncClient) -> None:
     """Test maps list - condition."""
-    response = client.get("/maps/list/condition?country=si")
+    response = await client.get("/maps/list/condition?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/condition?country=de")
+    response = await client.get("/maps/list/condition?country=de")
     assert response.status_code == 200
 
 
-def test_maps_list_precipitation() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_precipitation(client: AsyncClient) -> None:
     """Test maps list - precipitation."""
-    response = client.get("/maps/list/precipitation?country=si")
+    response = await client.get("/maps/list/precipitation?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/precipitation?country=de")
+    response = await client.get("/maps/list/precipitation?country=de")
     assert response.status_code == 200
 
 
-def test_maps_list_cloud() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_cloud(client: AsyncClient) -> None:
     """Test maps list - cloud."""
-    response = client.get("/maps/list/cloud?country=si")
+    response = await client.get("/maps/list/cloud?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/cloud?country=de")
+    response = await client.get("/maps/list/cloud?country=de")
     assert response.status_code == 404
 
 
-def test_maps_list_wind() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_wind(client: AsyncClient) -> None:
     """Test maps list - wind."""
-    response = client.get("/maps/list/wind?country=si")
+    response = await client.get("/maps/list/wind?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/wind?country=de")
+    response = await client.get("/maps/list/wind?country=de")
     assert response.status_code == 404
 
 
-def test_maps_list_temperature() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_temperature(client: AsyncClient) -> None:
     """Test maps list - temperature."""
-    response = client.get("/maps/list/temperature?country=si")
+    response = await client.get("/maps/list/temperature?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/temperature?country=de")
+    response = await client.get("/maps/list/temperature?country=de")
     assert response.status_code == 200
 
 
-def test_maps_list_hail() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_hail(client: AsyncClient) -> None:
     """Test maps list - hail."""
-    response = client.get("/maps/list/hail?country=si")
+    response = await client.get("/maps/list/hail?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/list/hail?country=de")
+    response = await client.get("/maps/list/hail?country=de")
     assert response.status_code == 404
 
 
-def test_maps_list_uv_index_max() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_uv_index_max(client: AsyncClient) -> None:
     """Test maps list - hail."""
-    response = client.get("/maps/list/uv_index_max?country=si")
+    response = await client.get("/maps/list/uv_index_max?country=si")
     assert response.status_code == 404
 
-    response = client.get("/maps/list/uv_index_max?country=de")
+    response = await client.get("/maps/list/uv_index_max?country=de")
     assert response.status_code == 200
 
 
-def test_maps_list_uv_dose() -> None:
+@pytest.mark.asyncio()
+async def test_maps_list_uv_dose(client: AsyncClient) -> None:
     """Test maps list - hail."""
-    response = client.get("/maps/list/uv_dose?country=si")
+    response = await client.get("/maps/list/uv_dose?country=si")
     assert response.status_code == 404
 
-    response = client.get("/maps/list/uv_dose?country=de")
+    response = await client.get("/maps/list/uv_dose?country=de")
     assert response.status_code == 200
 
 
-def test_maps_blank() -> None:
+@pytest.mark.asyncio()
+async def test_maps_blank(client: AsyncClient) -> None:
     """Test blank map type."""
-    response = client.get("/maps/list")
+    response = await client.get("/maps/list")
     assert response.status_code == 404
     assert response.json() == {"detail": "Not Found"}
 
-    response = client.get("/maps/list/")
+    response = await client.get("/maps/list/")
     assert response.status_code == 404
     assert response.json() == {"detail": "Not Found"}
 
 
-def test_maps_invalid() -> None:
+@pytest.mark.asyncio()
+async def test_maps_invalid(client: AsyncClient) -> None:
     """Test maps invalid map type."""
-    response = client.get("/maps/list/invalid?country=si")
+    response = await client.get("/maps/list/invalid?country=si")
     assert response.status_code == 422
     assert response.json()["detail"][0]["type"] == "enum"
     assert response.json()["detail"][0]["loc"] == ["path", "map_type"]
 
 
-def test_maps_no_country() -> None:
+@pytest.mark.asyncio()
+async def test_maps_no_country(client: AsyncClient) -> None:
     """Test maps list without country."""
-    response = client.get("/maps/list/condition")
+    response = await client.get("/maps/list/condition")
     assert response.status_code == 422
     assert response.json()["detail"][0]["type"] == "missing"
     assert response.json()["detail"][0]["loc"] == ["query", "country"]
 
 
-def test_maps_all_legends() -> None:
+@pytest.mark.asyncio()
+async def test_maps_all_legends(client: AsyncClient) -> None:
     """Test maps legends - all."""
-    response = client.get("/maps/legend?country=si")
+    response = await client.get("/maps/legend?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/legend?country=de")
+    response = await client.get("/maps/legend?country=de")
     assert response.status_code == 200
 
 
-def test_maps_legends() -> None:
+@pytest.mark.asyncio()
+async def test_maps_legends(client: AsyncClient) -> None:
     """Test maps legends."""
-    response = client.get("/maps/legend/condition?country=si")
+    response = await client.get("/maps/legend/condition?country=si")
     assert response.status_code == 404
     assert response.json() == {"detail": "Unsupported or unknown map type"}
 
-    response = client.get("/maps/legend/precipitation?country=si")
+    response = await client.get("/maps/legend/precipitation?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/legend/precipitation?country=de")
+    response = await client.get("/maps/legend/precipitation?country=de")
     assert response.status_code == 200
 
-    response = client.get("/maps/legend/wind?country=si")
+    response = await client.get("/maps/legend/wind?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/legend/wind?country=de")
+    response = await client.get("/maps/legend/wind?country=de")
     assert response.status_code == 404
     assert response.json() == {"detail": "Unsupported or unknown map type"}
 
-    response = client.get("/maps/legend/temperature?country=si")
+    response = await client.get("/maps/legend/temperature?country=si")
     assert response.status_code == 200
 
-    response = client.get("/maps/legend/hail?country=si")
+    response = await client.get("/maps/legend/hail?country=si")
     assert response.status_code == 200
