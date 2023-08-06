@@ -57,7 +57,7 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
         "precipitation_60",
         weather.get("precipitation", 0),
     )
-    if precipitation_value is None:
+    if precipitation_value is None:  # pragma: no cover
         precipitation_value = 0
 
     precipitation_intensity = float(precipitation_value)
