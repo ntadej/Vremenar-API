@@ -72,7 +72,6 @@ class StationInfoExtended(StationInfo):
 class StationSearchModel(BaseModel):
     """Station search body model."""
 
-    string: str | None = None
     latitude: float | None = None
     longitude: float | None = None
 
@@ -80,9 +79,6 @@ class StationSearchModel(BaseModel):
         title="Station search body",
         json_schema_extra={
             "examples": [
-                {
-                    "string": "Bled",
-                },
                 {
                     "latitude": 46.364444,
                     "longitude": 14.094722,

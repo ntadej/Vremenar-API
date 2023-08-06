@@ -4,7 +4,7 @@ from typing_extensions import TypedDict
 
 from vremenar.definitions import CountryID
 from vremenar.models.common import Coordinate
-from vremenar.models.stations import StationInfoExtended
+from vremenar.models.stations import StationInfo, StationInfoExtended
 
 from .redis import redis
 
@@ -72,3 +72,42 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
             metadata=metadata if metadata else None,
         )
     return dict(sorted(stations.items(), key=lambda item: item[1].name))
+
+
+async def search_stations(
+    country: CountryID,
+    latitude: float,
+    longitude: float,
+) -> list[StationInfo]:
+    """Search for stations by coordinate."""
+    async with redis.client() as connection:
+        station_ids: list[tuple[str, float]] = await redis.geosearch(
+            f"location:{country.value}",
+            latitude=latitude,
+            longitude=longitude,
+            radius=50,
+            unit="km",
+            withdist=True,
+            sort="ASC",
+        )
+
+        async with connection.pipeline(transaction=False) as pipeline:
+            for station_id, _ in station_ids[:5]:
+                pipeline.hgetall(f"station:{country.value}:{station_id}")
+            response = await pipeline.execute()
+
+    return [
+        StationInfo(
+            id=station["id"],
+            name=station["name"],
+            coordinate=Coordinate(
+                latitude=station["latitude"],
+                longitude=station["longitude"],
+                altitude=station["altitude"],
+            ),
+            zoom_level=station["zoom_level"],
+            forecast_only=station["forecast_only"],
+            alerts_area=station["alerts_area"] if "alerts_area" in station else None,
+        )
+        for station in response
+    ]

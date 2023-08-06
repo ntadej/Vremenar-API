@@ -7,11 +7,7 @@ from vremenar.definitions import CountryID, ObservationType
 from vremenar.models.maps import MapType
 from vremenar.models.stations import StationBase, StationInfoExtended
 from vremenar.models.weather import WeatherCondition
-from vremenar.utils import chunker, logger, parse_time, to_timestamp
-
-BASEURL: str = "https://vreme.arso.gov.si"
-API_BASEURL: str = "https://vreme.arso.gov.si/api/1.0/"
-TIMEOUT: int = 15
+from vremenar.utils import chunker
 
 
 async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
@@ -95,43 +91,5 @@ async def parse_record(
         if "temperature_low" in record
         else None,
     )
-
-    return station, condition
-
-
-async def parse_feature(
-    feature: dict[Any, Any],
-    observation: ObservationType,
-) -> tuple[StationInfoExtended | None, WeatherCondition | None]:
-    """Parse ARSO feature."""
-    stations = await get_stations(CountryID.Slovenia)
-
-    properties = feature["properties"]
-
-    station_id = properties["id"].strip("_")
-    station: StationInfoExtended | None = stations.get(station_id, None)
-    if not station:  # pragma: no cover
-        logger.warning("Unknown ARSO station: %s = %s", station_id, properties["title"])
-        return None, None
-
-    timeline = properties["days"][0]["timeline"][0]
-    time = parse_time(timeline["valid"])
-    icon = timeline["clouds_icon_wwsyn_icon"]
-
-    if "txsyn" in timeline:
-        temperature: float = float(timeline["txsyn"])
-        temperature_low: float | None = float(timeline["tnsyn"])
-    else:
-        temperature = float(timeline["t"])
-        temperature_low = None
-
-    condition = WeatherCondition(
-        observation=observation,
-        timestamp=to_timestamp(time),
-        icon=icon,
-        temperature=temperature,
-    )
-    if temperature_low:
-        condition.temperature_low = temperature_low
 
     return station, condition

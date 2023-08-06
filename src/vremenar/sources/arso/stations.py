@@ -1,7 +1,5 @@
 """ARSO weather stations."""
-from httpx import AsyncClient
-
-from vremenar.database.stations import get_stations
+from vremenar.database.stations import get_stations, search_stations
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException
 from vremenar.models.stations import (
@@ -10,9 +8,8 @@ from vremenar.models.stations import (
     StationSearchModel,
 )
 from vremenar.models.weather import WeatherInfoExtended
-from vremenar.utils import join_url, logger
 
-from .utils import API_BASEURL, TIMEOUT, parse_feature, parse_station
+from .utils import get_weather_records, parse_record
 
 
 async def list_stations() -> list[StationInfoExtended]:
@@ -23,45 +20,15 @@ async def list_stations() -> list[StationInfoExtended]:
 
 async def find_station(query: StationSearchModel) -> list[StationInfo]:
     """Find station by coordinate or string."""
-    url: str = join_url(API_BASEURL, "locations", trailing_slash=True)
-
-    if query.string and (query.latitude or query.longitude):
-        err = "Either search string or coordinates are required"
+    if query.latitude is None or query.longitude is None:
+        err = "Coordinates are required"
         raise InvalidSearchQueryException(err)
 
-    if query.string:
-        single = False
-        url += f"?loc={query.string}"
-    elif query.latitude is not None and query.longitude is not None:
-        single = True
-        url += f"?lat={query.latitude}&lon={query.longitude}"
-    else:
-        err = "Either search string or coordinates are required"
-        raise InvalidSearchQueryException(err)
-
-    logger.debug("ARSO URL: %s", url)
-
-    async with AsyncClient() as client:
-        response = await client.get(url, timeout=TIMEOUT)
-
-    response_body = response.json()
-
-    if single:
-        station = await parse_station(response_body)
-        if station:
-            return [station]
-
-    if "features" not in response_body:  # pragma: no cover
-        return []
-
-    locations: list[StationInfo] = []
-    for feature in response_body["features"]:
-        station = await parse_station(feature)
-        if not station:  # pragma: no cover
-            continue
-        locations.append(station)
-
-    return locations
+    return await search_stations(
+        CountryID.Slovenia,
+        query.latitude,
+        query.longitude,
+    )
 
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
@@ -71,21 +38,14 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     if not station:
         raise UnknownStationException()
 
-    url = (
-        join_url(API_BASEURL, "locations", trailing_slash=True) + f"?loc={station.name}"
-    )
+    records = await get_weather_records({f"arso:weather:current:{station_id}"})
 
-    logger.debug("ARSO URL: %s", url)
+    for record in records:
+        if not record:  # pragma: no cover
+            continue
 
-    async with AsyncClient() as client:
-        response = await client.get(url, timeout=TIMEOUT)
-
-    response_body = response.json()
-    if "features" not in response_body:  # pragma: no cover
-        raise UnknownStationException()
-
-    for feature in response_body["features"]:
-        _, condition = await parse_feature(feature, ObservationType.Recent)
-        return WeatherInfoExtended(station=station, condition=condition)
+        _, condition = await parse_record(record, ObservationType.Recent)
+        if condition:
+            return WeatherInfoExtended(station=station, condition=condition)
 
     raise UnknownStationException()  # pragma: no cover

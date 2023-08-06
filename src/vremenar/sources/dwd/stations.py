@@ -61,16 +61,12 @@ async def find_station(
         trailing_slash=False,
     )
 
-    if query.string:
-        err = "Only coordinates are required"
+    if query.latitude is None or query.longitude is None:
+        err = "Coordinates are required"
         raise InvalidSearchQueryException(err)
 
-    if query.latitude is not None and query.longitude is not None:
-        url_forecast += f"?lat={query.latitude}&lon={query.longitude}"
-        url_current += f"?lat={query.latitude}&lon={query.longitude}"
-    else:
-        err = "Only coordinates are required"
-        raise InvalidSearchQueryException(err)
+    url_forecast += f"?lat={query.latitude}&lon={query.longitude}"
+    url_current += f"?lat={query.latitude}&lon={query.longitude}"
 
     locations: list[StationInfo] = []
     if include_forecast_only:

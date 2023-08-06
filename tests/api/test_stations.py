@@ -32,23 +32,6 @@ async def test_stations_details(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_stations_find_string(client: AsyncClient) -> None:
-    """Test stations find by string."""
-    response = await client.post("/stations/find?country=si", json={"string": "Bled"})
-    assert response.status_code == 200
-
-    response = await client.post("/stations/find?country=si", json={"string": "Kranj"})
-    assert response.status_code == 200
-
-    response = await client.post(
-        "/stations/find?country=de",
-        json={"string": "Hamburg"},
-    )
-    assert response.status_code == 422
-    assert response.json()["detail"] == "Only coordinates are required"
-
-
-@pytest.mark.asyncio()
 async def test_stations_find_coordinate(client: AsyncClient) -> None:
     """Test stations find by coordinate."""
     # Bled
@@ -116,26 +99,11 @@ async def test_stations_find_errors(client: AsyncClient) -> None:
 
     response = await client.post("/stations/find?country=si", json={})
     assert response.status_code == 422
-    assert (
-        response.json()["detail"] == "Either search string or coordinates are required"
-    )
+    assert response.json()["detail"] == "Coordinates are required"
 
     response = await client.post("/stations/find?country=de", json={})
     assert response.status_code == 422
-    assert response.json()["detail"] == "Only coordinates are required"
-
-    response = await client.post(
-        "/stations/find?country=si",
-        json={
-            "string": "Bled",
-            "latitude": 46.3684,
-            "longitude": 14.1101,
-        },
-    )
-    assert response.status_code == 422
-    assert (
-        response.json()["detail"] == "Either search string or coordinates are required"
-    )
+    assert response.json()["detail"] == "Coordinates are required"
 
 
 @pytest.mark.asyncio()
