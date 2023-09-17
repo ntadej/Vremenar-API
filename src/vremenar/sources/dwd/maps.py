@@ -1,5 +1,5 @@
 """DWD weather maps."""
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from httpx import AsyncClient
 
@@ -61,7 +61,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
     """Get DWD condition map layers."""
     layers: list[MapLayer] = []
 
-    now = datetime.now(tz=timezone.utc)
+    now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
 
     country_suffix = f"?country={CountryID.Germany.value}"
@@ -120,7 +120,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     """Get DWD precipitation map layers."""
     layers: list[MapLayer] = []
 
-    current_time = datetime.now(tz=timezone.utc)
+    current_time = datetime.now(tz=UTC)
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
@@ -194,7 +194,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     """Get DWD temperature map layers."""
     layers: list[MapLayer] = []
 
-    current_time = datetime.now(tz=timezone.utc)
+    current_time = datetime.now(tz=UTC)
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
@@ -249,7 +249,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     map_name = "dwd:UVIndex" if map_type == MapType.UVIndexMax else "dwd:UV_Dosis_EU_CL"
     map_style = "uvi_cs" if map_type == MapType.UVIndexMax else ""
 
-    current_time = datetime.now(tz=timezone.utc)
+    current_time = datetime.now(tz=UTC)
     current_now = current_time.astimezone()
     utc_delta = current_now.utcoffset()
     utc_delta_seconds = 0.0
@@ -272,7 +272,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
         current_time -= timedelta(days=1)
 
     # forecast
-    for i in range(0, 3):
+    for i in range(3):
         time = current_time + timedelta(days=i)
         time = time.replace(tzinfo=None)
         time_string = time.isoformat()
@@ -402,7 +402,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
     """Get weather map from ID."""
     timestamp = map_id
     if map_id == "current":
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=UTC)
         now = now.replace(minute=0, second=0, microsecond=0)
         timestamp = to_timestamp(now)
 

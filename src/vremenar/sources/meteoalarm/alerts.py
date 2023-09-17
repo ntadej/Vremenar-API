@@ -1,5 +1,5 @@
 """MeteoAlarm alerts."""
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from json import loads
 
 from vremenar.database.redis import redis
@@ -65,7 +65,7 @@ async def list_alerts(
             if areas is not None:
                 alert_areas_filtered = {area for area in alert_areas if area in areas}
             alert = AlertInfo.init(info, localised, alert_areas_filtered, areas_dict)
-            if parse_timestamp(alert.ending) > datetime.now(tz=timezone.utc):
+            if parse_timestamp(alert.ending) > datetime.now(tz=UTC):
                 alerts.append(alert)
 
     logger.debug("Read %s alerts from the database", len(alerts))

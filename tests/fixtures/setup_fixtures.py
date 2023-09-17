@@ -1,7 +1,7 @@
 # type: ignore
 """Setup test database."""
 from asyncio import run
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from vremenar.database.redis import redis
@@ -158,7 +158,7 @@ async def stations_fixtures() -> None:
 async def arso_fixtures() -> None:
     """Create and setup ARSO fixtures."""
     source = "ARSO:current:00:00.000Z"
-    now = datetime.now(tz=timezone.utc)
+    now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
     timestamp = to_timestamp(now)
@@ -212,7 +212,7 @@ async def arso_fixtures() -> None:
 
 async def dwd_fixtures() -> None:
     """Create and setup DWD fixtures."""
-    now = datetime.now(tz=timezone.utc)
+    now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
     timestamp = to_timestamp(now)
 
@@ -238,7 +238,7 @@ async def dwd_fixtures() -> None:
 async def mosmix_fixtures() -> None:
     """Create and setup MOSMIX fixtures."""
     source = "MOSMIX:2020-12-27T18:00:00.000Z"
-    now = datetime.now(tz=timezone.utc)
+    now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
     timestamp = to_timestamp(now)

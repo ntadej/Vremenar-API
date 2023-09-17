@@ -1,5 +1,5 @@
 """Stations API tests."""
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from httpx import AsyncClient
@@ -143,7 +143,7 @@ async def test_stations_condition_error(client: AsyncClient) -> None:
 @pytest.mark.asyncio()
 async def test_stations_map(client: AsyncClient) -> None:
     """Test stations map."""
-    now = datetime.now(tz=timezone.utc)
+    now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
     soon_timestamp = f"{int(soon.timestamp())}000"

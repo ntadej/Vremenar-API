@@ -1,6 +1,6 @@
 """Helper utilities."""
 from collections.abc import Iterable
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from functools import lru_cache
 from logging import Logger, getLogger
 from typing import Any
@@ -43,7 +43,7 @@ def day_or_night(coordinate: Coordinate, time: datetime) -> str:
 
 def parse_timestamp(timestamp: str) -> datetime:
     """Parse time from timestamp string."""
-    return datetime.fromtimestamp(float(timestamp[:-3]), tz=timezone.utc)
+    return datetime.fromtimestamp(float(timestamp[:-3]), tz=UTC)
 
 
 def to_timestamp(time: datetime) -> str:
