@@ -16,7 +16,7 @@ uvicorn = "^0.23.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
-coverage = { extras = ["toml"], version = "^7.3.1" }
+coverage = { extras = ["toml"], version = "^7.3.2" }
 fastapi-profiler = "^1.2.0"
 gevent = "^23.9.1"
 mypy = "^1.5.1"
