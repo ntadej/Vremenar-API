@@ -8,15 +8,15 @@ authors = ["Tadej Novak <tadej@tano.si>"]
 python = "^3.11"
 astral = "^3.2"
 asyncstdlib = "^3.10.8"
-fastapi = "~0.103.1"
+fastapi = "~0.103.2"
 gunicorn = "^21.2.0"
 httpx = "^0.25.0"
-redis = { extras = ["hiredis"], version = "^5.0.0" }
+redis = { extras = ["hiredis"], version = "^5.0.1" }
 uvicorn = "^0.23.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
-coverage = { extras = ["toml"], version = "^7.3.1" }
+coverage = { extras = ["toml"], version = "^7.3.2" }
 fastapi-profiler = "^1.2.0"
 gevent = "^23.9.1"
 mypy = "^1.5.1"
@@ -26,9 +26,9 @@ pytest = "^7.4.2"
 pytest-asyncio = "^0.21.1"
 pytest-cov = "^4.1.0"
 requests = "^2.31.0"
-ruff = "0.0.290"
+ruff = "0.0.292"
 types-python-dateutil = "^2.8.19.14"
-types-redis = "^4.6.0.6"
+types-redis = "^4.6.0.7"
 
 [tool.black]
 line-length = 88
