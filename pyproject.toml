@@ -1,38 +1,61 @@
-[tool.poetry]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
 name = "vremenar"
-version = "0.4.0"
 description = ""
-authors = ["Tadej Novak <tadej@tano.si>"]
+version = "0.4.0"
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "Tadej Novak", email = "tadej@tano.si" }]
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Framework :: FastAPI",
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "fastapi ~= 0.103",
+  "redis[hiredis] >= 5.0",
+  "httpx",
+  "astral",
+  "asyncstdlib",
+  "gunicorn",
+  "uvicorn",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-astral = "^3.2"
-asyncstdlib = "^3.10.8"
-fastapi = "~0.103.2"
-gunicorn = "^21.2.0"
-httpx = "^0.25.0"
-redis = { extras = ["hiredis"], version = "^5.0.1" }
-uvicorn = "^0.23.2"
+[project.optional-dependencies]
+dev = [
+  "black",
+  "coverage[toml] >= 7.3",
+  "fastapi-profiler >= 1.2",
+  "gevent",
+  "mypy >= 1.5",
+  "pre-commit >= 3.4",
+  "pre-commit-hooks >= 4.5",
+  "pytest >= 7.0",
+  "pytest-asyncio",
+  "pytest-cov",
+  "requests",
+  "ruff == 0.0.292",
+  "types-python-dateutil",
+  "types-redis",
+]
 
-[tool.poetry.group.dev.dependencies]
-black = "^23.9.1"
-coverage = { extras = ["toml"], version = "^7.3.2" }
-fastapi-profiler = "^1.2.0"
-gevent = "^23.9.1"
-mypy = "^1.5.1"
-pre-commit = "^3.4.0"
-pre-commit-hooks = "^4.5.0"
-pytest = "^7.4.2"
-pytest-asyncio = "^0.21.1"
-pytest-cov = "^4.1.0"
-requests = "^2.31.0"
-ruff = "0.0.292"
-types-python-dateutil = "^2.8.19.14"
-types-redis = "^4.6.0.7"
+[tool.pdm.scripts]
+start = "gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker"
+dev = "uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug"
+fixtures = "python tests/fixtures/setup_fixtures.py"
+test = "pytest -W error"
 
 [tool.black]
 line-length = 88
-target-version = ['py311']
+target-version = ["py311", "py312"]
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -144,7 +167,3 @@ minversion = "6.0"
 addopts = "--ignore=src/vremenar/tests/ --cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage"
 asyncio_mode = "auto"
 testpaths = ["src/vremenar/tests", "tests"]
-
-[build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
