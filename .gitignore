@@ -2,6 +2,7 @@
 .mypy_cache
 .pdm-python
 .pytest_cache
+.update
 .venv
 *.egg-info
 *.code-workspace
