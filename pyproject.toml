@@ -34,7 +34,7 @@ dev = [
   "coverage[toml]",
   "fastapi-profiler == 1.2.*",
   "gevent",
-  "mypy == 1.6.*",
+  "mypy ==1.7.*",
   "pre-commit",
   "pre-commit-hooks == 4.5.*",
   "pytest >= 7.0",
