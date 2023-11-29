@@ -75,3 +75,14 @@ jobs:
       - name: Deploy
         run: |
           echo "Deploying to staging..."
+
+  deploy-production:
+    runs-on: ubuntu-22.04
+    needs: test
+    if: github.ref == 'refs/heads/deploy'
+    environment: Production
+
+    steps:
+      - name: Deploy
+        run: |
+          echo "Deploying to production..."
