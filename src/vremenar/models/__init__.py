@@ -1,16 +1,16 @@
 """Vremenar models."""
 from typing import Any, cast
 
-from pydantic import ConfigDict
+from pydantic import ConfigDict, JsonValue
 
 
-def get_examples(config: ConfigDict) -> list[dict[str, Any]]:
+def get_examples(config: ConfigDict) -> list[JsonValue]:
     """Get examples from model config."""
     if not isinstance(config["json_schema_extra"], dict):  # pragma: no cover
         return []
 
-    json_schema_extra: dict[str, list[dict[str, Any]]] = cast(
-        dict[str, list[dict[str, Any]]],
+    json_schema_extra: dict[str, list[JsonValue]] = cast(
+        dict[str, list[JsonValue]],
         config["json_schema_extra"],
     )
 
@@ -20,6 +20,6 @@ def get_examples(config: ConfigDict) -> list[dict[str, Any]]:
 def extend_examples(
     config: ConfigDict,
     example: dict[str, Any],
-) -> list[dict[str, Any]]:
+) -> JsonValue:
     """Get and extend examples from model config."""
-    return [e | example for e in get_examples(config)]
+    return [cast(dict[str, Any], e) | example for e in get_examples(config)]
