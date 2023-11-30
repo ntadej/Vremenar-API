@@ -39,8 +39,11 @@ def get_icon_base(weather: dict[str, Any]) -> str:
     if weather_condition == "fog":
         return "FG"
 
-    cloud_cover = float(weather.get("cloud_cover", 0))
-    cloud_cover_fraction = cloud_cover / 100
+    cloud_cover = weather.get("cloud_cover", None)
+    if not cloud_cover:  # pragma: no cover
+        cloud_cover = 0
+
+    cloud_cover_fraction = float(cloud_cover) / 100
     if cloud_cover_fraction < 1 / 8:
         return "clear"
     if 1 / 8 <= cloud_cover_fraction < 4 / 8:
@@ -56,7 +59,7 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
 
     precipitation_value = weather.get(
         "precipitation_60",
-        weather.get("precipitation", 0),
+        weather.get("precipitation", None),
     )
     if not precipitation_value:  # pragma: no cover
         precipitation_value = 0
