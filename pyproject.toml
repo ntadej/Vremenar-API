@@ -20,7 +20,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "fastapi == 0.104.*",
+  "fastapi ==0.109.*",
   "redis[hiredis] == 5.0.*",
   "httpx == 0.25.*",
   "astral == 3.2.*",
