@@ -6,6 +6,13 @@ from typing import Any
 import pytest
 from httpx import AsyncClient
 
+# def pytest_collection_modifyitems(items: list[Any]) -> None:
+#     """Add session scope to async tests."""
+#     pytest_asyncio_tests = (item for item in items if is_async_test(item))
+#     session_scope_marker = pytest.mark.asyncio(scope="session")
+#     for async_test in pytest_asyncio_tests:
+#         async_test.add_marker(session_scope_marker)
+
 
 @pytest.fixture(scope="session")
 def event_loop(

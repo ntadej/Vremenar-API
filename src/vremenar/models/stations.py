@@ -13,7 +13,7 @@ from . import extend_examples, get_examples
 class StationBase(BaseModel):
     """Station base model."""
 
-    id: str  # noqa: A003
+    id: str
 
     model_config = ConfigDict(
         title="Weather station base",

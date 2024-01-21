@@ -71,7 +71,7 @@ class AlertCertainty(str, Enum):
 class AlertArea(BaseModel):
     """Weather alert area model."""
 
-    id: str  # noqa: A003
+    id: str
     name: str
 
     model_config = ConfigDict(
@@ -124,9 +124,9 @@ class AlertAreaWithPolygon(AlertArea):
 class AlertInfo(BaseModel):
     """Weather alert info model."""
 
-    id: str  # noqa: A003
+    id: str
 
-    type: AlertType  # noqa: A003
+    type: AlertType
     urgency: AlertUrgency
     severity: AlertSeverity
     certainty: AlertCertainty
