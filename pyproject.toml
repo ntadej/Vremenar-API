@@ -104,6 +104,7 @@ select = [
   "DTZ",   # flake8-datetimez
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
+  "FA",    # flake8-future-annotations
   "ISC",   # flake8-implicit-str-concat
   "G",     # flake8-logging-format
   "PIE",   # flake8-pie
@@ -135,27 +136,13 @@ ignore = [
 line-length = 88
 
 [tool.mypy]
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-disallow_untyped_decorators = true
-disallow_untyped_defs = true
-disallow_untyped_globals = true
-no_implicit_reexport = true
 plugins = "pydantic.mypy"
+strict = true
 pretty = true
 show_column_numbers = true
 show_error_codes = true
 show_error_context = true
-strict_concatenate = true
-strict_equality = true
-warn_redundant_casts = true
-warn_return_any = true
 warn_unreachable = true
-warn_unused_configs = true
-warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 module = "astral.sun"
