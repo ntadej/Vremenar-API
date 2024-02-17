@@ -69,7 +69,7 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
             ),
             zoom_level=station["zoom_level"],
             forecast_only=station["forecast_only"],
-            alerts_area=station["alerts_area"] if "alerts_area" in station else None,
+            alerts_area=station.get("alerts_area", None),
             metadata=metadata if metadata else None,
         )
     return dict(sorted(stations.items(), key=lambda item: item[1].name))
@@ -113,9 +113,7 @@ async def search_stations(
                 ),
                 zoom_level=station["zoom_level"],
                 forecast_only=station["forecast_only"],
-                alerts_area=station["alerts_area"]
-                if "alerts_area" in station
-                else None,
+                alerts_area=station.get("alerts_area", None),
                 metadata=metadata if metadata else None,
             ),
         )

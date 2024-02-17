@@ -92,7 +92,7 @@ class AlertAreaWithPolygon(AlertArea):
 
     polygons: list[list[list[float]]]
 
-    def base(self: AlertAreaWithPolygon) -> AlertArea:
+    def base(self) -> AlertArea:
         """Return an instance of AlertArea."""
         data = self.model_dump(exclude={"polyons"})
         return AlertArea.model_validate(data)
@@ -161,16 +161,16 @@ class AlertInfo(BaseModel):
         )
         kwargs.setdefault("headline", localised["headline"])
 
-        if "description" in localised and localised["description"]:
+        if localised.get("description"):
             kwargs.setdefault("description", localised["description"])
 
-        if "instructions" in localised and localised["instructions"]:
+        if localised.get("instructions"):
             kwargs.setdefault("instructions", localised["instructions"])
 
-        if "sender_name" in localised and localised["sender_name"]:
+        if localised.get("sender_name"):
             kwargs.setdefault("sender_name", localised["sender_name"])
 
-        if "web" in localised and localised["web"]:
+        if localised.get("web"):
             kwargs.setdefault("web", localised["web"])
 
         # areas

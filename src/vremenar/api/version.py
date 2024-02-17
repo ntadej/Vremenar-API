@@ -46,7 +46,7 @@ async def version() -> VersionInfo:
         with VERSION_INFO.open() as f:
             data = load(f)
 
-    stable = data["stable"] if "stable" in data else ""
-    beta = data["beta"] if "beta" in data else ""
+    stable = data.get("stable", "")
+    beta = data.get("beta", "")
 
     return VersionInfo(stable=stable, beta=beta)

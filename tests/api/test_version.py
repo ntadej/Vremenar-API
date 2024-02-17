@@ -1,6 +1,7 @@
 """Version API tests."""
 
 from fastapi.testclient import TestClient
+
 from vremenar.main import app
 
 client = TestClient(app)

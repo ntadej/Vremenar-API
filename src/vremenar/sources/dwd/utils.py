@@ -35,11 +35,11 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
 
 def get_icon_base(weather: dict[str, Any]) -> str:
     """Get base icon from weather data."""
-    weather_condition = weather.get("condition", None)
+    weather_condition = weather.get("condition")
     if weather_condition == "fog":
         return "FG"
 
-    cloud_cover = weather.get("cloud_cover", None)
+    cloud_cover = weather.get("cloud_cover")
     if not cloud_cover:  # pragma: no cover
         cloud_cover = 0
 
@@ -55,12 +55,9 @@ def get_icon_base(weather: dict[str, Any]) -> str:
 
 def get_icon_condition(weather: dict[str, Any]) -> str | None:
     """Get icon condition from weather data."""
-    weather_condition = weather.get("condition", None)
+    weather_condition = weather.get("condition")
 
-    precipitation_value = weather.get(
-        "precipitation_60",
-        weather.get("precipitation", None),
-    )
+    precipitation_value = weather.get("precipitation_60", weather.get("precipitation"))
     if not precipitation_value:  # pragma: no cover
         precipitation_value = 0
 

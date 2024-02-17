@@ -41,7 +41,7 @@ dev = [
   "pytest-asyncio == 0.21.*",
   "pytest-cov",
   "requests",
-  "ruff == 0.1.14",
+  "ruff == 0.2.1",
   "types-python-dateutil",
   "types-redis",
 ]
@@ -51,19 +51,6 @@ start = "gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker"
 dev = "uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug"
 fixtures = "python tests/fixtures/setup_fixtures.py"
 test = "pytest -W error"
-
-[tool.black]
-line-length = 88
-target-version = ["py311", "py312"]
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.mypy_cache
-  | \.venv
-)/
-'''
 
 [tool.coverage.run]
 branch = true
@@ -83,7 +70,11 @@ ignore_errors = true
 omit = ["tests/*"]
 
 [tool.ruff]
+src = ["src"]
 target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
 select = [
   "F",     # pyflakes
   "E",     # pycodestyle
@@ -126,14 +117,14 @@ select = [
   "RUF",   # ruff
 ]
 ignore = [
-  "ANN102",  # missing-type-cls (not working for the moment)
+  "ANN101",  # missing-type-self (deprecated)
+  "ANN102",  # missing-type-class (deprecated)
   "PLR2004", # magic-value-comparison (not wanted)
   "D203",    # one-blank-line-before-class (conflicting with no-blank-line-before-class)
   "D213",    # multi-line-summary-second-line (conflicting with multi-line-summary-first-line)
   "FBT001",  # boolean-positional-arg-in-function-definition (not wanted)
   "FBT002",  # boolean-default-value-in-function-definition (not wanted)
 ]
-line-length = 88
 
 [tool.mypy]
 plugins = "pydantic.mypy"

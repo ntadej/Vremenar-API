@@ -46,7 +46,7 @@ class WeatherInfoExtended(WeatherInfo):
 
     station: StationInfo
 
-    def base(self: WeatherInfoExtended) -> WeatherInfo:
+    def base(self) -> WeatherInfo:
         """Return an instance of WeatherInfo."""
         return WeatherInfo(station=self.station.base(), condition=self.condition)
 

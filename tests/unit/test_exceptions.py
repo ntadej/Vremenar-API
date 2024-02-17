@@ -1,5 +1,6 @@
 """Exceptions tests."""
 import pytest
+
 from vremenar.exceptions import (
     InvalidSearchQueryException,
     UnknownAlertAreaException,

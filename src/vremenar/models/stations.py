@@ -34,7 +34,7 @@ class StationInfo(StationBase):
     forecast_only: bool | None = False
     alerts_area: str | None = None
 
-    def base(self: StationInfo) -> StationBase:
+    def base(self) -> StationBase:
         """Return an instance of StationBase."""
         data = self.model_dump(include={"id"})
         return StationBase.model_validate(data)
@@ -61,7 +61,7 @@ class StationInfoExtended(StationInfo):
 
     metadata: dict[str, Any] | None = None
 
-    def info(self: StationInfoExtended) -> StationInfo:
+    def info(self) -> StationInfo:
         """Return an instance of StationInfo."""
         data = self.model_dump(exclude={"metadata"})
         return StationInfo.model_validate(data)
