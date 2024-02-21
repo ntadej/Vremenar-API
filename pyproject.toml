@@ -22,7 +22,7 @@ classifiers = [
 dependencies = [
   "fastapi == 0.109.*",
   "redis[hiredis] == 5.0.*",
-  "httpx == 0.26.*",
+  "httpx ==0.27.*",
   "astral == 3.2.*",
   "asyncstdlib",
   "gunicorn",
