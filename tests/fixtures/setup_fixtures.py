@@ -1,5 +1,6 @@
 # type: ignore
 """Setup test database."""
+
 from asyncio import run
 from datetime import UTC, datetime, timedelta
 from typing import Any

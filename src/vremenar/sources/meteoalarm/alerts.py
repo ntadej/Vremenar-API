@@ -1,4 +1,5 @@
 """MeteoAlarm alerts."""
+
 from datetime import UTC, datetime
 from json import loads
 

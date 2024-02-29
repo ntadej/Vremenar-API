@@ -1,4 +1,5 @@
 """ARSO weather utils."""
+
 from typing import Any
 
 from vremenar.database.redis import redis
@@ -48,9 +49,12 @@ async def get_map_data(ids: list[str]) -> list[dict[str, Any]]:
     """Get ARSO map data from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection, connection.pipeline(  # pragma: no branch
-        transaction=False,
-    ) as pipeline:
+    async with (
+        redis.client() as connection,
+        connection.pipeline(  # pragma: no branch
+            transaction=False,
+        ) as pipeline,
+    ):
         # TODO: figure out why this is not covered
         for record_id in ids:  # pragma: no cover
             pipeline.hgetall(record_id)

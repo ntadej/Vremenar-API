@@ -1,4 +1,5 @@
 """Weather alerts API."""
+
 from fastapi import APIRouter, Query
 
 from vremenar.definitions import CountryID, LanguageID

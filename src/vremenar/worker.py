@@ -1,4 +1,5 @@
 """Custom Uvicorn worker."""
+
 from starlette.config import Config
 from uvicorn.workers import UvicornWorker
 

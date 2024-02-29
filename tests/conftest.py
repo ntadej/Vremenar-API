@@ -1,4 +1,5 @@
 """Tests configuration."""
+
 import asyncio
 from collections.abc import AsyncGenerator, Generator
 from typing import Any

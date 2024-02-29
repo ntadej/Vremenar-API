@@ -1,4 +1,5 @@
 """ARSO weather stations."""
+
 from vremenar.database.stations import get_stations, search_stations
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException

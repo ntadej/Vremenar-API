@@ -1,4 +1,5 @@
 """DWD weather utils."""
+
 from datetime import datetime
 from typing import Any
 
