@@ -1,4 +1,5 @@
 """Redis utilities."""
+
 from os import getenv
 
 from redis.asyncio import Redis, from_url

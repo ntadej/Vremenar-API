@@ -1,4 +1,5 @@
 """Helper utilities."""
+
 from collections.abc import Iterable
 from datetime import UTC, date, datetime
 from functools import lru_cache
