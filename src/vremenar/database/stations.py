@@ -1,4 +1,5 @@
 """Stations database helpers."""
+
 import asyncstdlib as a
 from typing_extensions import TypedDict
 

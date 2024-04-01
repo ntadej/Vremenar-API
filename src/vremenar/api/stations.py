@@ -1,4 +1,5 @@
 """Weather stations API."""
+
 from typing import Annotated
 
 from fastapi import APIRouter, Query
