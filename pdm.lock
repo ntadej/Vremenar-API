@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:9fedf84d304f6e363afa2a0d3c82d98dea0ae405516f63a3c3e7cc283e80950b"
+content_hash = "sha256:c6b3cdbb137cca56840ef72b7d8c7f468f5b7ac9c829649822343315efebf0a4"
 
 [[package]]
 name = "annotated-types"
@@ -633,15 +633,15 @@ files = [
 
 [[package]]
 name = "pre-commit-hooks"
-version = "4.5.0"
+version = "4.6.0"
 requires_python = ">=3.8"
 summary = "Some out-of-the-box hooks for pre-commit."
 dependencies = [
     "ruamel-yaml>=0.15",
 ]
 files = [
-    {file = "pre_commit_hooks-4.5.0-py2.py3-none-any.whl", hash = "sha256:b779d5c44ede9b1fda48e2d96b08e9aa5b1d2fdb8903ca09f0dbaca22d529edb"},
-    {file = "pre_commit_hooks-4.5.0.tar.gz", hash = "sha256:ffbe2af1c85ac9a7695866955680b4dee98822638b748a6f3debefad79748c8a"},
+    {file = "pre_commit_hooks-4.6.0-py2.py3-none-any.whl", hash = "sha256:a69199e6a2d45ec59c1020a81ca1549abddc2afb798276d9a0d951752d6abbfe"},
+    {file = "pre_commit_hooks-4.6.0.tar.gz", hash = "sha256:eb1f43ee67869cd41b4c59017fad4a0f9d4d61201d163f2135535aaf65035a2b"},
 ]
 
 [[package]]
