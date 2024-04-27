@@ -30,6 +30,6 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
     """Async testing client for unit tests."""
     from vremenar.main import app
 
-    transport = ASGITransport(app=app)
+    transport = ASGITransport(app=app)  # type: ignore
     async with AsyncClient(transport=transport, base_url="http://testserver") as client:
         yield client
