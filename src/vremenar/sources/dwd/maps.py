@@ -1,4 +1,5 @@
 """DWD weather maps."""
+
 from datetime import UTC, datetime, timedelta
 
 from httpx import AsyncClient

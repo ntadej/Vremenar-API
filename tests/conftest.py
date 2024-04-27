@@ -1,10 +1,11 @@
 """Tests configuration."""
+
 import asyncio
 from collections.abc import AsyncGenerator, Generator
 from typing import Any
 
 import pytest
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 # def pytest_collection_modifyitems(items: list[Any]) -> None:
 #     """Add session scope to async tests."""
@@ -29,5 +30,6 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
     """Async testing client for unit tests."""
     from vremenar.main import app
 
-    async with AsyncClient(app=app, base_url="http://testserver") as client:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
         yield client

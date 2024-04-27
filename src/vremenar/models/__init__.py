@@ -1,4 +1,5 @@
 """Vremenar models."""
+
 from typing import Any, cast
 
 from pydantic import ConfigDict, JsonValue
