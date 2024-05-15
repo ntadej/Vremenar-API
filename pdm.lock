@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:ba01f36c5891db56a915d1af3fdeb1360b079ca40f2e06d1e08f584186143ba0"
+content_hash = "sha256:98d9a57a5da6286909e98f9824c94194dc7cf53259af6cef55d3b5707143691d"
 
 [[package]]
 name = "annotated-types"
@@ -313,14 +313,14 @@ files = [
 
 [[package]]
 name = "fastapi-profiler"
-version = "1.3.0"
+version = "1.4.0"
 summary = "A FastAPI Middleware of pyinstrument to check your service performance."
 dependencies = [
     "fastapi",
     "pyinstrument>=4.4.0",
 ]
 files = [
-    {file = "fastapi_profiler-1.3.0-py3-none-any.whl", hash = "sha256:371f766de6aa12f525c8c42c6ce0d701cdf82d0738730c1a5681759881ed62e1"},
+    {file = "fastapi_profiler-1.4.0-py3-none-any.whl", hash = "sha256:5f82a037d22001c8475ca0f2cea7ccc18968bfb5e6c6902d634a2991976b9881"},
 ]
 
 [[package]]
