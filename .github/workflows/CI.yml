@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-venv-${{ matrix.python-version }}-
 
       - name: Start Redis
-        uses: shogo82148/actions-setup-redis@v1.34.0
+        uses: shogo82148/actions-setup-redis@v1.35.1
         with:
           redis-port: 6379
           redis-version: "6.x"
