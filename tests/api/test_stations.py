@@ -6,7 +6,7 @@ import pytest
 from httpx import AsyncClient
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_list(client: AsyncClient) -> None:
     """Test stations list."""
     response = await client.get("/stations/list?country=si")
@@ -16,7 +16,7 @@ async def test_stations_list(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_details(client: AsyncClient) -> None:
     """Test stations details."""
     response = await client.get("/stations/list?country=si")
@@ -32,7 +32,7 @@ async def test_stations_details(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_find_coordinate(client: AsyncClient) -> None:
     """Test stations find by coordinate."""
     # Bled
@@ -86,7 +86,7 @@ async def test_stations_find_coordinate(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_find_errors(client: AsyncClient) -> None:
     """Test stations find errors."""
     response = await client.get("/stations/find?country=si")
@@ -107,7 +107,7 @@ async def test_stations_find_errors(client: AsyncClient) -> None:
     assert response.json()["detail"] == "Coordinates are required"
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_condition(client: AsyncClient) -> None:
     """Test stations condition."""
     response = await client.get("/stations/condition/METEO-0038?country=si")
@@ -125,7 +125,7 @@ async def test_stations_condition(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_condition_error(client: AsyncClient) -> None:
     """Test stations condition errors."""
     response = await client.get("/stations/condition?country=si")
@@ -141,7 +141,7 @@ async def test_stations_condition_error(client: AsyncClient) -> None:
     assert response.json()["detail"] == "Unknown station"
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_map(client: AsyncClient) -> None:
     """Test stations map."""
     now = datetime.now(tz=UTC)
@@ -168,7 +168,7 @@ async def test_stations_map(client: AsyncClient) -> None:
     assert response.status_code == 200
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_stations_errors(client: AsyncClient) -> None:
     """Test stations map errors."""
     response = await client.get("/stations/map/abc?country=si")
