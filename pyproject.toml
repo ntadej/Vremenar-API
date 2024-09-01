@@ -38,7 +38,7 @@ dev = [
   "pre-commit",
   "pre-commit-hooks == 4.6.*",
   "pytest >= 8.0",
-  "pytest-asyncio == 0.21.*",
+  "pytest-asyncio ==0.24.*",
   "pytest-cov",
   "requests",
   "ruff == 0.6.3",

@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:43ee1dbf8665d44829cf17145a86d9bcdc2c60c333f403e93f1eb594ae474eff"
+content_hash = "sha256:e27015619b4ec63b672a8fadefe354260e5b83c18950378de90caef5c4c01264"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -812,16 +812,15 @@ files = [
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.21.2"
-requires_python = ">=3.7"
+version = "0.24.0"
+requires_python = ">=3.8"
 summary = "Pytest support for asyncio"
 dependencies = [
-    "pytest>=7.0.0",
-    "typing-extensions>=3.7.2; python_version < \"3.8\"",
+    "pytest<9,>=8.2",
 ]
 files = [
-    {file = "pytest_asyncio-0.21.2-py3-none-any.whl", hash = "sha256:ab664c88bb7998f711d8039cacd4884da6430886ae8bbd4eded552ed2004f16b"},
-    {file = "pytest_asyncio-0.21.2.tar.gz", hash = "sha256:d67738fc232b94b326b9d060750beb16e0074210b98dd8b58a5239fa2a154f45"},
+    {file = "pytest_asyncio-0.24.0-py3-none-any.whl", hash = "sha256:a811296ed596b69bf0b6f3dc40f83bcaf341b155a269052d82efa2b25ac7037b"},
+    {file = "pytest_asyncio-0.24.0.tar.gz", hash = "sha256:d081d828e576d85f875399194281e92bf8a68d60d72d1a2faf2feddb6c46b276"},
 ]
 
 [[package]]
