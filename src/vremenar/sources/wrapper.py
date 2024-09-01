@@ -11,7 +11,7 @@ from vremenar.models.stations import (
 )
 from vremenar.models.weather import WeatherInfoExtended
 
-from . import arso, dwd, meteoalarm
+from . import arso, dwd, meteoalarm, rainviewer
 
 
 def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
@@ -20,6 +20,8 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
         return arso.get_supported_map_types()
     if country == CountryID.Germany:
         return dwd.get_supported_map_types()
+    if country == CountryID.Global:
+        return rainviewer.get_supported_map_types()
 
     raise UnsupportedCountryException()  # pragma: no cover
 
@@ -33,6 +35,8 @@ async def get_map_layers(
         return await arso.get_map_layers(map_type)
     if country == CountryID.Germany:
         return await dwd.get_map_layers(map_type)
+    if country == CountryID.Global:
+        return await rainviewer.get_map_layers(map_type)
 
     raise UnsupportedCountryException()  # pragma: no cover
 
@@ -43,6 +47,8 @@ def get_all_map_legends(country: CountryID) -> list[MapLegend]:
         return arso.get_all_map_legends()
     if country == CountryID.Germany:
         return dwd.get_all_map_legends()
+    if country == CountryID.Global:
+        return rainviewer.get_all_map_legends()
 
     raise UnsupportedCountryException()  # pragma: no cover
 
@@ -53,6 +59,8 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
         return arso.get_map_legend(map_type)
     if country == CountryID.Germany:
         return dwd.get_map_legend(map_type)
+    if country == CountryID.Global:
+        return rainviewer.get_map_legend(map_type)
 
     raise UnsupportedCountryException()  # pragma: no cover
 
@@ -73,6 +81,8 @@ async def list_stations(country: CountryID) -> list[StationInfoExtended]:
         return await arso.list_stations()
     if country == CountryID.Germany:
         return await dwd.list_stations()
+    if country == CountryID.Global:
+        return []
 
     raise UnsupportedCountryException()  # pragma: no cover
 

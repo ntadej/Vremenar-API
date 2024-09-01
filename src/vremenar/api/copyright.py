@@ -43,4 +43,8 @@ async def copyright() -> dict[str, CopyrightInfo]:  # noqa: A001
             provider="Deutscher Wetterdienst",
             url="https://dwd.de",
         ),
+        CountryID.Global.value: CopyrightInfo(
+            provider="RainViewer",
+            url="https://www.rainviewer.com",
+        ),
     }

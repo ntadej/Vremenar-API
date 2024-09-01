@@ -15,6 +15,9 @@ async def test_stations_list(client: AsyncClient) -> None:
     response = await client.get("/stations/list?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/stations/list?country=global")
+    assert response.status_code == 200
+
 
 @pytest.mark.asyncio
 async def test_stations_details(client: AsyncClient) -> None:
