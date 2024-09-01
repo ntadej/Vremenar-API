@@ -10,10 +10,27 @@ from vremenar.models.maps import (
     MapLayer,
     MapLegend,
     MapLegendItem,
+    MapRenderingType,
     MapType,
+    SupportedMapType,
 )
 
 API_BASEURL = "https://api.rainviewer.com/public"
+
+
+def get_supported_map_types() -> list[SupportedMapType]:
+    """Get RainViewer supported map types."""
+    return [
+        SupportedMapType(
+            map_type=MapType.PrecipitationGlobal,
+            rendering=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
+        SupportedMapType(
+            map_type=MapType.CloudCoverageInfraredGlobal,
+            rendering=MapRenderingType.Tiles,
+        ),
+    ]
 
 
 async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
@@ -79,6 +96,17 @@ async def get_global_map_cloud_infrared() -> tuple[list[MapLayer], list[float]]:
     return layers, []
 
 
+async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
+    """Get RainViewer map layers."""
+    if map_type == MapType.PrecipitationGlobal:
+        return await get_global_map_precipitation()
+
+    if map_type == MapType.CloudCoverageInfraredGlobal:
+        return await get_global_map_cloud_infrared()
+
+    raise UnsupportedMapTypeException()
+
+
 def get_map_legend(map_type: MapType) -> MapLegend:
     """Get RainView map legend."""
     if map_type == MapType.PrecipitationGlobal:
@@ -107,3 +135,9 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         return MapLegend(map_type=map_type, items=items)
 
     raise UnsupportedMapTypeException()  # pragma: no cover
+
+
+def get_all_map_legends() -> list[MapLegend]:
+    """Get all RainViewer map legends."""
+    supported = get_supported_map_types()
+    return [get_map_legend(t.map_type) for t in supported if t.has_legend]

@@ -10,6 +10,7 @@ class CountryID(str, Enum):
 
     Slovenia = "si"
     Germany = "de"
+    Global = "global"
 
     def label(self) -> str:
         """Get country label."""
@@ -17,6 +18,8 @@ class CountryID(str, Enum):
             return "Slovenia"
         if self is CountryID.Germany:
             return "Germany"
+        if self is CountryID.Global:
+            return "Global"
         raise RuntimeError()  # pragma: no cover
 
     def full_name(self) -> str:
@@ -25,6 +28,8 @@ class CountryID(str, Enum):
             return "slovenia"
         if self is CountryID.Germany:
             return "germany"
+        if self is CountryID.Global:
+            return "global"
         raise RuntimeError()  # pragma: no cover
 
 

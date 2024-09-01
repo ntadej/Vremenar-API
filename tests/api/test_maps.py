@@ -13,6 +13,9 @@ async def test_maps_types(client: AsyncClient) -> None:
     response = await client.get("/maps/types?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/maps/types?country=global")
+    assert response.status_code == 200
+
 
 @pytest.mark.asyncio
 async def test_maps_list_condition(client: AsyncClient) -> None:
@@ -22,6 +25,9 @@ async def test_maps_list_condition(client: AsyncClient) -> None:
 
     response = await client.get("/maps/list/condition?country=de")
     assert response.status_code == 200
+
+    response = await client.get("/maps/list/condition?country=global")
+    assert response.status_code == 404
 
 
 @pytest.mark.asyncio
@@ -33,6 +39,9 @@ async def test_maps_list_precipitation(client: AsyncClient) -> None:
     response = await client.get("/maps/list/precipitation?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/maps/list/precipitation?country=global")
+    assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_maps_list_precipitation_global(client: AsyncClient) -> None:
@@ -41,6 +50,9 @@ async def test_maps_list_precipitation_global(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.get("/maps/list/precipitation_global?country=de")
+    assert response.status_code == 200
+
+    response = await client.get("/maps/list/precipitation_global?country=global")
     assert response.status_code == 200
 
 
@@ -53,6 +65,9 @@ async def test_maps_list_cloud(client: AsyncClient) -> None:
     response = await client.get("/maps/list/cloud?country=de")
     assert response.status_code == 404
 
+    response = await client.get("/maps/list/cloud?country=global")
+    assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_maps_list_cloud_global(client: AsyncClient) -> None:
@@ -61,6 +76,9 @@ async def test_maps_list_cloud_global(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.get("/maps/list/cloud_infrared_global?country=de")
+    assert response.status_code == 200
+
+    response = await client.get("/maps/list/cloud_infrared_global?country=global")
     assert response.status_code == 200
 
 
@@ -73,6 +91,9 @@ async def test_maps_list_wind(client: AsyncClient) -> None:
     response = await client.get("/maps/list/wind?country=de")
     assert response.status_code == 404
 
+    response = await client.get("/maps/list/wind?country=global")
+    assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_maps_list_temperature(client: AsyncClient) -> None:
@@ -83,6 +104,9 @@ async def test_maps_list_temperature(client: AsyncClient) -> None:
     response = await client.get("/maps/list/temperature?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/maps/list/temperature?country=global")
+    assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_maps_list_hail(client: AsyncClient) -> None:
@@ -91,6 +115,9 @@ async def test_maps_list_hail(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.get("/maps/list/hail?country=de")
+    assert response.status_code == 404
+
+    response = await client.get("/maps/list/hail?country=global")
     assert response.status_code == 404
 
 
@@ -103,6 +130,9 @@ async def test_maps_list_uv_index_max(client: AsyncClient) -> None:
     response = await client.get("/maps/list/uv_index_max?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/maps/list/uv_index_max?country=global")
+    assert response.status_code == 404
+
 
 @pytest.mark.asyncio
 async def test_maps_list_uv_dose(client: AsyncClient) -> None:
@@ -112,6 +142,9 @@ async def test_maps_list_uv_dose(client: AsyncClient) -> None:
 
     response = await client.get("/maps/list/uv_dose?country=de")
     assert response.status_code == 200
+
+    response = await client.get("/maps/list/uv_dose?country=global")
+    assert response.status_code == 404
 
 
 @pytest.mark.asyncio
@@ -153,6 +186,9 @@ async def test_maps_all_legends(client: AsyncClient) -> None:
     response = await client.get("/maps/legend?country=de")
     assert response.status_code == 200
 
+    response = await client.get("/maps/legend?country=global")
+    assert response.status_code == 200
+
 
 @pytest.mark.asyncio
 async def test_maps_legends(client: AsyncClient) -> None:
@@ -171,6 +207,9 @@ async def test_maps_legends(client: AsyncClient) -> None:
     assert response.status_code == 200
 
     response = await client.get("/maps/legend/precipitation_global?country=de")
+    assert response.status_code == 200
+
+    response = await client.get("/maps/legend/precipitation_global?country=global")
     assert response.status_code == 200
 
     response = await client.get("/maps/legend/wind?country=si")
