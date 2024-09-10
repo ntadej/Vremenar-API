@@ -32,19 +32,33 @@ class CopyrightInfo(BaseModel):
     tags=["copyright"],
     response_description="Get data copyright",
 )
-async def copyright() -> dict[str, CopyrightInfo]:  # noqa: A001
+async def copyright() -> dict[str, list[CopyrightInfo]]:  # noqa: A001
     """Get data copyright."""
     return {
-        CountryID.Slovenia.value: CopyrightInfo(
-            provider="Slovenian Environment Agency",
-            url="https://meteo.arso.gov.si",
-        ),
-        CountryID.Germany.value: CopyrightInfo(
-            provider="Deutscher Wetterdienst",
-            url="https://dwd.de",
-        ),
-        CountryID.Global.value: CopyrightInfo(
-            provider="RainViewer",
-            url="https://www.rainviewer.com",
-        ),
+        CountryID.Slovenia.value: [
+            CopyrightInfo(
+                provider="Slovenian Environment Agency",
+                url="https://meteo.arso.gov.si",
+            ),
+            CopyrightInfo(
+                provider="RainViewer",
+                url="https://www.rainviewer.com",
+            ),
+        ],
+        CountryID.Germany.value: [
+            CopyrightInfo(
+                provider="Deutscher Wetterdienst",
+                url="https://dwd.de",
+            ),
+            CopyrightInfo(
+                provider="RainViewer",
+                url="https://www.rainviewer.com",
+            ),
+        ],
+        CountryID.Global.value: [
+            CopyrightInfo(
+                provider="RainViewer",
+                url="https://www.rainviewer.com",
+            ),
+        ],
     }
