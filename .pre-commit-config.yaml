@@ -11,11 +11,12 @@ repos:
           - httpx
           - pydantic
           - pytest
+          - pytest_asyncio
           - types-python-dateutil
           - types-redis
           - uvicorn
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.3
+    rev: v0.6.4
     hooks:
       - id: ruff
       - id: ruff-format
