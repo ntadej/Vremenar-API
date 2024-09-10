@@ -6,7 +6,7 @@ build-backend = "pdm.backend"
 [project]
 name = "vremenar"
 description = ""
-version = "0.4.0"
+version = "0.5.0"
 license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Tadej Novak", email = "tadej@tano.si" }]
 requires-python = ">=3.11"
