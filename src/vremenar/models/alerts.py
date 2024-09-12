@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from enum import Enum
 from typing import Any
 
@@ -155,11 +156,17 @@ class AlertInfo(BaseModel):
         **kwargs: dict[str, Any] | list[AlertArea],
     ) -> AlertInfo:
         """Initialise from a dictionary."""
-        # translatable values
-        kwargs.setdefault(
-            "event",
-            localised["event"][0].upper() + localised["event"][1:],
+        # special (temporary) event handling
+        event_base = localised["event"][0].upper() + localised["event"][1:]
+        event_processed: Any = re.sub(r"\s-\s[a-z]+\sogroženost", "", event_base)
+        event_processed = re.sub(
+            r"(Minor|Moderate|Severe|Extreme)\s(.*)\sWarning",
+            r"\2",
+            event_processed,
         )
+
+        # translatable values
+        kwargs.setdefault("event", event_processed)
         kwargs.setdefault("headline", localised["headline"])
 
         if localised.get("description"):
