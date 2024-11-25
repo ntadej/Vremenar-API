@@ -1,15 +1,14 @@
-
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "vremenar"
 description = ""
-version = "0.5.0"
+dynamic = ["version"]
 license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Tadej Novak", email = "tadej@tano.si" }]
-requires-python = ">=3.11"
+requires-python = ">= 3.11"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Web Environment",
@@ -29,7 +28,7 @@ dependencies = [
   "uvicorn",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "coverage[toml]",
   "fastapi-profiler == 1.4.*",
@@ -46,17 +45,17 @@ dev = [
   "types-redis",
 ]
 
-[tool.pdm.scripts]
-start = "gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker"
-dev = "uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug"
-fixtures = "python tests/fixtures/setup_fixtures.py"
-test = "pytest -W error"
+[project.scripts]
+vremenar = "vremenar.cli:main"
+
+[tool.hatch.version]
+path = "src/vremenar/__init__.py"
 
 [tool.coverage.run]
 branch = true
 concurrency = ["thread", "gevent"]
 source = ["src/vremenar"]
-omit = ["src/vremenar/worker.py"]
+omit = ["src/vremenar/cli.py", "src/vremenar/worker.py"]
 
 [tool.coverage.report]
 exclude_lines = [

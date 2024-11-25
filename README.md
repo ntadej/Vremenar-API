@@ -13,13 +13,19 @@ and [DWD](https://dwd.de/EN/) weather data.
 
 Vremenar API is python-based, with Python 3.11 as the minimum supported version.
 
-### Python PDM
+### uv
 
-This project uses [PDM](https://pdm.fming.dev) to track dependencies.
-For basic setup run
+This project uses [uv](https://github.com/astral-sh/uv) to track dependencies.
+For basic development setup run
 
 ```shell
-pdm sync
+uv sync
+```
+
+For production setup run
+
+```shell
+uv sync --no-dev
 ```
 
 ### Production running
@@ -28,7 +34,7 @@ Gunicorn is recommended and tested in production workflows.
 An example command is:
 
 ```shell
-pdm run start
+gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker
 ```
 
 It is recommended to run the API behind a caching server such
@@ -36,10 +42,10 @@ as `varnish` as none of the requests are cached by default.
 
 ### Development running
 
-Uvicorn can be used directly for development:
+A simple development CLI using uvicorn can be used directly for development:
 
 ```shell
-pdm run dev
+uv run vremenar
 ```
 
 ## Contributing
@@ -60,7 +66,7 @@ pre-commit run --all
 
 ## Copyright info
 
-Copyright (C) 2020-2023 Tadej Novak
+Copyright (C) 2020-2024 Tadej Novak
 
 This project may be used under the terms of the
 GNU Affero General Public License version 3.0 as published by the

@@ -1,14 +1,17 @@
-.coverage
-.mypy_cache
-.pdm-python
-.pytest_cache
-.update
-.venv
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
 *.egg-info
-*.code-workspace
-__pycache__
-/*.sh
+
+# Virtual environments
+.venv
+
+# Development tools
+.mypy_cache
+.coverage
 /coverage
 /coverage.xml
-/playground
 /version.json
