@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:5cc84e3074277257c4f85a607d050a9b9c3e23f06aae4d12de5e039c18d56933"
+content_hash = "sha256:47508c62b2a9d25025e50b40f699c501573819c60c8a6330932c07e70cee78a4"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -918,32 +918,30 @@ files = [
 
 [[package]]
 name = "redis"
-version = "5.0.8"
-requires_python = ">=3.7"
+version = "5.2.0"
+requires_python = ">=3.8"
 summary = "Python client for Redis database and key-value store"
 dependencies = [
     "async-timeout>=4.0.3; python_full_version < \"3.11.3\"",
-    "importlib-metadata>=1.0; python_version < \"3.8\"",
-    "typing-extensions; python_version < \"3.8\"",
 ]
 files = [
-    {file = "redis-5.0.8-py3-none-any.whl", hash = "sha256:56134ee08ea909106090934adc36f65c9bcbbaecea5b21ba704ba6fb561f8eb4"},
-    {file = "redis-5.0.8.tar.gz", hash = "sha256:0c5b10d387568dfe0698c6fad6615750c24170e548ca2deac10c649d463e9870"},
+    {file = "redis-5.2.0-py3-none-any.whl", hash = "sha256:ae174f2bb3b1bf2b09d54bf3e51fbc1469cf6c10aa03e21141f51969801a7897"},
+    {file = "redis-5.2.0.tar.gz", hash = "sha256:0b1087665a771b1ff2e003aa5bdd354f15a70c9e25d5a7dbf9c722c16528a7b0"},
 ]
 
 [[package]]
 name = "redis"
-version = "5.0.8"
+version = "5.2.0"
 extras = ["hiredis"]
-requires_python = ">=3.7"
+requires_python = ">=3.8"
 summary = "Python client for Redis database and key-value store"
 dependencies = [
-    "hiredis>1.0.0",
-    "redis==5.0.8",
+    "hiredis>=3.0.0",
+    "redis==5.2.0",
 ]
 files = [
-    {file = "redis-5.0.8-py3-none-any.whl", hash = "sha256:56134ee08ea909106090934adc36f65c9bcbbaecea5b21ba704ba6fb561f8eb4"},
-    {file = "redis-5.0.8.tar.gz", hash = "sha256:0c5b10d387568dfe0698c6fad6615750c24170e548ca2deac10c649d463e9870"},
+    {file = "redis-5.2.0-py3-none-any.whl", hash = "sha256:ae174f2bb3b1bf2b09d54bf3e51fbc1469cf6c10aa03e21141f51969801a7897"},
+    {file = "redis-5.2.0.tar.gz", hash = "sha256:0b1087665a771b1ff2e003aa5bdd354f15a70c9e25d5a7dbf9c722c16528a7b0"},
 ]
 
 [[package]]
