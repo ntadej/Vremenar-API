@@ -67,7 +67,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy-staging:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: test
     if: github.ref == 'refs/heads/main'
     environment: Staging
@@ -78,7 +78,7 @@ jobs:
           echo "Deploying to staging..."
 
   deploy-production:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: test
     if: github.ref == 'refs/heads/deploy'
     environment: Production
