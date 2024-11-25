@@ -20,7 +20,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "fastapi == 0.114.*",
+  "fastapi == 0.115.*",
   "redis[hiredis] == 5.0.*",
   "httpx == 0.27.*",
   "astral == 3.2.*",
@@ -34,14 +34,14 @@ dev = [
   "coverage[toml]",
   "fastapi-profiler == 1.4.*",
   "gevent",
-  "mypy == 1.11.2",
+  "mypy == 1.13.0",
   "pre-commit",
   "pre-commit-hooks == 4.6.*",
   "pytest >= 8.0",
   "pytest-asyncio == 0.24.*",
   "pytest-cov",
   "requests",
-  "ruff == 0.6.4",
+  "ruff == 0.8.0",
   "types-python-dateutil",
   "types-redis",
 ]
@@ -87,6 +87,8 @@ select = [
   "YTT",   # flake8-2020
   "ANN",   # flake8-annotations
   "ASYNC", # flake8-async
+  "S",     # flakey-bandit
+  "BLE",   # flake8-blind-except
   "FBT",   # flake8-boolean-trap
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
@@ -97,6 +99,8 @@ select = [
   "EXE",   # flake8-executable
   "FA",    # flake8-future-annotations
   "ISC",   # flake8-implicit-str-concat
+  "ICN",   # flake8-import-conventions
+  "LOG",   # flake8-logging
   "G",     # flake8-logging-format
   "PIE",   # flake8-pie
   "T20",   # flake8-print
@@ -106,24 +110,26 @@ select = [
   "SLF",   # flake8-self
   "SIM",   # flake8-simplify
   "TID",   # flake8-tidy-imports
-  "TCH",   # flake8-type-checking
+  "TC",    # flake8-type-checking
   "INT",   # flake8-gettext
   "ARG",   # flake8-unused-arguments
   "PTH",   # flake8-use-pathlib
   "PL",    # pylint
   "TRY",   # tryceratops
   "FLY",   # flynt
+  "FAST",  # fastapi
   "PERF",  # perflint
-  "RUF",   # ruff
+  "FURB",  # refurb
+  # "DOC",   # pydoclint
+  "RUF", # ruff
 ]
 ignore = [
-  "ANN101",  # missing-type-self (deprecated)
-  "ANN102",  # missing-type-class (deprecated)
   "PLR2004", # magic-value-comparison (not wanted)
   "D203",    # one-blank-line-before-class (conflicting with no-blank-line-before-class)
   "D213",    # multi-line-summary-second-line (conflicting with multi-line-summary-first-line)
   "FBT001",  # boolean-positional-arg-in-function-definition (not wanted)
   "FBT002",  # boolean-default-value-in-function-definition (not wanted)
+  "S101",    # assert (TODO)
 ]
 
 [tool.mypy]

@@ -1,5 +1,7 @@
 """Weather alerts API."""
 
+from typing import Annotated
+
 from fastapi import APIRouter, Query
 
 from vremenar.definitions import CountryID, LanguageID
@@ -33,8 +35,8 @@ async def areas_list(country: CountryID) -> list[AlertAreaWithPolygon]:
 async def alerts_list(
     country: CountryID,
     language: LanguageID = LanguageID.English,
-    station: list[str] | None = Query(None),  # noqa: B008
-    area: list[str] | None = Query(None),  # noqa: B008
+    station: Annotated[list[str] | None, Query()] = None,
+    area: Annotated[list[str] | None, Query()] = None,
 ) -> list[AlertInfo]:
     """List weather alerts for the criteria."""
     return await list_alerts_for_critera(country, language, station, area)
