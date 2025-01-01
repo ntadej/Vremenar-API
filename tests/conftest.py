@@ -1,11 +1,15 @@
 """Tests configuration."""
 
-from collections.abc import AsyncGenerator
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 from pytest_asyncio import is_async_test
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
 
 
 def pytest_collection_modifyitems(items: list[Any]) -> None:
@@ -17,7 +21,7 @@ def pytest_collection_modifyitems(items: list[Any]) -> None:
 
 
 @pytest.fixture(scope="module")
-async def client() -> AsyncGenerator[AsyncClient, None]:
+async def client() -> AsyncGenerator[AsyncClient]:
     """Async testing client for unit tests."""
     from vremenar.main import app
 

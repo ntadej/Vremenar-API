@@ -1,16 +1,22 @@
 """ARSO weather stations."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from vremenar.database.stations import get_stations, search_stations
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException
-from vremenar.models.stations import (
-    StationInfo,
-    StationInfoExtended,
-    StationSearchModel,
-)
 from vremenar.models.weather import WeatherInfoExtended
 
 from .utils import get_weather_records, parse_record
+
+if TYPE_CHECKING:
+    from vremenar.models.stations import (
+        StationInfo,
+        StationInfoExtended,
+        StationSearchModel,
+    )
 
 
 async def list_stations() -> list[StationInfoExtended]:

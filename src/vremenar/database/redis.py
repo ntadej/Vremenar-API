@@ -1,5 +1,7 @@
 """Redis utilities."""
 
+from __future__ import annotations
+
 from os import getenv
 
 from redis.asyncio import Redis, from_url
@@ -13,7 +15,7 @@ database: int = {
     "test": 2,
 }.get(db_env, 0)
 
-redis: "Redis[str]" = from_url(
+redis: Redis[str] = from_url(
     f"redis://localhost/{database}",
     decode_responses=True,
 )

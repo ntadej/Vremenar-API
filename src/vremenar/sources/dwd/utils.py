@@ -1,15 +1,20 @@
 """DWD weather utils."""
 
-from datetime import datetime
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
 from vremenar.definitions import CountryID, ObservationType
-from vremenar.models.stations import StationBase, StationInfo, StationInfoExtended
 from vremenar.models.weather import WeatherCondition
 from vremenar.units import kelvin_to_celsius
 from vremenar.utils import chunker, day_or_night, parse_timestamp
+
+if TYPE_CHECKING:
+    from datetime import datetime
+
+    from vremenar.models.stations import StationBase, StationInfo, StationInfoExtended
 
 
 async def get_mosmix_ids_for_timestamp(timestamp: str) -> set[str]:
@@ -22,9 +27,8 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
     """Get weather records from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection:  # pragma: no branch
-        # TODO: figure out why this is not covered
-        for batch in chunker(list(ids), 100):  # pragma: no cover
+    async with redis.client() as connection:
+        for batch in chunker(list(ids), 100):
             async with connection.pipeline(transaction=False) as pipeline:
                 for record_id in batch:
                     pipeline.hgetall(record_id)

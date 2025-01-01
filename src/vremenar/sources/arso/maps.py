@@ -1,5 +1,7 @@
 """ARSO weather maps."""
 
+from __future__ import annotations
+
 from vremenar.definitions import ObservationType
 from vremenar.exceptions import UnrecognisedMapIDException, UnsupportedMapTypeException
 from vremenar.models.maps import (

@@ -1,5 +1,7 @@
 """Map models."""
 
+from __future__ import annotations
+
 from enum import Enum
 
 from pydantic import BaseModel, ConfigDict
@@ -88,7 +90,7 @@ class MapLayersList(BaseModel):
         map_type: MapType,
         bbox: list[float],
         layers: list[MapLayer],
-    ) -> "MapLayersList":
+    ) -> MapLayersList:
         """Initialise map response model."""
         rendering: MapRenderingType = (
             MapRenderingType.Image if bbox else MapRenderingType.Tiles

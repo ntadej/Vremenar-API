@@ -1,5 +1,7 @@
 """Simple development CLI."""
 
+from __future__ import annotations
+
 from argparse import ArgumentParser
 
 import uvicorn
@@ -11,7 +13,7 @@ def main() -> None:
         prog="Vremenar",
         description="Simple development CLI for Vremenar API.",
     )
-    args = parser.parse_args()  # noqa: F841
+    parser.parse_args()
 
     # uvicorn vremenar.main:app --reload --reload-dir src/vremenar --log-level debug
     uvicorn.run(

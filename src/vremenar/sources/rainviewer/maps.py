@@ -1,5 +1,7 @@
 """RainViewer weather maps."""
 
+from __future__ import annotations
+
 from typing import Any
 
 from httpx import AsyncClient

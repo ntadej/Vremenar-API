@@ -1,14 +1,18 @@
 """Helper utilities."""
 
-from collections.abc import Iterable
+from __future__ import annotations
+
 from datetime import UTC, date, datetime
 from functools import lru_cache
 from logging import Logger, getLogger
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from astral import Observer, sun
 
-from .models.common import Coordinate
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from .models.common import Coordinate
 
 logger: Logger = getLogger("uvicorn.error")
 

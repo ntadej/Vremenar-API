@@ -1,14 +1,18 @@
 """ARSO weather utils."""
 
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
 from vremenar.definitions import CountryID, ObservationType
-from vremenar.models.maps import MapType
-from vremenar.models.stations import StationBase, StationInfoExtended
 from vremenar.models.weather import WeatherCondition
 from vremenar.utils import chunker
+
+if TYPE_CHECKING:
+    from vremenar.models.maps import MapType
+    from vremenar.models.stations import StationBase, StationInfoExtended
 
 
 async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
@@ -21,9 +25,8 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
     """Get ARSO weather records from redis."""
     result: list[dict[str, Any]] = []
 
-    async with redis.client() as connection:  # pragma: no branch
-        # TODO: figure out why this is not covered
-        for batch in chunker(list(ids), 100):  # pragma: no cover
+    async with redis.client() as connection:
+        for batch in chunker(list(ids), 100):
             async with connection.pipeline(transaction=False) as pipeline:
                 for record_id in batch:
                     pipeline.hgetall(record_id)
@@ -51,12 +54,9 @@ async def get_map_data(ids: list[str]) -> list[dict[str, Any]]:
 
     async with (
         redis.client() as connection,
-        connection.pipeline(  # pragma: no branch
-            transaction=False,
-        ) as pipeline,
+        connection.pipeline(transaction=False) as pipeline,
     ):
-        # TODO: figure out why this is not covered
-        for record_id in ids:  # pragma: no cover
+        for record_id in ids:
             pipeline.hgetall(record_id)
         response = await pipeline.execute()
     result.extend(response)

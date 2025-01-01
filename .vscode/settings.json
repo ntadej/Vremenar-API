@@ -16,6 +16,7 @@
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "sonarlint.connectedMode.project": {
+        "connectionId": "ntadej",
         "projectKey": "ntadej_Vremenar-API"
     }
 }

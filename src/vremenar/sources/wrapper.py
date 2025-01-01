@@ -1,17 +1,23 @@
 """Weather sources wrapper."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from vremenar.definitions import CountryID, LanguageID
 from vremenar.exceptions import UnsupportedCountryException
-from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
-from vremenar.models.maps import MapLayer, MapLegend, MapType, SupportedMapType
-from vremenar.models.stations import (
-    StationInfo,
-    StationInfoExtended,
-    StationSearchModel,
-)
-from vremenar.models.weather import WeatherInfoExtended
 
 from . import arso, dwd, meteoalarm, rainviewer
+
+if TYPE_CHECKING:
+    from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
+    from vremenar.models.maps import MapLayer, MapLegend, MapType, SupportedMapType
+    from vremenar.models.stations import (
+        StationInfo,
+        StationInfoExtended,
+        StationSearchModel,
+    )
+    from vremenar.models.weather import WeatherInfoExtended
 
 
 def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
