@@ -149,7 +149,7 @@ ignore_errors = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage"
+addopts = "--cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:skip-covered --cov-report xml --cov-report html:coverage --junitxml=junit.xml -o junit_family=legacy"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 testpaths = ["tests"]
