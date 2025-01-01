@@ -1,11 +1,9 @@
 """Weather models."""
 
-from __future__ import annotations
-
 from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import ObservationType
-from vremenar.models.stations import StationBase, StationInfo  # noqa: TC001
+from vremenar.models.stations import StationBase, StationInfo
 
 
 class WeatherCondition(BaseModel):

@@ -46,10 +46,6 @@ jobs:
           files: ./coverage.xml
           flags: unittests
 
-      - name: Override Coverage Source Path for Sonar
-        if: matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
-        run: sed -i "s/<source>\/home\/runner\/work\/Vremenar-API\/Vremenar-API<\/source>/<source>\/github\/workspace<\/source>/g" coverage.xml
-
       - name: SonarQube Scan
         if: matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
         uses: SonarSource/sonarqube-scan-action@v4
