@@ -52,7 +52,7 @@ jobs:
 
       - name: SonarCloud Scan
         if: matrix.python-version == 3.11 && matrix.os == 'ubuntu-24.04'
-        uses: SonarSource/sonarcloud-github-action@v3
+        uses: SonarSource/sonarcloud-github-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
