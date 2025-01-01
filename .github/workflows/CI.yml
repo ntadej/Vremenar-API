@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-14]
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout
@@ -15,37 +15,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Setup PDM
-        uses: pdm-project/setup-pdm@v4
-
-      - name: Set up cache
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: ${{ runner.os }}-venv-${{ matrix.python-version }}-${{ hashFiles('**/pdm.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-venv-${{ matrix.python-version }}-
-
       - name: Start Redis
-        uses: shogo82148/actions-setup-redis@v1.35.1
+        uses: shogo82148/actions-setup-redis@v1
         with:
           redis-port: 6379
           redis-version: "6.x"
           auto-start: true
 
-      - name: Setup server
-        run: |
-          pdm sync -G dev
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Set up dependencies
+        run: uv sync -p ${{ matrix.python-version }}
 
       - name: Run tests
         run: |
-          pdm run fixtures
-          pdm run test
+          uv run tests/fixtures/setup_fixtures.py
+          uv run pytest -W error
 
       - name: Report coverage with Codecov
         if: github.event_name == 'push' && matrix.python-version == 3.11 && matrix.os == 'ubuntu-22.04'
@@ -61,7 +53,7 @@ jobs:
 
       - name: SonarCloud Scan
         if: matrix.python-version == 3.11 && matrix.os == 'ubuntu-22.04'
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
