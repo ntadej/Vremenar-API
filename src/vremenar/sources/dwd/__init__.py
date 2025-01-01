@@ -9,7 +9,12 @@ from .maps import (
 )
 from .stations import current_station_condition, find_station, list_stations
 
+DWD_NAME = "Deutscher Wetterdienst"
+DWD_URL = "https://dwd.de"
+
 __all__ = [
+    "DWD_NAME",
+    "DWD_URL",
     "current_station_condition",
     "find_station",
     "get_all_map_legends",

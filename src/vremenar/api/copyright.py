@@ -4,6 +4,9 @@ from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import CountryID
+from vremenar.sources.arso import ARSO_NAME, ARSO_URL
+from vremenar.sources.dwd import DWD_NAME, DWD_URL
+from vremenar.sources.rainviewer import RAINVIEWER_NAME, RAINVIEWER_URL
 
 router = APIRouter()
 
@@ -19,8 +22,8 @@ class CopyrightInfo(BaseModel):
         json_schema_extra={
             "examples": [
                 {
-                    "provider": "Slovenian Environment Agency",
-                    "url": "https://meteo.arso.gov.si",
+                    "provider": ARSO_NAME,
+                    "url": ARSO_URL,
                 },
             ],
         },
@@ -36,29 +39,14 @@ async def copyright() -> dict[str, list[CopyrightInfo]]:  # noqa: A001
     """Get data copyright."""
     return {
         CountryID.Slovenia.value: [
-            CopyrightInfo(
-                provider="Slovenian Environment Agency",
-                url="https://meteo.arso.gov.si",
-            ),
-            CopyrightInfo(
-                provider="RainViewer",
-                url="https://www.rainviewer.com",
-            ),
+            CopyrightInfo(provider=ARSO_NAME, url=ARSO_URL),
+            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
         CountryID.Germany.value: [
-            CopyrightInfo(
-                provider="Deutscher Wetterdienst",
-                url="https://dwd.de",
-            ),
-            CopyrightInfo(
-                provider="RainViewer",
-                url="https://www.rainviewer.com",
-            ),
+            CopyrightInfo(provider=DWD_NAME, url=DWD_URL),
+            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
         CountryID.Global.value: [
-            CopyrightInfo(
-                provider="RainViewer",
-                url="https://www.rainviewer.com",
-            ),
+            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
     }
