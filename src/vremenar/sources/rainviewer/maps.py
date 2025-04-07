@@ -52,7 +52,7 @@ async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Historical,
         )
         for item in radar["past"]
@@ -62,7 +62,7 @@ async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Forecast,
         )
         for item in radar["nowcast"]
@@ -88,7 +88,7 @@ async def get_global_map_cloud_infrared() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Historical,
         )
         for item in satellite["infrared"]
