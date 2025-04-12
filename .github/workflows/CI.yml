@@ -52,7 +52,7 @@ jobs:
 
       - name: SonarQube Scan
         if: matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
