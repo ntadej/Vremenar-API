@@ -52,7 +52,7 @@ async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Historical,
         )
         for item in radar["past"]
@@ -62,7 +62,7 @@ async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Forecast,
         )
         for item in radar["nowcast"]
@@ -88,7 +88,7 @@ async def get_global_map_cloud_infrared() -> tuple[list[MapLayer], list[float]]:
     layers += [
         MapLayer(
             url=f"{host}{item['path']}{suffix}",
-            timestamp=f'{item["time"]}000',
+            timestamp=f"{item['time']}000",
             observation=ObservationType.Historical,
         )
         for item in satellite["infrared"]
@@ -106,7 +106,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     if map_type == MapType.CloudCoverageInfraredGlobal:
         return await get_global_map_cloud_infrared()
 
-    raise UnsupportedMapTypeException()
+    raise UnsupportedMapTypeException
 
 
 def get_map_legend(map_type: MapType) -> MapLegend:
@@ -136,7 +136,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:
         items.append(MapLegendItem(value="dBZ", color="transparent", placeholder=True))
         return MapLegend(map_type=map_type, items=items)
 
-    raise UnsupportedMapTypeException()  # pragma: no cover
+    raise UnsupportedMapTypeException  # pragma: no cover
 
 
 def get_all_map_legends() -> list[MapLegend]:

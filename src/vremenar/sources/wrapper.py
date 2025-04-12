@@ -29,7 +29,7 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
     if country == CountryID.Global:
         return rainviewer.get_supported_map_types()
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def get_map_layers(
@@ -44,7 +44,7 @@ async def get_map_layers(
     if country == CountryID.Global:
         return await rainviewer.get_map_layers(map_type)
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 def get_all_map_legends(country: CountryID) -> list[MapLegend]:
@@ -56,7 +56,7 @@ def get_all_map_legends(country: CountryID) -> list[MapLegend]:
     if country == CountryID.Global:
         return rainviewer.get_all_map_legends()
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
@@ -68,7 +68,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     if country == CountryID.Global:
         return rainviewer.get_map_legend(map_type)
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoExtended]:
@@ -78,7 +78,7 @@ async def get_weather_map(country: CountryID, map_id: str) -> list[WeatherInfoEx
     if country == CountryID.Germany:
         return await dwd.get_weather_map(map_id)
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def list_stations(country: CountryID) -> list[StationInfoExtended]:
@@ -90,7 +90,7 @@ async def list_stations(country: CountryID) -> list[StationInfoExtended]:
     if country == CountryID.Global:
         return []
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def find_station(
@@ -104,7 +104,7 @@ async def find_station(
     if country == CountryID.Germany:
         return await dwd.find_station(query, include_forecast_only)
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def current_station_condition(
@@ -117,7 +117,7 @@ async def current_station_condition(
     if country == CountryID.Germany:
         return await dwd.current_station_condition(station_id)
 
-    raise UnsupportedCountryException()  # pragma: no cover
+    raise UnsupportedCountryException  # pragma: no cover
 
 
 async def list_alerts(country: CountryID, language: LanguageID) -> list[AlertInfo]:

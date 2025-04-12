@@ -1,4 +1,4 @@
-# type: ignore
+# mypy: disable-error-code="arg-type,import-untyped"
 """Setup test database."""
 
 from __future__ import annotations
@@ -84,7 +84,7 @@ async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) ->
         for area in areas:
             async with connection.pipeline() as pipeline:
                 pipeline.hset(
-                    f'alerts_area:{country.value}:{area["code"]}:info',
+                    f"alerts_area:{country.value}:{area['code']}:info",
                     mapping=area,
                 )
                 pipeline.sadd(f"alerts_area:{country.value}", area["code"])

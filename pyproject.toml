@@ -33,14 +33,14 @@ dependencies = [
 dev = [
   "coverage[toml]",
   "gevent",
-  "mypy == 1.14.1",
+  "mypy == 1.15.0",
   "pre-commit",
   "pre-commit-hooks == 5.0.*",
   "pytest >= 8.0",
-  "pytest-asyncio == 0.25.*",
+  "pytest-asyncio == 0.26.*",
   "pytest-cov",
   "requests",
-  "ruff == 0.8.4",
+  "ruff == 0.11.5",
   "types-python-dateutil",
   "types-redis",
 ]
@@ -76,14 +76,7 @@ line-length = 88
 
 [tool.ruff.lint]
 select = [
-  "F",     # pyflakes
-  "E",     # pycodestyle
-  "W",     # pycodestyle
-  "C90",   # mccabe (complexity)
-  "I",     # isort
-  "N",     # pep8-naming
-  "D",     # pydocstyle
-  "UP",    # pyupgrade
+  "FAST",  # fastapi
   "YTT",   # flake8-2020
   "ANN",   # flake8-annotations
   "ASYNC", # flake8-async
@@ -106,22 +99,30 @@ select = [
   "T20",   # flake8-print
   "PT",    # flake8-pytest-style
   "Q",     # flake8-quotes
+  "RSE",   # flake8-raise
   "RET",   # flake8-return
   "SLF",   # flake8-self
   "SIM",   # flake8-simplify
   "TID",   # flake8-tidy-imports
   "TC",    # flake8-type-checking
-  "INT",   # flake8-gettext
   "ARG",   # flake8-unused-arguments
   "PTH",   # flake8-use-pathlib
-  "PL",    # pylint
-  "TRY",   # tryceratops
   "FLY",   # flynt
-  "FAST",  # fastapi
+  "I",     # isort
+  "C90",   # mccabe (complexity)
+  "N",     # pep8-naming
   "PERF",  # perflint
-  "FURB",  # refurb
+  "E",     # pycodestyle
+  "W",     # pycodestyle
   "DOC",   # pydoclint
+  "D",     # pydocstyle
+  "F",     # pyflakes
+  "PGH",   # pygrep-hooks
+  "PL",    # pylint
+  "UP",    # pyupgrade
+  "FURB",  # refurb
   "RUF",   # ruff
+  "TRY",   # tryceratops
 ]
 ignore = [
   "PLR2004", # magic-value-comparison (not wanted)

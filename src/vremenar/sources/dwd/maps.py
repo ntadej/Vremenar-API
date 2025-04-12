@@ -329,7 +329,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
     if map_type in (MapType.UVIndexMax, MapType.UVDose):
         return await get_map_uv(map_type)
 
-    raise UnsupportedMapTypeException()
+    raise UnsupportedMapTypeException
 
 
 def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
@@ -415,7 +415,7 @@ def get_map_legend(map_type: MapType) -> MapLegend:  # noqa: PLR0915
         )
         return MapLegend(map_type=map_type, items=items)
 
-    raise UnsupportedMapTypeException()
+    raise UnsupportedMapTypeException
 
 
 def get_all_map_legends() -> list[MapLegend]:
@@ -436,7 +436,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
 
     ids: set[str] = await get_mosmix_ids_for_timestamp(timestamp)
     if not ids:
-        raise UnrecognisedMapIDException()
+        raise UnrecognisedMapIDException
 
     records = await get_weather_records(ids)
 

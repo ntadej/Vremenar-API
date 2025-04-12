@@ -20,7 +20,7 @@ class CountryID(str, Enum):
             return "Germany"
         if self is CountryID.Global:
             return "Global"
-        raise RuntimeError()  # pragma: no cover
+        raise RuntimeError  # pragma: no cover
 
     def full_name(self) -> str:
         """Get country full name."""
@@ -30,7 +30,7 @@ class CountryID(str, Enum):
             return "germany"
         if self is CountryID.Global:
             return "global"
-        raise RuntimeError()  # pragma: no cover
+        raise RuntimeError  # pragma: no cover
 
 
 class LanguageID(str, Enum):

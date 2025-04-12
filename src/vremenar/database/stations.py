@@ -63,7 +63,7 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
 
     for station_id, station in stations_raw.items():
         extra_keys: set[str] = set(station.keys()).difference(STATION_BASE_KEYS)
-        metadata = {key: station[key] for key in extra_keys}  # type: ignore
+        metadata = {key: station[key] for key in extra_keys}  # type: ignore[literal-required]
 
         stations[station_id] = StationInfoExtended(
             id=station_id,

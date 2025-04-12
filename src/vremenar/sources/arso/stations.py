@@ -45,7 +45,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     stations = await get_stations(CountryID.Slovenia)
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
-        raise UnknownStationException()
+        raise UnknownStationException
 
     records = await get_weather_records({f"arso:weather:current:{station_id}"})
 
@@ -59,4 +59,4 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
 
         return WeatherInfoExtended(station=station, condition=condition)
 
-    raise UnknownStationException()  # pragma: no cover
+    raise UnknownStationException  # pragma: no cover

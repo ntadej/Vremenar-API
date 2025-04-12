@@ -92,7 +92,7 @@ async def _parse_areas(country: CountryID, areas: list[str] | None = None) -> se
         areas_list = await list_alerts_areas(country)
         for a in areas:
             if a not in areas_list:
-                raise UnknownAlertAreaException()
+                raise UnknownAlertAreaException
             areas_to_query.add(a)
     return areas_to_query
 
@@ -107,10 +107,10 @@ async def _parse_stations(
         stations_list = await get_stations(country)
         for s in stations:
             if s not in stations_list:
-                raise UnknownStationException()
+                raise UnknownStationException
             area = stations_list[s].alerts_area
             if not area:
-                raise UnknownStationAlertAreaException()  # pragma: no cover
+                raise UnknownStationAlertAreaException  # pragma: no cover
             areas_to_query.add(area)
     return areas_to_query
 

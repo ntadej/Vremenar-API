@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
-from pydantic import ConfigDict, JsonValue
+if TYPE_CHECKING:
+    from pydantic import ConfigDict, JsonValue
 
 
 def get_examples(config: ConfigDict) -> list[JsonValue]:
@@ -13,7 +14,7 @@ def get_examples(config: ConfigDict) -> list[JsonValue]:
         return []
 
     json_schema_extra: dict[str, list[JsonValue]] = cast(
-        dict[str, list[JsonValue]],
+        "dict[str, list[JsonValue]]",
         config["json_schema_extra"],
     )
 
@@ -25,4 +26,4 @@ def extend_examples(
     example: dict[str, Any],
 ) -> JsonValue:
     """Get and extend examples from model config."""
-    return [cast(dict[str, Any], e) | example for e in get_examples(config)]
+    return [cast("dict[str, Any]", e) | example for e in get_examples(config)]
