@@ -21,7 +21,7 @@ classifiers = [
 ]
 dependencies = [
   "fastapi == 0.115.*",
-  "redis[hiredis] == 5.2.*",
+  "redis[hiredis] == 6.2.*",
   "httpx == 0.28.*",
   "astral == 3.2.*",
   "asyncstdlib",
@@ -33,14 +33,14 @@ dependencies = [
 dev = [
   "coverage[toml]",
   "gevent",
-  "mypy == 1.15.0",
+  "mypy == 1.16.0",
   "pre-commit",
   "pre-commit-hooks == 5.0.*",
   "pytest >= 8.0",
-  "pytest-asyncio == 0.26.*",
+  "pytest-asyncio < 1.0.0",
   "pytest-cov",
   "requests",
-  "ruff == 0.11.5",
+  "ruff == 0.11.13",
   "types-python-dateutil",
   "types-redis",
 ]
