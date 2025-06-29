@@ -12,6 +12,7 @@ from .wrapper import (
     list_alerts,
     list_alerts_for_critera,
     list_stations,
+    station_weather_details,
 )
 
 __all__ = [
@@ -26,4 +27,5 @@ __all__ = [
     "list_alerts",
     "list_alerts_for_critera",
     "list_stations",
+    "station_weather_details",
 ]

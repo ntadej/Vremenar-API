@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+from statistics import mean
 from typing import TYPE_CHECKING, Any
 
 from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
 from vremenar.definitions import CountryID, ObservationType
-from vremenar.models.weather import WeatherCondition
+from vremenar.models.weather import WeatherCondition, WeatherStatistics
 from vremenar.utils import chunker
 
 if TYPE_CHECKING:
@@ -18,6 +19,18 @@ if TYPE_CHECKING:
 async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
     """Get ARSO weather IDs for timestamp from redis."""
     ids: set[str] = await redis.smembers(f"arso:weather:{timestamp}")
+    return ids
+
+
+async def get_weather_ids_for_station(station_id: str) -> set[str]:
+    """Get ARSO weather IDs for station from redis."""
+    ids: set[str] = {
+        weather_id
+        async for weather_id in redis.scan_iter(
+            match=f"arso:weather_48h:*:{station_id}",
+            count=1000,
+        )
+    }
     return ids
 
 
@@ -90,3 +103,34 @@ async def parse_record(
     )
 
     return station, condition
+
+
+def generate_statistics(records: list[dict[str, Any]]) -> WeatherStatistics:
+    """Generate weather statistics."""
+    records_sorted = sorted(
+        records,
+        key=lambda x: x["timestamp"],
+        reverse=True,
+    )
+
+    temperatures_24h = [float(r["temperature"]) for r in records_sorted[:240]]
+    temperatures_48h = [float(r["temperature"]) for r in records_sorted[:480]]
+
+    temperature_min_24h = min(temperatures_24h)
+    timestamp_temperature_min_24h = records_sorted[
+        temperatures_24h.index(temperature_min_24h)
+    ]["timestamp"]
+    temperatuere_max_24h = max(temperatures_24h)
+    timestamp_temperature_max_24h = records_sorted[
+        temperatures_24h.index(temperatuere_max_24h)
+    ]["timestamp"]
+
+    return WeatherStatistics(
+        timestamp=records_sorted[0]["timestamp"],
+        temperature_average_24h=round(mean(temperatures_24h), 1),
+        temperature_average_48h=round(mean(temperatures_48h), 1),
+        temperature_min_24h=temperature_min_24h,
+        temperature_max_24h=max(temperatures_24h),
+        timestamp_temperature_min_24h=timestamp_temperature_min_24h,
+        timestamp_temperature_max_24h=timestamp_temperature_max_24h,
+    )

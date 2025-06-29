@@ -31,6 +31,35 @@ class WeatherCondition(BaseModel):
     )
 
 
+class WeatherStatistics(BaseModel):
+    """Weather statistics model."""
+
+    timestamp: str
+    temperature_average_24h: float
+    temperature_average_48h: float
+    temperature_min_24h: float
+    temperature_max_24h: float
+    timestamp_temperature_min_24h: str
+    timestamp_temperature_max_24h: str
+
+    model_config = ConfigDict(
+        title="Weather condition",
+        json_schema_extra={
+            "examples": [
+                {
+                    "timestamp": "1604779200000",
+                    "temperature_average_24h": 17.5,
+                    "temperature_average_48h": 18.5,
+                    "temperature_min_24h": 10.5,
+                    "temperature_max_24h": 24.3,
+                    "timestamp_temperature_min_24h": "1604779200000",
+                    "timestamp_temperature_max_24h": "1604779200000",
+                },
+            ],
+        },
+    )
+
+
 class WeatherInfo(BaseModel):
     """Weather info model."""
 
@@ -52,3 +81,13 @@ class WeatherInfoExtended(WeatherInfo):
     model_config = ConfigDict(
         title="Weather information with extended station information",
     )
+
+
+class WeatherDetails(BaseModel):
+    """Weather details model."""
+
+    station: StationInfo
+    condition: WeatherCondition
+    statistics: WeatherStatistics
+
+    model_config = ConfigDict(title="Weather details")
