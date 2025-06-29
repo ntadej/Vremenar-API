@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
+from statistics import mean
 from typing import TYPE_CHECKING, Any
 
 from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
 from vremenar.definitions import CountryID, ObservationType
-from vremenar.models.weather import WeatherCondition
+from vremenar.models.weather import WeatherCondition, WeatherStatistics
 from vremenar.utils import chunker
 
 if TYPE_CHECKING:
@@ -18,6 +20,18 @@ if TYPE_CHECKING:
 async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
     """Get ARSO weather IDs for timestamp from redis."""
     ids: set[str] = await redis.smembers(f"arso:weather:{timestamp}")
+    return ids
+
+
+async def get_weather_ids_for_station(station_id: str) -> set[str]:
+    """Get ARSO weather IDs for station from redis."""
+    ids: set[str] = {
+        weather_id
+        async for weather_id in redis.scan_iter(
+            match=f"arso:weather_48h:*:{station_id}",
+            count=1000,
+        )
+    }
     return ids
 
 
@@ -90,3 +104,45 @@ async def parse_record(
     )
 
     return station, condition
+
+
+def generate_statistics(records: list[dict[str, Any]]) -> WeatherStatistics:
+    """Generate weather statistics."""
+    records_sorted = sorted(
+        records,
+        key=lambda x: int(x["timestamp"][:-3]),
+        reverse=True,
+    )
+    for record in records_sorted:
+        record["date"] = datetime.fromtimestamp(int(record["timestamp"][:-3]), tz=UTC)
+    latest = records_sorted[0]["date"]
+    reference_24 = latest + timedelta(hours=-24)
+    reference_48 = latest + timedelta(hours=-48)
+
+    records_24h = [
+        record for record in records_sorted if record["date"] >= reference_24
+    ]
+    records_48h = [
+        record for record in records_sorted if record["date"] >= reference_48
+    ]
+    temperatures_24h = [float(r["temperature"]) for r in records_24h]
+    temperatures_48h = [float(r["temperature"]) for r in records_48h]
+
+    temperature_min_24h = min(temperatures_24h)
+    timestamp_temperature_min_24h = records_24h[
+        temperatures_24h.index(temperature_min_24h)
+    ]["timestamp"]
+    temperature_max_24h = max(temperatures_24h)
+    timestamp_temperature_max_24h = records_24h[
+        temperatures_24h.index(temperature_max_24h)
+    ]["timestamp"]
+
+    return WeatherStatistics(
+        timestamp=records_sorted[0]["timestamp"],
+        temperature_average_24h=round(mean(temperatures_24h), 1),
+        temperature_average_48h=round(mean(temperatures_48h), 1),
+        temperature_min_24h=temperature_min_24h,
+        temperature_max_24h=temperature_max_24h,
+        timestamp_temperature_min_24h=timestamp_temperature_min_24h,
+        timestamp_temperature_max_24h=timestamp_temperature_max_24h,
+    )

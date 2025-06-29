@@ -10,12 +10,13 @@ from vremenar.models.stations import (
     StationInfoExtended,
     StationSearchModel,
 )
-from vremenar.models.weather import WeatherInfo, WeatherInfoExtended
+from vremenar.models.weather import WeatherDetails, WeatherInfo, WeatherInfoExtended
 from vremenar.sources import (
     current_station_condition,
     find_station,
     get_weather_map,
     list_stations,
+    station_weather_details,
 )
 
 from .config import defaults
@@ -76,6 +77,18 @@ async def condition(
         return condition
 
     return condition.base()
+
+
+@router.get(
+    "/stations/details/{station_id}",
+    tags=["stations"],
+    name="Station weather details",
+    response_description="Weather details for the chosen station",
+    **defaults,
+)
+async def details(country: CountryID, station_id: str) -> WeatherDetails:
+    """Get current station condition."""
+    return await station_weather_details(country, station_id)
 
 
 @router.get(
