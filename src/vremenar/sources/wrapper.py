@@ -17,7 +17,7 @@ if TYPE_CHECKING:
         StationInfoExtended,
         StationSearchModel,
     )
-    from vremenar.models.weather import WeatherInfoExtended
+    from vremenar.models.weather import WeatherDetails, WeatherInfoExtended
 
 
 def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
@@ -116,6 +116,17 @@ async def current_station_condition(
         return await arso.current_station_condition(station_id)
     if country == CountryID.Germany:
         return await dwd.current_station_condition(station_id)
+
+    raise UnsupportedCountryException  # pragma: no cover
+
+
+async def station_weather_details(
+    country: CountryID,
+    station_id: str,
+) -> WeatherDetails:
+    """Get current station weather condition."""
+    if country == CountryID.Slovenia:
+        return await arso.station_weather_details(station_id)
 
     raise UnsupportedCountryException  # pragma: no cover
 

@@ -11,6 +11,7 @@ from .stations import (
     current_station_condition,
     find_station,
     list_stations,
+    station_weather_details,
 )
 
 ARSO_NAME = "Slovenian Environment Agency"
@@ -27,4 +28,5 @@ __all__ = [
     "get_supported_map_types",
     "get_weather_map",
     "list_stations",
+    "station_weather_details",
 ]
