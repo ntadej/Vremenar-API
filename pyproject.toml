@@ -35,7 +35,7 @@ dev = [
   "gevent",
   "mypy == 1.16.0",
   "pre-commit",
-  "pre-commit-hooks == 5.0.*",
+  "pre-commit-hooks ==6.0.*",
   "pytest >= 8.0",
   "pytest-asyncio < 1.0.0",
   "pytest-cov",
