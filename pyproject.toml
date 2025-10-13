@@ -54,7 +54,6 @@ path = "src/vremenar/__init__.py"
 
 [tool.coverage.run]
 branch = true
-concurrency = ["thread", "gevent"]
 source = ["src/vremenar"]
 omit = ["src/vremenar/cli.py", "src/vremenar/worker.py"]
 
