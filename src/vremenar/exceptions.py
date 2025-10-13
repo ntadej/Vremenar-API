@@ -77,6 +77,6 @@ class InvalidSearchQueryException(HTTPException):
     def __init__(self, detail: str) -> None:
         """Init exception."""
         super().__init__(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=detail,
         )

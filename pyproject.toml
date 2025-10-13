@@ -18,10 +18,11 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "fastapi == 0.115.*",
-  "redis[hiredis] == 6.2.*",
+  "fastapi == 0.119.*",
+  "redis[hiredis] == 6.4.*",
   "httpx == 0.28.*",
   "astral == 3.2.*",
   "asyncstdlib",
@@ -33,14 +34,14 @@ dependencies = [
 dev = [
   "coverage[toml]",
   "gevent",
-  "mypy == 1.16.0",
+  "mypy == 1.18.2",
   "pre-commit",
-  "pre-commit-hooks == 5.0.*",
+  "pre-commit-hooks == 6.0.*",
   "pytest >= 8.0",
   "pytest-asyncio < 1.0.0",
   "pytest-cov",
   "requests",
-  "ruff == 0.11.13",
+  "ruff == 0.14.0",
   "types-python-dateutil",
   "types-redis",
 ]
@@ -133,7 +134,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/tests/*" = ["S101"]
+"**/tests/*" = ["PLC0415", "S101"]
 
 [tool.mypy]
 plugins = "pydantic.mypy"
