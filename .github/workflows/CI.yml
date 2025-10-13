@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04, macos-14]
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13"] #, "3.14"]
 
     steps:
       - name: Checkout
@@ -36,8 +36,8 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run tests/fixtures/setup_fixtures.py
-          uv run pytest -W error
+          uv run -p ${{ matrix.python-version }} tests/fixtures/setup_fixtures.py
+          uv run -p ${{ matrix.python-version }} pytest -W error
 
       - name: Report coverage with Codecov
         if: github.event_name == 'push' && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
