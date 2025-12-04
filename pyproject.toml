@@ -41,7 +41,7 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.14.7",
+  "ruff ==0.14.8",
   "types-python-dateutil",
   "types-redis",
 ]
