@@ -21,7 +21,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "fastapi == 0.123.*",
+  "fastapi == 0.128.*",
   "redis[hiredis] == 7.1.*",
   "httpx == 0.28.*",
   "astral == 3.2.*",
@@ -34,14 +34,14 @@ dependencies = [
 dev = [
   "coverage[toml]",
   "gevent",
-  "mypy == 1.19.0",
+  "mypy == 1.19.1",
   "pre-commit",
   "pre-commit-hooks == 6.0.*",
   "pytest >= 8.0",
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.14.7",
+  "ruff == 0.14.10",
   "types-python-dateutil",
   "types-redis",
 ]
