@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict
 from . import extend_examples, get_examples
 
 
-class AlertType(str, Enum):
+class AlertType(StrEnum):
     """Alert type."""
 
     Generic = "alert"
@@ -29,7 +29,7 @@ class AlertType(str, Enum):
     RainFlood = "rain-flood"
 
 
-class AlertResponseType(str, Enum):
+class AlertResponseType(StrEnum):
     """Alert response type."""
 
     Shelter = "shelter"  # Take shelter in place or per instructions
@@ -43,7 +43,7 @@ class AlertResponseType(str, Enum):
     NoResponse = "none"  # No recommended action
 
 
-class AlertUrgency(str, Enum):
+class AlertUrgency(StrEnum):
     """Alert urgency."""
 
     Immediate = "immediate"  # Responsive action should be taken immediately.
@@ -52,7 +52,7 @@ class AlertUrgency(str, Enum):
     Past = "past"  # Responsive action no longer required.
 
 
-class AlertSeverity(str, Enum):
+class AlertSeverity(StrEnum):
     """Alert severity."""
 
     Minor = "minor"  # yellow
@@ -61,7 +61,7 @@ class AlertSeverity(str, Enum):
     Extreme = "extreme"  # violet
 
 
-class AlertCertainty(str, Enum):
+class AlertCertainty(StrEnum):
     """Alert certainty."""
 
     Observed = "observed"

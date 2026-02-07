@@ -18,10 +18,10 @@ async def store_station(country: CountryID, station: dict[str, Any]) -> None:
     station_id = station["id"]
 
     async with redis.pipeline() as pipeline:
-        pipeline.sadd(f"station:{country.value}", station_id)
-        pipeline.hset(f"station:{country.value}:{station_id}", mapping=station)
+        pipeline.sadd(f"station:{country}", station_id)
+        pipeline.hset(f"station:{country}:{station_id}", mapping=station)
         pipeline.geoadd(
-            f"location:{country.value}",
+            f"location:{country}",
             (station["longitude"], station["latitude"], station_id),
         )
         await pipeline.execute()
@@ -84,10 +84,10 @@ async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) ->
         for area in areas:
             async with connection.pipeline() as pipeline:
                 pipeline.hset(
-                    f"alerts_area:{country.value}:{area['code']}:info",
+                    f"alerts_area:{country}:{area['code']}:info",
                     mapping=area,
                 )
-                pipeline.sadd(f"alerts_area:{country.value}", area["code"])
+                pipeline.sadd(f"alerts_area:{country}", area["code"])
                 await pipeline.execute()
 
 
@@ -101,17 +101,17 @@ async def store_alert_record(
     record_areas = record.pop("areas", [])
 
     async with redis.pipeline() as pipeline:
-        pipeline.sadd(f"alert:{country.value}", record_id)
-        pipeline.hset(f"alert:{country.value}:{record_id}:info", mapping=record)
+        pipeline.sadd(f"alert:{country}", record_id)
+        pipeline.hset(f"alert:{country}:{record_id}:info", mapping=record)
         if record_areas:
-            pipeline.sadd(f"alert:{country.value}:{record_id}:areas", *record_areas)
+            pipeline.sadd(f"alert:{country}:{record_id}:areas", *record_areas)
         for language in LanguageID:
             pipeline.hset(
-                f"alert:{country.value}:{record_id}:localised_{language.value}",
+                f"alert:{country}:{record_id}:localised_{language}",
                 mapping=record_localised,
             )
         for area in record_areas:
-            pipeline.sadd(f"alerts_area:{country.value}:{area}:alerts", record_id)
+            pipeline.sadd(f"alerts_area:{country}:{area}:alerts", record_id)
         await pipeline.execute()
 
 
@@ -201,7 +201,7 @@ async def arso_fixtures() -> None:
         "url": "foo",
         "observation": "recent",
     }
-    await store_arso_map_record(map_record, MapType.WeatherCondition.value, "current")
+    await store_arso_map_record(map_record, MapType.WeatherCondition, "current")
 
     for map_type in [
         MapType.Precipitation,
@@ -210,7 +210,7 @@ async def arso_fixtures() -> None:
         MapType.Temperature,
         MapType.HailProbability,
     ]:
-        await store_arso_map_record(map_record, map_type.value)
+        await store_arso_map_record(map_record, map_type)
 
 
 async def dwd_fixtures() -> None:

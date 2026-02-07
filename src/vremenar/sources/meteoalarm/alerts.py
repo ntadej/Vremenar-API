@@ -23,10 +23,10 @@ async def list_alerts_areas(country: CountryID) -> dict[str, AlertAreaWithPolygo
     areas: dict[str, AlertAreaWithPolygon] = {}
 
     async with redis.client() as connection:
-        codes = await connection.smembers(f"alerts_area:{country.value}")
+        codes = await connection.smembers(f"alerts_area:{country}")
         async with connection.pipeline(transaction=False) as pipeline:
             for code in codes:
-                pipeline.hgetall(f"alerts_area:{country.value}:{code}:info")
+                pipeline.hgetall(f"alerts_area:{country}:{code}:info")
             response = await pipeline.execute()
 
         for area in response:
@@ -52,14 +52,12 @@ async def list_alerts(
 
     async with redis.client() as connection:
         if alert_ids is None:  # pragma: no cover
-            alert_ids = await connection.smembers(f"alert:{country.value}")
+            alert_ids = await connection.smembers(f"alert:{country}")
         async with connection.pipeline(transaction=False) as pipeline:
             for alert_id in alert_ids:
-                pipeline.hgetall(f"alert:{country.value}:{alert_id}:info")
-                pipeline.hgetall(
-                    f"alert:{country.value}:{alert_id}:localised_{language.value}",
-                )
-                pipeline.smembers(f"alert:{country.value}:{alert_id}:areas")
+                pipeline.hgetall(f"alert:{country}:{alert_id}:info")
+                pipeline.hgetall(f"alert:{country}:{alert_id}:localised_{language}")
+                pipeline.smembers(f"alert:{country}:{alert_id}:areas")
             response = await pipeline.execute()
 
         areas_dict = await list_alerts_areas(country)
@@ -80,7 +78,7 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
     """Get alert IDs for requested areas."""
     async with redis.pipeline() as pipeline:
         for area in areas:
-            pipeline.smembers(f"alerts_area:{country.value}:{area}:alerts")
+            pipeline.smembers(f"alerts_area:{country}:{area}:alerts")
         response = await pipeline.execute()
     return set.union(*response)
 

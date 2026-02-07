@@ -43,10 +43,10 @@ async def load_stations(country: CountryID) -> dict[str, StationDict]:
     """Load stations from redis."""
     stations: dict[str, StationDict] = {}
     async with redis.client() as connection:
-        station_ids: set[str] = await redis.smembers(f"station:{country.value}")
+        station_ids: set[str] = await redis.smembers(f"station:{country}")
         async with connection.pipeline(transaction=False) as pipeline:
             for station_id in station_ids:
-                pipeline.hgetall(f"station:{country.value}:{station_id}")
+                pipeline.hgetall(f"station:{country}:{station_id}")
             response = await pipeline.execute()
 
     for station in response:
@@ -76,7 +76,7 @@ async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
             zoom_level=station["zoom_level"],
             forecast_only=station["forecast_only"],
             alerts_area=station.get("alerts_area", None),
-            metadata=metadata if metadata else None,
+            metadata=metadata or None,
         )
     return dict(sorted(stations.items(), key=lambda item: item[1].name))
 
@@ -89,7 +89,7 @@ async def search_stations(
     """Search for stations by coordinate."""
     async with redis.client() as connection:
         station_ids: list[tuple[str, float]] = await redis.geosearch(
-            f"location:{country.value}",
+            f"location:{country}",
             latitude=latitude,
             longitude=longitude,
             radius=50,
@@ -100,7 +100,7 @@ async def search_stations(
 
         async with connection.pipeline(transaction=False) as pipeline:
             for station_id, _ in station_ids:
-                pipeline.hgetall(f"station:{country.value}:{station_id}")
+                pipeline.hgetall(f"station:{country}:{station_id}")
             response = await pipeline.execute()
 
     stations: list[StationInfoExtended] = []
@@ -120,7 +120,7 @@ async def search_stations(
                 zoom_level=station["zoom_level"],
                 forecast_only=station["forecast_only"],
                 alerts_area=station.get("alerts_area", None),
-                metadata=metadata if metadata else None,
+                metadata=metadata or None,
             ),
         )
 

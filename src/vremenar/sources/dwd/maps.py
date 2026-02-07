@@ -81,7 +81,7 @@ def get_map_condition() -> tuple[list[MapLayer], list[float]]:
     now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
 
-    country_suffix = f"?country={CountryID.Germany.value}"
+    country_suffix = f"?country={CountryID.Germany}"
 
     layers.append(
         MapLayer(

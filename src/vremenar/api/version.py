@@ -1,15 +1,16 @@
 """Version API."""
 
-from json import load
+from json import loads
 from pathlib import Path
 
+from anyio import Path as AsyncPath
 from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict
 
 from vremenar import __version__
 
 router = APIRouter()
-VERSION_INFO: Path = Path.cwd() / "version.json"
+VERSION_INFO: AsyncPath = AsyncPath(Path.cwd() / "version.json")
 
 
 class VersionInfo(BaseModel):
@@ -42,9 +43,10 @@ async def version() -> VersionInfo:
     """Get app and server versions."""
     data: dict[str, str] = {}
 
-    if VERSION_INFO.is_file():  # pragma: no cover
-        with VERSION_INFO.open() as f:
-            data = load(f)
+    if await VERSION_INFO.is_file():  # pragma: no cover
+        async with await VERSION_INFO.open() as f:
+            file_data = await f.read()
+            data = loads(file_data)
 
     stable = data.get("stable", "")
     beta = data.get("beta", "")

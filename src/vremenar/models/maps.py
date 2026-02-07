@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict
 
@@ -11,7 +11,7 @@ from vremenar.definitions import ObservationType
 from . import get_examples
 
 
-class MapType(str, Enum):
+class MapType(StrEnum):
     """Map type enum."""
 
     WeatherCondition = "condition"
@@ -26,7 +26,7 @@ class MapType(str, Enum):
     UVDose = "uv_dose"
 
 
-class MapRenderingType(str, Enum):
+class MapRenderingType(StrEnum):
     """Map rendering type enum."""
 
     Image = "image"

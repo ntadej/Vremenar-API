@@ -25,6 +25,7 @@ dependencies = [
   "redis[hiredis] == 7.1.*",
   "httpx == 0.28.*",
   "astral == 3.2.*",
+  "anyio",
   "asyncstdlib",
   "gunicorn",
   "uvicorn",
@@ -41,7 +42,7 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.14.10",
+  "ruff == 0.15.0",
   "types-python-dateutil",
   "types-redis",
 ]

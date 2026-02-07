@@ -55,7 +55,7 @@ async def get_map_ids_for_type(map_type: MapType) -> list[str]:
     ids: list[str] = [
         map_id
         async for map_id in redis.scan_iter(
-            match=f"arso:map:{map_type.value}:*",
+            match=f"arso:map:{map_type}:*",
             count=1000,
         )
     ]

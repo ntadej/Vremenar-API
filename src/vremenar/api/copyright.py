@@ -38,15 +38,15 @@ class CopyrightInfo(BaseModel):
 async def copyright() -> dict[str, list[CopyrightInfo]]:  # noqa: A001
     """Get data copyright."""
     return {
-        CountryID.Slovenia.value: [
+        CountryID.Slovenia: [
             CopyrightInfo(provider=ARSO_NAME, url=ARSO_URL),
             CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
-        CountryID.Germany.value: [
+        CountryID.Germany: [
             CopyrightInfo(provider=DWD_NAME, url=DWD_URL),
             CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
-        CountryID.Global.value: [
+        CountryID.Global: [
             CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
     }
