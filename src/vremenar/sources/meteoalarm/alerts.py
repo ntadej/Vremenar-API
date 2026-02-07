@@ -102,7 +102,7 @@ async def _parse_stations(
     """Parse stations from query."""
     areas_to_query: set[str] = set()
     if stations:
-        stations_list = await get_stations(country)
+        stations_list = await get_stations(country)  # ty: ignore
         for s in stations:
             if s not in stations_list:
                 raise UnknownStationException

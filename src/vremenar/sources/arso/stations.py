@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 async def list_stations() -> list[StationInfoExtended]:
     """List ARSO weather stations."""
-    stations = await get_stations(CountryID.Slovenia)
+    stations = await get_stations(CountryID.Slovenia)  # ty: ignore
     return list(stations.values())
 
 
@@ -52,7 +52,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
-    stations = await get_stations(CountryID.Slovenia)
+    stations = await get_stations(CountryID.Slovenia)  # ty: ignore
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
         raise UnknownStationException
@@ -74,7 +74,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
 
 async def station_weather_details(station_id: str) -> WeatherDetails:
     """Get detailed weather information for a station."""
-    stations = await get_stations(CountryID.Slovenia)
+    stations = await get_stations(CountryID.Slovenia)  # ty: ignore
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
         raise UnknownStationException
@@ -89,6 +89,9 @@ async def station_weather_details(station_id: str) -> WeatherDetails:
         _, condition = await parse_record(record, ObservationType.Recent)
         if condition:
             break
+
+    if not condition:  # pragma: no cover
+        raise UnknownStationException
 
     record_ids = await get_weather_ids_for_station(station_id)
     records_48h = await get_weather_records(record_ids)

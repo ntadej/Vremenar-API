@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 async def list_stations() -> list[StationInfoExtended]:
     """List DWD weather stations."""
-    stations = await get_stations(CountryID.Germany)
+    stations = await get_stations(CountryID.Germany)  # ty: ignore
     return list(stations.values())
 
 
@@ -64,7 +64,7 @@ async def find_station(
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
-    stations = await get_stations(CountryID.Germany)
+    stations = await get_stations(CountryID.Germany)  # ty: ignore
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station or station.forecast_only:
         raise UnknownStationException

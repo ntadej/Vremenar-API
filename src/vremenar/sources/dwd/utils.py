@@ -129,7 +129,7 @@ async def parse_record(
 ) -> tuple[StationBase | None, WeatherCondition | None]:
     """Parse DWD record."""
     station_id = record["station_id"]
-    stations = await get_stations(CountryID.Germany)
+    stations = await get_stations(CountryID.Germany)  # ty: ignore
 
     if station_id not in stations:  # pragma: no cover
         return None, None

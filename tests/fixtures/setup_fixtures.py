@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from asyncio import run
 from datetime import UTC, datetime, timedelta
-from typing import Any
 
 from vremenar.database.redis import redis
 from vremenar.definitions import CountryID, LanguageID
@@ -13,7 +12,10 @@ from vremenar.models.maps import MapType
 from vremenar.utils import to_timestamp
 
 
-async def store_station(country: CountryID, station: dict[str, Any]) -> None:
+async def store_station(
+    country: CountryID,
+    station: dict[str | bytes, str | int | float],
+) -> None:
     """Store a station to redis."""
     station_id = station["id"]
 
@@ -28,11 +30,11 @@ async def store_station(country: CountryID, station: dict[str, Any]) -> None:
 
 
 async def store_arso_weather_record(
-    record: dict[str, Any],
+    record: dict[str | bytes, str | int | float],
     key_override: str = "",
 ) -> None:
     """Store an ARSO weather record to redis."""
-    if not key_override:
+    if not key_override and isinstance(record["timestamp"], str):
         key_override = record["timestamp"]
     set_key = f"arso:weather:{key_override}"
     key = f"arso:weather:{key_override}:{record['station_id']}"
@@ -44,12 +46,12 @@ async def store_arso_weather_record(
 
 
 async def store_arso_map_record(
-    record: dict[str, Any],
+    record: dict[str | bytes, str | int | float],
     map_type: str,
     key_override: str = "",
 ) -> None:
     """Store an ARSO map record to redis."""
-    if not key_override:
+    if not key_override and isinstance(record["timestamp"], str):
         key_override = record["timestamp"]
     key = f"arso:map:{map_type}:{key_override}"
 
@@ -58,7 +60,7 @@ async def store_arso_map_record(
         await pipeline.execute()
 
 
-async def store_mosmix_record(record: dict[str, Any]) -> None:
+async def store_mosmix_record(record: dict[str | bytes, str | int | float]) -> None:
     """Store a MOSMIX record to redis."""
     set_key = f"mosmix:{record['timestamp']}"
     key = f"mosmix:{record['timestamp']}:{record['station_id']}"
@@ -69,7 +71,9 @@ async def store_mosmix_record(record: dict[str, Any]) -> None:
         await pipeline.execute()
 
 
-async def store_dwd_weather_record(record: dict[str, Any]) -> None:
+async def store_dwd_weather_record(
+    record: dict[str | bytes, str | int | float],
+) -> None:
     """Store a DWD weather record to redis."""
     key = f"dwd:current:{record['station_id']}"
 
@@ -78,7 +82,10 @@ async def store_dwd_weather_record(record: dict[str, Any]) -> None:
         await pipeline.execute()
 
 
-async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) -> None:
+async def store_alerts_areas(
+    country: CountryID,
+    areas: list[dict[str | bytes, str]],
+) -> None:
     """Store alerts areas to redis."""
     async with redis.client() as connection:
         for area in areas:
@@ -93,12 +100,12 @@ async def store_alerts_areas(country: CountryID, areas: list[dict[str, Any]]) ->
 
 async def store_alert_record(
     country: CountryID,
-    record: dict[str, Any],
-    record_localised: dict[str, Any],
+    record: dict[str | bytes, str],
+    record_localised: dict[str | bytes, str],
+    record_areas: list[str],
 ) -> None:
     """Store alert record to redis."""
-    record_id = record["id"]
-    record_areas = record.pop("areas", [])
+    record_id: str = record["id"]
 
     async with redis.pipeline() as pipeline:
         pipeline.sadd(f"alert:{country}", record_id)
@@ -305,19 +312,19 @@ async def mosmix_fixtures() -> None:
 
 async def alerts_fixtures() -> None:
     """Create and setup weather alerts fixtures."""
-    area_germany_1 = {
+    area_germany_1: dict[str | bytes, str] = {
         "code": "DE048",
         "name": "Kreis Pinneberg",
         "polygons": "[]",
     }
 
-    area_germany_2 = {
+    area_germany_2: dict[str | bytes, str] = {
         "code": "DE413",
         "name": "Hansestadt Hamburg",
         "polygons": "[]",
     }
 
-    alert_germany_1 = {
+    alert_germany_1: dict[str | bytes, str] = {
         "id": "2.49.0.0.276.0.DWD.PVW.TEST",
         "response_type": "prepare",
         "urgency": "immediate",
@@ -326,9 +333,9 @@ async def alerts_fixtures() -> None:
         "certainty": "likely",
         "severity": "minor",
         "onset": "1662220920000",
-        "areas": ["DE048"],
     }
-    alert_germany_1_localised = {
+    alert_germany_1_areas = ["DE048"]
+    alert_germany_1_localised: dict[str | bytes, str] = {
         "event": "wind gusts",
         "sender_name": "Deutscher Wetterdienst",
         "description": (
@@ -340,7 +347,7 @@ async def alerts_fixtures() -> None:
         "web": "https://www.wettergefahren.de",
     }
 
-    alert_germany_2 = {
+    alert_germany_2: dict[str | bytes, str] = {
         "id": "2.49.0.0.277.0.DWD.PVW.TEST",
         "response_type": "prepare",
         "urgency": "immediate",
@@ -349,15 +356,14 @@ async def alerts_fixtures() -> None:
         "certainty": "likely",
         "severity": "minor",
         "onset": "1662220920000",
-        "areas": [],
     }
-    alert_germany_2_localised = {
+    alert_germany_2_localised: dict[str | bytes, str] = {
         "event": "wind gusts",
         "instructions": "RUN!",
         "headline": "Official WARNING of WIND GUSTS",
     }
 
-    alert_slovenia_1 = {
+    alert_slovenia_1: dict[str | bytes, str] = {
         "id": "ARSO.TEST",
         "response_type": "prepare",
         "urgency": "immediate",
@@ -366,9 +372,8 @@ async def alerts_fixtures() -> None:
         "certainty": "likely",
         "severity": "minor",
         "onset": "1652220920000",
-        "areas": [],
     }
-    alert_slovenia_1_localised = {
+    alert_slovenia_1_localised: dict[str | bytes, str] = {
         "event": "wind gusts",
         "headline": "Official WARNING of WIND GUSTS",
     }
@@ -378,16 +383,19 @@ async def alerts_fixtures() -> None:
         CountryID.Germany,
         alert_germany_1,
         alert_germany_1_localised,
+        alert_germany_1_areas,
     )
     await store_alert_record(
         CountryID.Germany,
         alert_germany_2,
         alert_germany_2_localised,
+        [],
     )
     await store_alert_record(
         CountryID.Slovenia,
         alert_slovenia_1,
         alert_slovenia_1_localised,
+        [],
     )
 
 

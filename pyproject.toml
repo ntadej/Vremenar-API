@@ -45,6 +45,7 @@ dev = [
   "ruff == 0.15.0",
   "types-python-dateutil",
   "types-redis",
+  "ty == 0.0.15",
 ]
 
 [project.scripts]
@@ -135,6 +136,9 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/*" = ["PLC0415", "S101"]
+
+[tool.ty.rules]
+all = "error"
 
 [tool.mypy]
 plugins = "pydantic.mypy"

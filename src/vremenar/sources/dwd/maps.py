@@ -157,6 +157,8 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
         logger.info(MESSAGE_NOT_AVAILABLE_YET)
         current_time -= timedelta(minutes=5)
 
+    most_recent = current_time.isoformat()
+
     # historical data + recent
     for i in range(18, -1, -1):
         time = current_time - timedelta(minutes=5 * i)
@@ -434,10 +436,10 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
             record,
             ObservationType.Recent if map_id == "current" else ObservationType.Forecast,
         )
-        if not station:
+        if not station or not condition:  # pragma: no cover
             continue
         conditions_list.append(
-            WeatherInfoExtended(station=station, condition=condition),
+            WeatherInfoExtended(station=station, condition=condition),  # ty: ignore
         )
 
     return conditions_list

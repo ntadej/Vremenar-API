@@ -153,12 +153,12 @@ class AlertInfo(BaseModel):
         localised: dict[str, Any],
         alert_areas: set[str],
         areas: dict[str, AlertAreaWithPolygon] | None = None,
-        **kwargs: dict[str, Any] | list[AlertArea],
+        **kwargs: str,
     ) -> AlertInfo:
         """Initialise from a dictionary."""
         # special (temporary) event handling
         event_base = localised["event"][0].upper() + localised["event"][1:]
-        event_processed: Any = re.sub(r"\s-\s[a-z]+\sogroženost", "", event_base)
+        event_processed: str = re.sub(r"\s-\s[a-z]+\sogroženost", "", event_base)
         event_processed = re.sub(
             r"(Minor|Moderate|Severe|Extreme)\s(.*)\sWarning",
             r"\2",
@@ -187,7 +187,6 @@ class AlertInfo(BaseModel):
             areas_list = list(alert_areas)
             areas_list.sort()
             areas_objs = [areas[a].base() for a in areas_list]
-        kwargs.setdefault("areas", areas_objs)
 
         # init
         return cls(
@@ -199,6 +198,7 @@ class AlertInfo(BaseModel):
             response_type=info["response_type"],
             onset=info["onset"],
             ending=info["expires"],
+            areas=areas_objs,
             **kwargs,
         )
 
