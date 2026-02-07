@@ -6,7 +6,6 @@ from pydantic import BaseModel, ConfigDict
 from vremenar.definitions import CountryID
 from vremenar.sources.arso import ARSO_NAME, ARSO_URL
 from vremenar.sources.dwd import DWD_NAME, DWD_URL
-from vremenar.sources.rainviewer import RAINVIEWER_NAME, RAINVIEWER_URL
 
 router = APIRouter()
 
@@ -40,13 +39,9 @@ async def copyright() -> dict[str, list[CopyrightInfo]]:  # noqa: A001
     return {
         CountryID.Slovenia: [
             CopyrightInfo(provider=ARSO_NAME, url=ARSO_URL),
-            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
         CountryID.Germany: [
             CopyrightInfo(provider=DWD_NAME, url=DWD_URL),
-            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
         ],
-        CountryID.Global: [
-            CopyrightInfo(provider=RAINVIEWER_NAME, url=RAINVIEWER_URL),
-        ],
+        CountryID.Global: [],
     }

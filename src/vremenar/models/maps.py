@@ -18,7 +18,6 @@ class MapType(StrEnum):
     Precipitation = "precipitation"
     PrecipitationGlobal = "precipitation_global"
     CloudCoverage = "cloud"
-    CloudCoverageInfraredGlobal = "cloud_infrared_global"
     WindSpeed = "wind"
     Temperature = "temperature"
     HailProbability = "hail"
