@@ -45,7 +45,7 @@ dev = [
   "ruff == 0.15.0",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.15",
+  "ty ==0.0.17",
 ]
 
 [project.scripts]
