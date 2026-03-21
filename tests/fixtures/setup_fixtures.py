@@ -124,7 +124,7 @@ async def store_alert_record(
 
 async def stations_fixtures() -> None:
     """Create and setup weather stations fixtures."""
-    germany = {
+    germany: dict[str | bytes, str | int | float] = {
         "id": "10147",
         "name": "Hamburg Fuhlsbüttel",
         "latitude": 53.63,
@@ -136,7 +136,7 @@ async def stations_fixtures() -> None:
         "DWD_ID": "1975",
         "status": "1",
     }
-    germany_forecast_only = {
+    germany_forecast_only: dict[str | bytes, str | int | float] = {
         "id": "P0201",
         "name": "Schenefeld",
         "latitude": 53.6,
@@ -147,7 +147,7 @@ async def stations_fixtures() -> None:
         "alerts_area": "DE058",
         "status": "1",
     }
-    slovenia = {
+    slovenia: dict[str | bytes, str | int | float] = {
         "id": "METEO-0038",
         "name": "Bled",
         "latitude": 46.3684,
@@ -174,7 +174,7 @@ async def arso_fixtures() -> None:
     timestamp = to_timestamp(now)
     timestamp_soon = to_timestamp(soon)
 
-    record = {
+    record: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "METEO-0038",
         "timestamp": timestamp,
@@ -182,7 +182,7 @@ async def arso_fixtures() -> None:
         "temperature": 12,
     }
 
-    record_soon = {
+    record_soon: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "METEO-0038",
         "timestamp": timestamp_soon,
@@ -191,7 +191,7 @@ async def arso_fixtures() -> None:
         "temperature_low": 13,
     }
 
-    record_unknown = {
+    record_unknown: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "NULL",
         "timestamp": timestamp,
@@ -203,7 +203,7 @@ async def arso_fixtures() -> None:
     await store_arso_weather_record(record_soon)
     await store_arso_weather_record(record_unknown)
 
-    map_record = {
+    map_record: dict[str | bytes, str | int | float] = {
         "timestamp": timestamp,
         "url": "foo",
         "observation": "recent",
@@ -226,7 +226,7 @@ async def dwd_fixtures() -> None:
     now = now.replace(minute=0, second=0, microsecond=0)
     timestamp = to_timestamp(now)
 
-    record = {
+    record: dict[str | bytes, str | int | float] = {
         "station_id": "10147",
         "timestamp": timestamp,
         "wind_direction": 148.0,
@@ -254,7 +254,7 @@ async def mosmix_fixtures() -> None:
     timestamp = to_timestamp(now)
     timestamp_soon = to_timestamp(soon)
 
-    record = {
+    record: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "10147",
         "timestamp": timestamp,
@@ -271,7 +271,7 @@ async def mosmix_fixtures() -> None:
         "condition": "rain",
     }
 
-    record_soon = {
+    record_soon: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "10147",
         "timestamp": timestamp_soon,
@@ -288,7 +288,7 @@ async def mosmix_fixtures() -> None:
         "condition": "dry",
     }
 
-    record_unknown = {
+    record_unknown: dict[str | bytes, str | int | float] = {
         "source": source,
         "station_id": "NULL",
         "timestamp": timestamp,

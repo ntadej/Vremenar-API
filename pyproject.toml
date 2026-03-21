@@ -21,8 +21,8 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "fastapi == 0.128.*",
-  "redis[hiredis] == 7.1.*",
+  "fastapi == 0.135.*",
+  "redis[hiredis] == 7.3.*",
   "httpx == 0.28.*",
   "astral == 3.2.*",
   "anyio",
@@ -42,10 +42,10 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.15.0",
+  "ruff == 0.15.7",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.15",
+  "ty == 0.0.24",
 ]
 
 [project.scripts]
