@@ -25,6 +25,7 @@ MAPS_BASEURL = (
     "https://maps.dwd.de/geoserver/dwd/ows"
     "?service=WMS&version=1.3&request=GetMap&srs=EPSG:3857&format=image%2Fpng&transparent=true"
 )
+MAPS_TIMEOUT = 3
 
 MESSAGE_MAP_URL = "DWD Map URL: %s"
 MESSAGE_NOT_AVAILABLE_YET = "Map not available yet"
@@ -151,7 +152,7 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
     logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
-        response = await client.get(test_url)
+        response = await client.get(test_url, timeout=MAPS_TIMEOUT)
 
     if "InvalidDimensionValue" in response.text:  # pragma: no cover
         logger.info(MESSAGE_NOT_AVAILABLE_YET)
@@ -225,7 +226,7 @@ async def get_map_temperature() -> tuple[list[MapLayer], list[float]]:
     logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
-        response = await client.get(test_url)
+        response = await client.get(test_url, timeout=MAPS_TIMEOUT)
 
     if "InvalidDimensionValue" in response.text:  # pragma: no cover
         logger.info(MESSAGE_NOT_AVAILABLE_YET)
@@ -275,7 +276,7 @@ async def get_map_uv(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     logger.debug(MESSAGE_MAP_URL, test_url)
 
     async with AsyncClient() as client:
-        response = await client.get(test_url)
+        response = await client.get(test_url, timeout=MAPS_TIMEOUT)
 
     if "InvalidDimensionValue" in response.text:  # pragma: no cover
         logger.info(MESSAGE_NOT_AVAILABLE_YET)

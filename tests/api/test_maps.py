@@ -9,6 +9,8 @@ import pytest
 if TYPE_CHECKING:
     from httpx import AsyncClient
 
+TIMEOUT = 3
+
 
 @pytest.mark.asyncio
 async def test_maps_types(client: AsyncClient) -> None:
@@ -16,7 +18,7 @@ async def test_maps_types(client: AsyncClient) -> None:
     response = await client.get("/maps/types?country=si")
     assert response.status_code == 200
 
-    response = await client.get("/maps/types?country=de")
+    response = await client.get("/maps/types?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/types?country=global")
@@ -29,7 +31,7 @@ async def test_maps_list_condition(client: AsyncClient) -> None:
     response = await client.get("/maps/list/condition?country=si")
     assert response.status_code == 200
 
-    response = await client.get("/maps/list/condition?country=de")
+    response = await client.get("/maps/list/condition?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/list/condition?country=global")
@@ -42,7 +44,7 @@ async def test_maps_list_precipitation(client: AsyncClient) -> None:
     response = await client.get("/maps/list/precipitation?country=si")
     assert response.status_code == 200
 
-    response = await client.get("/maps/list/precipitation?country=de")
+    response = await client.get("/maps/list/precipitation?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/list/precipitation?country=global")
@@ -94,7 +96,7 @@ async def test_maps_list_temperature(client: AsyncClient) -> None:
     response = await client.get("/maps/list/temperature?country=si")
     assert response.status_code == 200
 
-    response = await client.get("/maps/list/temperature?country=de")
+    response = await client.get("/maps/list/temperature?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/list/temperature?country=global")
@@ -120,7 +122,7 @@ async def test_maps_list_uv_index_max(client: AsyncClient) -> None:
     response = await client.get("/maps/list/uv_index_max?country=si")
     assert response.status_code == 404
 
-    response = await client.get("/maps/list/uv_index_max?country=de")
+    response = await client.get("/maps/list/uv_index_max?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/list/uv_index_max?country=global")
@@ -133,7 +135,7 @@ async def test_maps_list_uv_dose(client: AsyncClient) -> None:
     response = await client.get("/maps/list/uv_dose?country=si")
     assert response.status_code == 404
 
-    response = await client.get("/maps/list/uv_dose?country=de")
+    response = await client.get("/maps/list/uv_dose?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
 
     response = await client.get("/maps/list/uv_dose?country=global")
