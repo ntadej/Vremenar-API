@@ -41,14 +41,16 @@ jobs:
 
       - name: Report coverage with Codecov
         if: github.event_name == 'push' && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage.xml
           flags: unittests
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }} && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
-        uses: codecov/test-results-action@v1
+        if: ${{ !cancelled() && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04' }}
+        uses: codecov/codecov-action@v7
+        with:
+          report_type: test_results
 
       - name: SonarQube Scan
         if: matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
