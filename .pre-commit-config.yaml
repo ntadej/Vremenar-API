@@ -8,7 +8,7 @@ repos:
           - astral
           - asyncstdlib
           - fastapi
-          - httpx
+          - httpx2
           - pydantic
           - pytest
           - pytest_asyncio
@@ -16,7 +16,7 @@ repos:
           - types-redis
           - uvicorn
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.13
+    rev: v0.15.20
     hooks:
       - id: ruff
       - id: ruff-format

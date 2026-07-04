@@ -21,9 +21,9 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "fastapi == 0.136.*",
-  "redis[hiredis] == 7.4.*",
-  "httpx == 0.28.*",
+  "fastapi == 0.139.*",
+  "redis[hiredis] == 8.0.*",
+  "httpx2 == 2.4.*",
   "astral == 3.2.*",
   "anyio",
   "asyncstdlib",
@@ -42,10 +42,10 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.15.13",
+  "ruff == 0.15.20",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.37",
+  "ty == 0.0.56",
 ]
 
 [project.scripts]
@@ -136,6 +136,9 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/*" = ["PLC0415", "S101"]
+
+[tool.ty.environment]
+python-version = "3.11"
 
 [tool.ty.rules]
 all = "error"

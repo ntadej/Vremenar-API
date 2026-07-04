@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
-from httpx import AsyncClient
+from httpx2 import AsyncClient
 
 from vremenar.definitions import CountryID, ObservationType
 from vremenar.exceptions import UnrecognisedMapIDException, UnsupportedMapTypeException
