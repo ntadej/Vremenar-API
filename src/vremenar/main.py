@@ -5,7 +5,13 @@ from __future__ import annotations
 from fastapi import FastAPI
 
 from . import __version__
-from .api import alerts, copyright, maps, stations, version  # noqa: A004
+from .api import (
+    alerts,
+    copyright,  # ruff: ignore[builtin-import-shadowing]
+    maps,
+    stations,
+    version,
+)
 from .database import database_info
 
 tags_metadata = [

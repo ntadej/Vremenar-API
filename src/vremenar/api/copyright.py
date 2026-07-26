@@ -34,7 +34,7 @@ class CopyrightInfo(BaseModel):
     tags=["copyright"],
     response_description="Get data copyright",
 )
-async def copyright() -> dict[str, list[CopyrightInfo]]:  # noqa: A001
+async def copyright() -> dict[str, list[CopyrightInfo]]:  # ruff: ignore[builtin-variable-shadowing]
     """Get data copyright."""
     return {
         CountryID.Slovenia: [

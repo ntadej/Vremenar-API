@@ -101,7 +101,7 @@ async def details(country: CountryID, station_id: str) -> WeatherDetails:
 async def conditions_map(
     country: CountryID,
     map_id: str,
-    extended: Annotated[bool, Query(include_in_schema=False)] = False,  # noqa: ARG001
+    extended: Annotated[bool, Query(include_in_schema=False)] = False,  # ruff: ignore[unused-function-argument]
 ) -> list[WeatherInfo]:
     """Get weather conditions map for a specific ID."""
     weather_map = await get_weather_map(country, map_id)

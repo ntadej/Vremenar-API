@@ -77,7 +77,7 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
     else:
         intensity = "light"
 
-    if weather_condition in ["hail", "sleet"]:
+    if weather_condition in {"hail", "sleet"}:
         precipitation_type = "SHGR"
     elif weather_condition == "thunderstorm":
         precipitation_type = "TSRA"
@@ -129,7 +129,7 @@ async def parse_record(
 ) -> tuple[StationBase | None, WeatherCondition | None]:
     """Parse DWD record."""
     station_id = record["station_id"]
-    stations = await get_stations(CountryID.Germany)  # ty: ignore
+    stations = await get_stations(CountryID.Germany)  # ty: ignore[too-many-positional-arguments]
 
     if station_id not in stations:  # pragma: no cover
         return None, None
