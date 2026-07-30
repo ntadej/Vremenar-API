@@ -22,7 +22,7 @@ classifiers = [
 ]
 dependencies = [
   "fastapi == 0.140.*",
-  "redis[hiredis] == 8.0.*",
+  "redis[hiredis] ==8.1.*",
   "httpx2 ==2.9.*",
   "astral == 3.2.*",
   "anyio",
