@@ -21,9 +21,9 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "fastapi == 0.140.*",
-  "redis[hiredis] == 8.0.*",
-  "httpx2 ==2.9.*",
+  "fastapi == 0.141.*",
+  "redis[hiredis] == 8.1.*",
+  "httpx2 ==2.10.*",
   "astral == 3.2.*",
   "anyio",
   "asyncstdlib",
@@ -35,17 +35,17 @@ dependencies = [
 dev = [
   "coverage[toml]",
   "gevent",
-  "mypy == 2.3.0",
+  "mypy == 2.3.1",
   "pre-commit",
   "pre-commit-hooks == 6.0.*",
   "pytest >= 8.0",
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.16.0",
+  "ruff == 0.16.3",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.63",
+  "ty == 0.0.72",
 ]
 
 [project.scripts]
@@ -133,16 +133,18 @@ select = [
   "TRY",   # tryceratops
 ]
 ignore = [
-  "PLR2004", # magic-value-comparison (not wanted)
-  "D203",    # one-blank-line-before-class (conflicting with no-blank-line-before-class)
-  "D213",    # multi-line-summary-second-line (conflicting with multi-line-summary-first-line)
-  "FBT001",  # boolean-positional-arg-in-function-definition (not wanted)
-  "FBT002",  # boolean-default-value-in-function-definition (not wanted)
-  "RUF067",  # non-empty-init-module (not wanted)
+  "incorrect-blank-line-before-class", # conflicting with no-blank-line-before-class
+  "multi-line-summary-second-line",    # conflicting with multi-line-summary-first-line
+  "non-empty-init-module",             # not wanted
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/tests/*" = ["PLC0415", "S101", "RUF069"]
+"**/tests/*" = [
+  "assert",
+  "float-equality-comparison",
+  "import-outside-top-level",
+  "magic-value-comparison",
+]
 
 [tool.ty.environment]
 python-version = "3.11"

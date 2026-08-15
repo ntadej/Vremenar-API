@@ -70,9 +70,11 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
     if precipitation_intensity <= 0 or weather_condition == "dry":
         return None
 
-    if precipitation_intensity > 10:
+    precipitation_heavy_threshold = 10
+    precipitation_moderate_threshold = 2.5
+    if precipitation_intensity > precipitation_heavy_threshold:
         intensity = "heavy"
-    elif precipitation_intensity > 2.5:
+    elif precipitation_intensity > precipitation_moderate_threshold:
         intensity = "mod"
     else:
         intensity = "light"

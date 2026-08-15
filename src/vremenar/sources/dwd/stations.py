@@ -27,6 +27,7 @@ async def list_stations() -> list[StationInfoExtended]:
 
 async def find_station(
     query: StationSearchModel,
+    *,
     include_forecast_only: bool,
 ) -> list[StationInfo]:
     """Find station by coordinate."""

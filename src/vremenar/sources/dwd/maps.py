@@ -30,6 +30,8 @@ MAPS_TIMEOUT = 3
 MESSAGE_MAP_URL = "DWD Map URL: %s"
 MESSAGE_NOT_AVAILABLE_YET = "Map not available yet"
 
+PRECIPITATION_BUFFER_SECONDS = 100
+
 
 def get_supported_map_types() -> list[SupportedMapType]:
     """Get DWD supported map types."""
@@ -141,7 +143,9 @@ async def get_map_precipitation() -> tuple[list[MapLayer], list[float]]:
         microseconds=current_time.microsecond,
     )
     current_time -= time_delta
-    if time_delta.seconds < 100:  # buffer for recent image # pragma: no cover
+    if (
+        time_delta.seconds < PRECIPITATION_BUFFER_SECONDS
+    ):  # buffer for recent image # pragma: no cover
         current_time -= timedelta(minutes=5)
     test_time = current_time.replace(tzinfo=None).isoformat()
     test_url = (

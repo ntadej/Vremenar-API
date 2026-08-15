@@ -96,13 +96,17 @@ async def list_stations(country: CountryID) -> list[StationInfoExtended]:
 async def find_station(
     country: CountryID,
     query: StationSearchModel,
+    *,
     include_forecast_only: bool,
 ) -> list[StationInfo]:
     """Find weather station by coordinate or string."""
     if country == CountryID.Slovenia:
         return await arso.find_station(query)
     if country == CountryID.Germany:
-        return await dwd.find_station(query, include_forecast_only)
+        return await dwd.find_station(
+            query,
+            include_forecast_only=include_forecast_only,
+        )
 
     raise UnsupportedCountryException  # pragma: no cover
 
