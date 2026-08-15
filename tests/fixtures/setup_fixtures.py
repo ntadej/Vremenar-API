@@ -45,6 +45,22 @@ async def store_arso_weather_record(
         await pipeline.execute()
 
 
+async def store_arso_weather_record_48h(
+    record: dict[str | bytes, str | int | float],
+    key_override: str = "",
+) -> None:
+    """Store an ARSO 48h weather record to redis."""
+    if not key_override and isinstance(record["timestamp"], str):
+        key_override = record["timestamp"]
+    set_key = f"arso:weather_48h:{key_override}"
+    key = f"arso:weather_48h:{key_override}:{record['station_id']}"
+
+    async with redis.pipeline() as pipeline:
+        pipeline.sadd(set_key, key)
+        pipeline.hset(key, mapping=record)
+        await pipeline.execute()
+
+
 async def store_arso_map_record(
     record: dict[str | bytes, str | int | float],
     map_type: str,
@@ -159,15 +175,29 @@ async def stations_fixtures() -> None:
         "region": "SI_GORENJSKA",
         "country": "SI",
     }
+    slovenia_alt: dict[str | bytes, str | int | float] = {
+        "id": "METEO-1430",
+        "name": "Kredarica",
+        "latitude": 46.3788,
+        "longitude": 13.8489,
+        "altitude": 2514,
+        "zoom_level": 3,
+        "forecast_only": 0,
+        "alerts_area": "SI007",
+        "region": "SI_GORENJSKA",
+        "country": "SI",
+    }
 
     await store_station(CountryID.Germany, germany)
     await store_station(CountryID.Germany, germany_forecast_only)
     await store_station(CountryID.Slovenia, slovenia)
+    await store_station(CountryID.Slovenia, slovenia_alt)
 
 
 async def arso_fixtures() -> None:
     """Create and setup ARSO fixtures."""
     source = "ARSO:current:00:00.000Z"
+    source_48h = "ARSO:48h:METEO-1430"
     now = datetime.now(tz=UTC)
     now = now.replace(minute=0, second=0, microsecond=0)
     soon = now + timedelta(hours=1)
@@ -180,6 +210,14 @@ async def arso_fixtures() -> None:
         "timestamp": timestamp,
         "icon": "prevCloudy_day",
         "temperature": 12,
+    }
+
+    record_alt: dict[str | bytes, str | int | float] = {
+        "source": source,
+        "station_id": "METEO-1430",
+        "timestamp": timestamp,
+        "icon": "prevCloudy_day",
+        "temperature": 2,
     }
 
     record_soon: dict[str | bytes, str | int | float] = {
@@ -200,8 +238,18 @@ async def arso_fixtures() -> None:
     }
 
     await store_arso_weather_record(record, "current")
+    await store_arso_weather_record(record_alt, "current")
     await store_arso_weather_record(record_soon)
     await store_arso_weather_record(record_unknown)
+
+    record_48h: dict[str | bytes, str | int | float] = {
+        "source": source_48h,
+        "station_id": "METEO-1430",
+        "timestamp": timestamp,
+        "temperature": 2,
+    }
+
+    await store_arso_weather_record_48h(record_48h)
 
     map_record: dict[str | bytes, str | int | float] = {
         "timestamp": timestamp,
@@ -329,7 +377,7 @@ async def alerts_fixtures() -> None:
         "response_type": "prepare",
         "urgency": "immediate",
         "type": "wind",
-        "expires": "1762253200000",  # make expiry date far in the future
+        "expires": "1862253200000",  # make expiry date far in the future
         "certainty": "likely",
         "severity": "minor",
         "onset": "1662220920000",
@@ -352,7 +400,7 @@ async def alerts_fixtures() -> None:
         "response_type": "prepare",
         "urgency": "immediate",
         "type": "wind",
-        "expires": "1762253200000",  # make expiry date far in the future
+        "expires": "1862253200000",  # make expiry date far in the future
         "certainty": "likely",
         "severity": "minor",
         "onset": "1662220920000",

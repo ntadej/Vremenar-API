@@ -132,6 +132,12 @@ async def test_stations_condition(client: AsyncClient) -> None:
     response = await client.get("/stations/condition/10147?country=de&extended=true")
     assert response.status_code == 200
 
+    response = await client.get("/stations/condition/METEO-1430?country=si")
+    assert response.status_code == 200
+
+    response = await client.get("/stations/details/METEO-1430?country=si")
+    assert response.status_code == 200
+
 
 @pytest.mark.asyncio
 async def test_stations_condition_error(client: AsyncClient) -> None:
@@ -147,6 +153,14 @@ async def test_stations_condition_error(client: AsyncClient) -> None:
     response = await client.get("/stations/condition/12345?country=de")
     assert response.status_code == 404
     assert response.json()["detail"] == "Unknown station"
+
+    response = await client.get("/stations/details/METEO-12345?country=si")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Unknown station"
+
+    response = await client.get("/stations/details/METEO-0038?country=si")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Unsupported station"
 
 
 @pytest.mark.asyncio

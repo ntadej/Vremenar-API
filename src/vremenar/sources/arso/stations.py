@@ -6,7 +6,11 @@ from typing import TYPE_CHECKING
 
 from vremenar.database.stations import get_stations, search_stations
 from vremenar.definitions import CountryID, ObservationType
-from vremenar.exceptions import InvalidSearchQueryException, UnknownStationException
+from vremenar.exceptions import (
+    InvalidSearchQueryException,
+    UnknownStationException,
+    UnsupportedStationException,
+)
 from vremenar.models.weather import (
     WeatherCondition,
     WeatherDetails,
@@ -87,14 +91,20 @@ async def station_weather_details(station_id: str) -> WeatherDetails:
             continue
 
         _, condition = await parse_record(record, ObservationType.Recent)
-        if condition:
+        if condition:  # pragma: no cover
             break
 
     if not condition:  # pragma: no cover
         raise UnknownStationException
 
     record_ids = await get_weather_ids_for_station(station_id)
+    if not record_ids:  # pragma: no cover
+        raise UnsupportedStationException
+
     records_48h = await get_weather_records(record_ids)
+    if not records_48h:  # pragma: no cover
+        raise UnsupportedStationException
+
     statistics: WeatherStatistics = generate_statistics(records_48h)
 
     return WeatherDetails(station=station, condition=condition, statistics=statistics)

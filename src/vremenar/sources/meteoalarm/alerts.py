@@ -80,7 +80,7 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
         for area in areas:
             pipeline.smembers(f"alerts_area:{country}:{area}:alerts")
         response = await pipeline.execute()
-    return set.union(*response)
+    return set.union(*response)  # ty: ignore[unsound-return-statement]
 
 
 async def _parse_areas(country: CountryID, areas: list[str] | None = None) -> set[str]:

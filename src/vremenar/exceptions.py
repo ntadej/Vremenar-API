@@ -71,6 +71,17 @@ class UnknownStationException(HTTPException):
         )
 
 
+class UnsupportedStationException(HTTPException):
+    """Unsupported station exception."""
+
+    def __init__(self) -> None:
+        """Init exception."""
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Unsupported station",
+        )
+
+
 class InvalidSearchQueryException(HTTPException):
     """Invalid query exception."""
 

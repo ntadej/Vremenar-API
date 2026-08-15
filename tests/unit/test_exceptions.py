@@ -10,6 +10,7 @@ from vremenar.exceptions import (
     UnrecognisedMapIDException,
     UnsupportedCountryException,
     UnsupportedMapTypeException,
+    UnsupportedStationException,
 )
 
 
@@ -32,6 +33,9 @@ def test_exceptions() -> None:
 
     with pytest.raises(UnknownStationException):
         raise UnknownStationException
+
+    with pytest.raises(UnsupportedStationException):
+        raise UnsupportedStationException
 
     err = "Test message"
     with pytest.raises(InvalidSearchQueryException):
