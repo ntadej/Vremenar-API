@@ -14,9 +14,10 @@ database: int = {
     "production": 1,
     "test": 2,
 }.get(db_env, 0)
+database_host: str = getenv("VREMENAR_DATABASE_HOST", "localhost")
 
 redis: Redis[str] = from_url(
-    f"redis://localhost/{database}",
+    f"redis://{database_host}/{database}",
     decode_responses=True,
 )
 
