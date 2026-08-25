@@ -15,6 +15,11 @@ from vremenar.models.maps import (
     SupportedMapType,
 )
 from vremenar.models.weather import WeatherInfoExtended
+from vremenar.sources.librewxr import (
+    get_global_map_cloud_infrared,
+    get_global_map_precipitation,
+    get_librewxr_map_legend,
+)
 from vremenar.utils import logger
 
 from .utils import (
@@ -38,14 +43,18 @@ def get_supported_map_types() -> list[SupportedMapType]:
             rendering=MapRenderingType.Image,
             has_legend=True,
         ),
-        # SupportedMapType(
-        #     map_type=MapType.PrecipitationGlobal,
-        #     rendering=MapRenderingType.Tiles,
-        #     has_legend=True,
-        # ),
+        SupportedMapType(
+            map_type=MapType.PrecipitationGlobal,
+            rendering=MapRenderingType.Tiles,
+            has_legend=True,
+        ),
         SupportedMapType(
             map_type=MapType.CloudCoverage,
             rendering=MapRenderingType.Image,
+        ),
+        SupportedMapType(
+            map_type=MapType.CloudCoverageInfraredGlobal,
+            rendering=MapRenderingType.Tiles,
         ),
         SupportedMapType(
             map_type=MapType.WindSpeed,
@@ -68,7 +77,10 @@ def get_supported_map_types() -> list[SupportedMapType]:
 async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]]:
     """Get ARSO map layers."""
     if map_type == MapType.PrecipitationGlobal:
-        raise UnsupportedMapTypeException
+        return await get_global_map_precipitation()
+
+    if map_type == MapType.CloudCoverageInfraredGlobal:
+        return await get_global_map_cloud_infrared()
 
     bbox: list[float] = []
     if map_type is not MapType.WeatherCondition:
@@ -96,7 +108,7 @@ async def get_map_layers(map_type: MapType) -> tuple[list[MapLayer], list[float]
 def get_map_legend(map_type: MapType) -> MapLegend:
     """Get ARSO map legend."""
     if map_type == MapType.PrecipitationGlobal:
-        raise UnsupportedMapTypeException
+        return get_librewxr_map_legend(map_type)
 
     if map_type == MapType.Precipitation:
         items = [

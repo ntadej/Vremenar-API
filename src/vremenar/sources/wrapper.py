@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from vremenar.definitions import CountryID, LanguageID
 from vremenar.exceptions import UnsupportedCountryException
 
-from . import arso, dwd, meteoalarm
+from . import arso, dwd, librewxr, meteoalarm
 
 if TYPE_CHECKING:
     from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
@@ -27,7 +27,7 @@ def get_all_supported_map_types(country: CountryID) -> list[SupportedMapType]:
     if country == CountryID.Germany:
         return dwd.get_supported_map_types()
     if country == CountryID.Global:
-        return []
+        return librewxr.get_supported_map_types()
 
     raise UnsupportedCountryException  # pragma: no cover
 
@@ -42,7 +42,7 @@ async def get_map_layers(
     if country == CountryID.Germany:
         return await dwd.get_map_layers(map_type)
     if country == CountryID.Global:
-        raise UnsupportedCountryException
+        return await librewxr.get_map_layers(map_type)
 
     raise UnsupportedCountryException  # pragma: no cover
 
@@ -54,7 +54,7 @@ def get_all_map_legends(country: CountryID) -> list[MapLegend]:
     if country == CountryID.Germany:
         return dwd.get_all_map_legends()
     if country == CountryID.Global:
-        raise UnsupportedCountryException
+        return librewxr.get_all_map_legends()
 
     raise UnsupportedCountryException  # pragma: no cover
 
@@ -66,7 +66,7 @@ def get_map_legend(country: CountryID, map_type: MapType) -> MapLegend:
     if country == CountryID.Germany:
         return dwd.get_map_legend(map_type)
     if country == CountryID.Global:
-        raise UnsupportedCountryException
+        return librewxr.get_map_legend(map_type)
 
     raise UnsupportedCountryException  # pragma: no cover
 
