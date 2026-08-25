@@ -23,7 +23,7 @@ classifiers = [
 dependencies = [
   "fastapi == 0.141.*",
   "redis[hiredis] == 8.1.*",
-  "httpx2 ==2.10.*",
+  "httpx2 ==2.12.*",
   "astral == 3.2.*",
   "anyio",
   "asyncstdlib",
