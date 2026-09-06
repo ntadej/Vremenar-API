@@ -30,15 +30,7 @@ uv sync --no-dev
 
 ### Production running
 
-Gunicorn is recommended and tested in production workflows.
-An example command is:
-
-```shell
-gunicorn vremenar.main:app -w 2 -k vremenar.worker.ConfigurableWorker
-```
-
-It is recommended to run the API behind a caching server such
-as `varnish` as none of the requests are cached by default.
+To be updated.
 
 ### Development running
 

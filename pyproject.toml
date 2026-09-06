@@ -23,11 +23,10 @@ classifiers = [
 dependencies = [
   "fastapi == 0.141.*",
   "redis[hiredis] == 8.1.*",
-  "httpx2 ==2.10.*",
+  "httpx2 ==2.12.*",
   "astral == 3.2.*",
   "anyio",
   "asyncstdlib",
-  "gunicorn",
   "uvicorn",
 ]
 
@@ -42,10 +41,10 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.16.3",
+  "ruff == 0.16.6",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.72",
+  "ty == 0.0.78",
 ]
 
 [project.scripts]
@@ -171,3 +170,4 @@ addopts = "--cov=vremenar --cov-config=.coveragerc --cov-report=term-missing:ski
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 testpaths = ["tests"]
+filterwarnings = ["error", "ignore::DeprecationWarning:starlette.*:"]
