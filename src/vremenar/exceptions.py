@@ -91,3 +91,14 @@ class InvalidSearchQueryException(HTTPException):
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=detail,
         )
+
+
+class InvalidAPIKeyException(HTTPException):
+    """Invalid API key exception."""
+
+    def __init__(self) -> None:
+        """Init exception."""
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing API key",
+        )

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
 from . import __version__
 from .api import (
@@ -12,6 +12,7 @@ from .api import (
     stations,
     version,
 )
+from .api.auth import validate_api_key
 from .database import database_info
 
 tags_metadata = [
@@ -40,6 +41,7 @@ app: FastAPI = FastAPI(
     description="Weather API powering Vremenar application",
     version=__version__,
     openapi_tags=tags_metadata,
+    dependencies=[Depends(validate_api_key)],
 )
 app.include_router(version)
 app.include_router(stations)
