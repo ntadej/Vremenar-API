@@ -16,6 +16,8 @@ async def test_stations_list(client: AsyncClient) -> None:
     """Test stations list."""
     response = await client.get("/stations/list?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=3600"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=3600"
 
     response = await client.get("/stations/list?country=de")
     assert response.status_code == 200
@@ -27,12 +29,6 @@ async def test_stations_list(client: AsyncClient) -> None:
 @pytest.mark.asyncio
 async def test_stations_details(client: AsyncClient) -> None:
     """Test stations details."""
-    response = await client.get("/stations/list?country=si")
-    assert response.status_code == 200
-
-    response = await client.get("/stations/list?country=de")
-    assert response.status_code == 200
-
     response = await client.get("/stations/list?country=si&extended=true")
     assert response.status_code == 200
 
@@ -120,6 +116,8 @@ async def test_stations_condition(client: AsyncClient) -> None:
     """Test stations condition."""
     response = await client.get("/stations/condition/METEO-0038?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=60"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
     response = await client.get("/stations/condition/10147?country=de")
     assert response.status_code == 200
@@ -137,6 +135,8 @@ async def test_stations_condition(client: AsyncClient) -> None:
 
     response = await client.get("/stations/details/METEO-1430?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=60"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
 
 @pytest.mark.asyncio
@@ -173,12 +173,16 @@ async def test_stations_map(client: AsyncClient) -> None:
 
     response = await client.get("/stations/map/current?country=si&extended=false")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=300"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=300"
 
     response = await client.get("/stations/map/current?country=si&extended=true")
     assert response.status_code == 200
 
     response = await client.get(f"/stations/map/{soon_timestamp}?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=300"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=900"
 
     response = await client.get("/stations/map/current?country=de&extended=false")
     assert response.status_code == 200

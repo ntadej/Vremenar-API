@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query, Response
 
 from vremenar.definitions import CountryID
 from vremenar.models.stations import (
@@ -19,6 +19,14 @@ from vremenar.sources import (
     station_weather_details,
 )
 
+from .cache import (
+    CACHE_1MIN,
+    CACHE_5MIN,
+    CACHE_15MIN,
+    CACHE_HOUR,
+    cache_dependency,
+    set_cache_headers,
+)
 from .config import defaults
 
 router = APIRouter()
@@ -29,6 +37,7 @@ router = APIRouter()
     tags=["stations"],
     name="List stations",
     response_description="List of weather stations",
+    dependencies=[Depends(cache_dependency(CACHE_HOUR))],
     **defaults,
 )
 async def stations_list(
@@ -69,6 +78,7 @@ async def find(
     tags=["stations"],
     name="Current station condition",
     response_description="Current weather condition for the chosen station",
+    dependencies=[Depends(cache_dependency(CACHE_1MIN))],
     **defaults,
 )
 async def condition(
@@ -91,6 +101,7 @@ async def condition(
     tags=["stations"],
     name="Station weather details",
     response_description="Weather details for the chosen station",
+    dependencies=[Depends(cache_dependency(CACHE_1MIN))],
     **defaults,
 )
 async def details(country: CountryID, station_id: str) -> WeatherDetails:
@@ -109,9 +120,16 @@ async def conditions_map(
     country: CountryID,
     map_id: str,
     *,
+    response: Response,
     extended: Annotated[bool, Query(include_in_schema=False)] = False,  # ruff: ignore[unused-function-argument]
 ) -> list[WeatherInfo]:
     """Get weather conditions map for a specific ID."""
     weather_map = await get_weather_map(country, map_id)
+
+    set_cache_headers(
+        response,
+        CACHE_5MIN,
+        CACHE_5MIN if map_id == "current" else CACHE_15MIN,
+    )
 
     return [condition.base() for condition in weather_map]
