@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from vremenar.definitions import CountryID, LanguageID
 from vremenar.exceptions import UnsupportedCountryException
 
-from . import arso, dwd, librewxr, meteoalarm
+from . import arso, dwd, librewxr, meteoalarm, metno
 
 if TYPE_CHECKING:
     from vremenar.models.alerts import AlertAreaWithPolygon, AlertInfo
@@ -107,6 +107,8 @@ async def find_station(
             query,
             include_forecast_only=include_forecast_only,
         )
+    if country == CountryID.Global:
+        return await metno.find_station(query)
 
     raise UnsupportedCountryException  # pragma: no cover
 
@@ -120,6 +122,8 @@ async def current_station_condition(
         return await arso.current_station_condition(station_id)
     if country == CountryID.Germany:
         return await dwd.current_station_condition(station_id)
+    if country == CountryID.Global:
+        return await metno.current_station_condition(station_id)
 
     raise UnsupportedCountryException  # pragma: no cover
 

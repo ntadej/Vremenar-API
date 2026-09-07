@@ -49,6 +49,16 @@ async def test_stations_find_coordinate(client: AsyncClient) -> None:
     )
     assert response.status_code == 200
 
+    # Bled (global)
+    response = await client.post(
+        "/stations/find?country=global",
+        json={
+            "latitude": 46.3684,
+            "longitude": 14.1101,
+        },
+    )
+    assert response.status_code == 200
+
     # Hamburg (simple)
     response = await client.post(
         "/stations/find?country=de",
@@ -110,6 +120,10 @@ async def test_stations_find_errors(client: AsyncClient) -> None:
     assert response.status_code == 422
     assert response.json()["detail"] == "Coordinates are required"
 
+    response = await client.post("/stations/find?country=global", json={})
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Coordinates are required"
+
 
 @pytest.mark.asyncio
 async def test_stations_condition(client: AsyncClient) -> None:
@@ -120,6 +134,11 @@ async def test_stations_condition(client: AsyncClient) -> None:
     assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
     response = await client.get("/stations/condition/10147?country=de")
+    assert response.status_code == 200
+
+    response = await client.get(
+        "/stations/condition/MET.no_46.368_14.11?country=global",
+    )
     assert response.status_code == 200
 
     response = await client.get(

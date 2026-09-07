@@ -138,6 +138,13 @@ async def store_alert_record(
         await pipeline.execute()
 
 
+async def remove_record(record_key: str) -> None:
+    """Remove a record from redis."""
+    async with redis.pipeline() as pipeline:
+        pipeline.delete(record_key)
+        await pipeline.execute()
+
+
 async def stations_fixtures() -> None:
     """Create and setup weather stations fixtures."""
     germany: dict[str | bytes, str | int | float] = {
@@ -454,6 +461,8 @@ async def setup_fixtures() -> None:
     await dwd_fixtures()
     await mosmix_fixtures()
     await alerts_fixtures()
+
+    await remove_record("met.no:weather:current:MET.no_46.368_14.11")
 
 
 run(setup_fixtures())
