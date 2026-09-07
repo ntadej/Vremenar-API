@@ -8,15 +8,13 @@ description = ""
 dynamic = ["version"]
 license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Tadej Novak", email = "tadej@tano.si" }]
-requires-python = ">= 3.11"
+requires-python = ">= 3.13"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Web Environment",
   "Framework :: FastAPI",
   "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
 ]
@@ -32,7 +30,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "coverage[toml]",
+  "coverage",
   "gevent",
   "mypy == 2.3.1",
   "pre-commit",
@@ -146,7 +144,7 @@ ignore = [
 ]
 
 [tool.ty.environment]
-python-version = "3.11"
+python-version = "3.13"
 
 [tool.ty.rules]
 all = "error"

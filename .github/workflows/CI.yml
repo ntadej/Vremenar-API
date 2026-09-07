@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04, macos-14]
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.13", "3.14"]
 
     steps:
       - name: Checkout
@@ -40,20 +40,20 @@ jobs:
           uv run -p ${{ matrix.python-version }} pytest
 
       - name: Report coverage with Codecov
-        if: github.event_name == 'push' && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
+        if: github.event_name == 'push' && matrix.python-version == 3.14 && matrix.os == 'ubuntu-24.04'
         uses: codecov/codecov-action@v7
         with:
           files: ./coverage.xml
           flags: unittests
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() && matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04' }}
+        if: ${{ !cancelled() && matrix.python-version == 3.14 && matrix.os == 'ubuntu-24.04' }}
         uses: codecov/codecov-action@v7
         with:
           report_type: test_results
 
       - name: SonarQube Scan
-        if: matrix.python-version == 3.13 && matrix.os == 'ubuntu-24.04'
+        if: matrix.python-version == 3.14 && matrix.os == 'ubuntu-24.04'
         uses: SonarSource/sonarqube-scan-action@v8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
