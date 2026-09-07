@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked
 
 # Then, use a final image without uv
-FROM python:3.13-slim-trixie
+FROM python:3.14-slim-trixie
 
 # Setup a non-root user
 RUN groupadd --system --gid 999 nonroot \
