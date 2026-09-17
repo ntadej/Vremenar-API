@@ -2,6 +2,7 @@
 
 from json import loads
 from pathlib import Path
+from typing import cast
 
 from anyio import Path as AsyncPath
 from fastapi import APIRouter
@@ -46,7 +47,7 @@ async def version() -> VersionInfo:
     if await VERSION_INFO.is_file():  # pragma: no cover
         async with await VERSION_INFO.open() as f:
             file_data = await f.read()
-            data = loads(file_data)
+            data = cast("dict[str, str]", loads(file_data))
 
     stable = data.get("stable", "")
     beta = data.get("beta", "")

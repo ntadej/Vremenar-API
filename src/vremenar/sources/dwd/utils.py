@@ -14,7 +14,7 @@ from vremenar.utils import chunker, day_or_night, parse_timestamp
 if TYPE_CHECKING:
     from datetime import datetime
 
-    from vremenar.models.stations import StationBase, StationInfo, StationInfoExtended
+    from vremenar.models.stations import StationInfo, StationInfoExtended
 
 
 async def get_mosmix_ids_for_timestamp(timestamp: str) -> set[str]:
@@ -128,10 +128,10 @@ def get_icon(weather: dict[str, Any], station: StationInfo, time: datetime) -> s
 async def parse_record(
     record: dict[str, Any],
     observation: ObservationType,
-) -> tuple[StationBase | None, WeatherCondition | None]:
+) -> tuple[StationInfo | None, WeatherCondition | None]:
     """Parse DWD record."""
     station_id = record["station_id"]
-    stations = await get_stations(CountryID.Germany)  # ty: ignore[too-many-positional-arguments]
+    stations = await get_stations(CountryID.Germany)
 
     if station_id not in stations:  # pragma: no cover
         return None, None

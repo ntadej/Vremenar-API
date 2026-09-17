@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 
 async def list_stations() -> list[StationInfoExtended]:
     """List ARSO weather stations."""
-    stations = await get_stations(CountryID.Slovenia)  # ty: ignore[too-many-positional-arguments]
+    stations = await get_stations(CountryID.Slovenia)
     return list(stations.values())
 
 
@@ -56,7 +56,7 @@ async def find_station(query: StationSearchModel) -> list[StationInfo]:
 
 async def current_station_condition(station_id: str) -> WeatherInfoExtended:
     """Get current station weather condition."""
-    stations = await get_stations(CountryID.Slovenia)  # ty: ignore[too-many-positional-arguments]
+    stations = await get_stations(CountryID.Slovenia)
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
         raise UnknownStationException
@@ -78,7 +78,7 @@ async def current_station_condition(station_id: str) -> WeatherInfoExtended:
 
 async def station_weather_details(station_id: str) -> WeatherDetails:
     """Get detailed weather information for a station."""
-    stations = await get_stations(CountryID.Slovenia)  # ty: ignore[too-many-positional-arguments]
+    stations = await get_stations(CountryID.Slovenia)
     station: StationInfoExtended | None = stations.get(station_id, None)
     if not station:
         raise UnknownStationException

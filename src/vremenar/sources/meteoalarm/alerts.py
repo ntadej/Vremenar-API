@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 from json import loads
+from typing import cast
 
 from vremenar.database.redis import redis
 from vremenar.database.stations import get_stations
@@ -80,7 +81,7 @@ async def list_alert_ids_for_areas(country: CountryID, areas: set[str]) -> set[s
         for area in areas:
             pipeline.smembers(f"alerts_area:{country}:{area}:alerts")
         response = await pipeline.execute()
-    return set.union(*response)  # ty: ignore[unsound-return-statement]
+    return cast("set[str]", set.union(*response))
 
 
 async def _parse_areas(country: CountryID, areas: list[str] | None = None) -> set[str]:
@@ -102,7 +103,7 @@ async def _parse_stations(
     """Parse stations from query."""
     areas_to_query: set[str] = set()
     if stations:
-        stations_list = await get_stations(country)  # ty: ignore[too-many-positional-arguments]
+        stations_list = await get_stations(country)
         for s in stations:
             if s not in stations_list:
                 raise UnknownStationException

@@ -37,7 +37,7 @@ def decode_station_id(station_id: str) -> tuple[float, float]:
     return float(parts[1]), float(parts[2])
 
 
-def get_icon_base(weather: dict[str, Any]) -> str:
+def get_icon_base(weather: dict[bytes | str, Any]) -> str:
     """Get base icon from weather data."""
     weather_condition = weather.get("symbol_code")
     if weather_condition == "fog":
@@ -57,7 +57,7 @@ def get_icon_base(weather: dict[str, Any]) -> str:
     return "overcast"
 
 
-def get_icon_condition(weather: dict[str, Any]) -> str | None:
+def get_icon_condition(weather: dict[bytes | str, Any]) -> str | None:
     """Get icon condition from weather data."""
     weather_condition = weather.get("symbol_code", "")
 
@@ -86,7 +86,11 @@ def get_icon_condition(weather: dict[str, Any]) -> str | None:
     return f"{intensity}{precipitation_type}"
 
 
-def get_icon(weather: dict[str, Any], coordinate: Coordinate, time: datetime) -> str:
+def get_icon(
+    weather: dict[bytes | str, Any],
+    coordinate: Coordinate,
+    time: datetime,
+) -> str:
     """Get icon from weather data."""
     # SOURCE:
     # conditions: dry, fog, rain, sleet, snow, hail, thunderstorm, null
@@ -120,9 +124,9 @@ def get_icon(weather: dict[str, Any], coordinate: Coordinate, time: datetime) ->
     return f"{base_icon}_{time_of_day}"
 
 
-async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
+async def get_weather_records(ids: set[str]) -> list[dict[bytes | str, Any]]:
     """Get MET.no weather records from redis."""
-    result: list[dict[str, Any]] = []
+    result: list[dict[bytes | str, Any]] = []
 
     async with redis.client() as connection:
         for batch in chunker(list(ids), 100):
@@ -137,7 +141,10 @@ async def get_weather_records(ids: set[str]) -> list[dict[str, Any]]:
     return result
 
 
-async def write_weather_record(record: dict[str, Any], delta: timedelta) -> None:
+async def write_weather_record(
+    record: dict[bytes | str, Any],
+    delta: timedelta,
+) -> None:
     """Write MET.no weather record to redis."""
     record_id = f"met.no:weather:current:{record['station_id']}"
     async with redis.pipeline() as pipeline:
@@ -149,7 +156,7 @@ async def write_weather_record(record: dict[str, Any], delta: timedelta) -> None
         await pipeline.execute()
 
 
-async def request_weather_record(station_id: str) -> list[dict[str, Any]]:  # ruff: ignore[too-many-locals]
+async def request_weather_record(station_id: str) -> list[dict[bytes | str, Any]]:  # ruff: ignore[too-many-locals]
     """Load MET.no weather record from upstream API."""
     latitude, longitude = decode_station_id(station_id)
 
@@ -181,7 +188,7 @@ async def request_weather_record(station_id: str) -> list[dict[str, Any]]:  # ru
         2
     ]
 
-    output: dict[str, Any] = {
+    output: dict[bytes | str, Any] = {
         "source": "met.no",
         "station_id": station_id,
         "timestamp": to_timestamp(updated_at_time) if updated_at_time else None,
@@ -210,7 +217,7 @@ async def request_weather_record(station_id: str) -> list[dict[str, Any]]:  # ru
 
 
 def parse_record(
-    record: dict[str, Any],
+    record: dict[bytes | str, Any],
 ) -> tuple[StationInfo | None, WeatherCondition | None]:
     """Parse MET.no weather record."""
     station_id = record.get("station_id", "")

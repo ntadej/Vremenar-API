@@ -237,7 +237,7 @@ async def get_weather_map(map_id: str) -> list[WeatherInfoExtended]:
         if not station or not condition:  # pragma: no cover
             continue
         conditions_list.append(
-            WeatherInfoExtended(station=station, condition=condition),  # ty: ignore[invalid-argument-type]
+            WeatherInfoExtended(station=station, condition=condition),
         )
 
     return conditions_list

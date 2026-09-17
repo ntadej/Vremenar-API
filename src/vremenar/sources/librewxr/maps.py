@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from httpx2 import AsyncClient
 
@@ -46,7 +46,7 @@ async def get_global_map_precipitation() -> tuple[list[MapLayer], list[float]]:
         response = await client.get(api_url)
         data: dict[str, Any] = response.json()
 
-    host: str = data["host"]
+    host: str = cast("str", data["host"])
     radar: dict[str, Any] = data["radar"]
 
     layers += [
@@ -82,7 +82,7 @@ async def get_global_map_cloud_infrared() -> tuple[list[MapLayer], list[float]]:
         response = await client.get(api_url)
         data: dict[str, Any] = response.json()
 
-    host: str = data["host"]
+    host: str = cast("str", data["host"])
     satellite: dict[str, Any] = data["satellite"]
 
     layers += [

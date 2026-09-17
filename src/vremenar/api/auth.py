@@ -2,7 +2,7 @@
 
 from os import getenv
 from secrets import compare_digest
-from typing import Annotated
+from typing import Annotated, override
 
 from fastapi import Request, Security
 from fastapi.security import APIKeyHeader
@@ -15,6 +15,7 @@ api_key: str = getenv("VREMENAR_API_KEY", "")
 class RawAPIKeyHeader(APIKeyHeader):
     """API key header that tells an empty header apart from a missing one."""
 
+    @override
     async def __call__(self, request: Request) -> str | None:
         """Return the raw header value, or `None` if the header is absent."""
         return request.headers.get(self.model.name)

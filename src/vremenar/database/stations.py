@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, cast
 
-import asyncstdlib as a
+from async_lru import alru_cache
 
 from vremenar.models.common import Coordinate
 from vremenar.models.stations import StationInfoExtended
@@ -55,7 +55,7 @@ async def load_stations(country: CountryID) -> dict[str, StationDict]:
     return stations
 
 
-@a.lru_cache
+@alru_cache
 async def get_stations(country: CountryID) -> dict[str, StationInfoExtended]:
     """Get a dictionary of supported stations for a country."""
     stations_raw: dict[str, StationDict] = await load_stations(country)
@@ -88,7 +88,7 @@ async def search_stations(
 ) -> list[StationInfoExtended]:
     """Search for stations by coordinate."""
     async with redis.client() as connection:
-        station_ids: list[tuple[str, float]] = await redis.geosearch(
+        station_ids = await redis.geosearch(
             f"location:{country}",
             latitude=latitude,
             longitude=longitude,
@@ -101,7 +101,7 @@ async def search_stations(
         async with connection.pipeline(transaction=False) as pipeline:
             for station_id, _ in station_ids:
                 pipeline.hgetall(f"station:{country}:{station_id}")
-            response = await pipeline.execute()
+            response = cast("list[dict[str, str]]", await pipeline.execute())
 
     stations: list[StationInfoExtended] = []
     for station in response:

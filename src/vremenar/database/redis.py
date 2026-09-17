@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from os import getenv
+from typing import cast
 
 from redis.asyncio import Redis, from_url
 
@@ -16,9 +17,12 @@ database: int = {
 }.get(db_env, 0)
 database_host: str = getenv("VREMENAR_DATABASE_HOST", "localhost")
 
-redis: Redis[str] = from_url(
-    f"redis://{database_host}/{database}",
-    decode_responses=True,
+redis: Redis[str] = cast(
+    "Redis[str]",
+    from_url(
+        f"redis://{database_host}/{database}",
+        decode_responses=True,
+    ),
 )
 
 

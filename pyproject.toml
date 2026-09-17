@@ -21,10 +21,10 @@ classifiers = [
 dependencies = [
   "fastapi == 0.141.*",
   "redis[hiredis] == 8.1.*",
-  "httpx2 ==2.12.*",
+  "httpx2 ==2.13.*",
   "astral == 3.2.*",
   "anyio",
-  "asyncstdlib",
+  "async-lru",
   "uvicorn",
 ]
 
@@ -39,10 +39,10 @@ dev = [
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff == 0.16.6",
+  "ruff == 0.16.8",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.78",
+  "ty == 0.0.82",
 ]
 
 [project.scripts]

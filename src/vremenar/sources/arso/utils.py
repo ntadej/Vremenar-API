@@ -14,7 +14,7 @@ from vremenar.utils import chunker
 
 if TYPE_CHECKING:
     from vremenar.models.maps import MapType
-    from vremenar.models.stations import StationBase, StationInfoExtended
+    from vremenar.models.stations import StationInfo, StationInfoExtended
 
 
 async def get_weather_ids_for_timestamp(timestamp: str) -> set[str]:
@@ -81,10 +81,10 @@ async def get_map_data(ids: list[str]) -> list[dict[str, Any]]:
 async def parse_record(
     record: dict[str, Any],
     observation: ObservationType,
-) -> tuple[StationBase | None, WeatherCondition | None]:
+) -> tuple[StationInfo | None, WeatherCondition | None]:
     """Parse ARSO weather record."""
     station_id = record["station_id"]
-    stations = await get_stations(CountryID.Slovenia)  # ty: ignore[too-many-positional-arguments]
+    stations = await get_stations(CountryID.Slovenia)
 
     if station_id not in stations:  # pragma: no cover
         return None, None
