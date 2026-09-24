@@ -1,0 +1,55 @@
+default_language_version.python = "3.13"
+
+[[repos]]
+repo = "https://github.com/pre-commit/mirrors-mypy"
+rev = "v2.3.1"
+hooks = [
+  { id = "mypy", args = [
+  ], additional_dependencies = [
+    "astral",
+    "async-lru",
+    "fastapi",
+    "httpx2",
+    "pydantic",
+    "pytest",
+    "pytest-asyncio",
+    "types-python-dateutil",
+    "types-redis",
+    "uvicorn",
+  ] },
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.16.8"
+hooks = [{ id = "ruff-check" }, { id = "ruff-format" }]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ty-pre-commit"
+rev = "v0.0.84"
+hooks = [{ id = "ty" }]
+
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v6.0.0"
+hooks = [
+  { id = "check-added-large-files" },
+  { id = "check-ast" },
+  { id = "check-builtin-literals" },
+  { id = "check-case-conflict" },
+  { id = "check-docstring-first" },
+  { id = "check-json" },
+  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-merge-conflict" },
+  { id = "check-toml" },
+  { id = "check-vcs-permalinks" },
+  { id = "check-yaml" },
+  { id = "destroyed-symlinks" },
+  { id = "end-of-file-fixer" },
+  { id = "mixed-line-ending" },
+  { id = "trailing-whitespace" },
+]
+
+[[repos]]
+repo = "meta"
+hooks = [{ id = "check-hooks-apply" }, { id = "check-useless-excludes" }]

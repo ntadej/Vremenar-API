@@ -25,6 +25,8 @@ dependencies = [
   "astral == 3.2.*",
   "anyio",
   "async-lru",
+  "pydantic",
+  "starlette",
   "uvicorn",
 ]
 

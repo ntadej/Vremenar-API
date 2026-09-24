@@ -1372,7 +1372,9 @@ dependencies = [
     { name = "async-lru" },
     { name = "fastapi" },
     { name = "httpx2" },
+    { name = "pydantic" },
     { name = "redis", extra = ["hiredis"] },
+    { name = "starlette" },
     { name = "uvicorn" },
 ]
 
@@ -1400,7 +1402,9 @@ requires-dist = [
     { name = "async-lru" },
     { name = "fastapi", specifier = "==0.141.*" },
     { name = "httpx2", specifier = "==2.13.*" },
+    { name = "pydantic" },
     { name = "redis", extras = ["hiredis"], specifier = "==8.1.*" },
+    { name = "starlette" },
     { name = "uvicorn" },
 ]
 
