@@ -3,7 +3,55 @@
   "extends": [
     "config:recommended"
   ],
-  "pre-commit": {
-    "enabled": true
-  }
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update prek hook revisions",
+      "managerFilePatterns": [
+        "/(^|/)prek\\.toml$/"
+      ],
+      "matchStrings": [
+        "repo = \"https://github\\.com/(?<depName>[^\"]+?)\"\\s+rev = \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags",
+      "depTypeTemplate": "repository"
+    }
+  ],
+  "packageRules": [
+    {
+      "groupName": "uv",
+      "matchPackageNames": [
+        "astral-sh/uv",
+        "ghcr.io/astral-sh/uv"
+      ]
+    },
+    {
+      "groupName": "mypy",
+      "matchPackageNames": [
+        "mypy",
+        "pre-commit/mirrors-mypy"
+      ]
+    },
+    {
+      "groupName": "ruff",
+      "matchPackageNames": [
+        "ruff",
+        "astral-sh/ruff-pre-commit"
+      ]
+    },
+    {
+      "groupName": "ty",
+      "matchPackageNames": [
+        "ty",
+        "astral-sh/ty-pre-commit"
+      ]
+    },
+    {
+      "groupName": "pre-commit-hooks",
+      "matchPackageNames": [
+        "pre-commit-hooks",
+        "pre-commit/pre-commit-hooks"
+      ]
+    }
+  ]
 }
