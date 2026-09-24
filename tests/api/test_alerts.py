@@ -15,6 +15,8 @@ async def test_alerts_areas(client: AsyncClient) -> None:
     """Test alerts areas."""
     response = await client.get("/alerts/areas?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=3600"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=3600"
 
     response = await client.get("/alerts/areas?country=de")
     assert response.status_code == 200
@@ -25,6 +27,8 @@ async def test_alerts_full_list(client: AsyncClient) -> None:
     """Test alerts full list."""
     response = await client.get("/alerts/full_list?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=60"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
     response = await client.get("/alerts/full_list?country=de")
     assert response.status_code == 200
@@ -44,6 +48,8 @@ async def test_alerts_list(client: AsyncClient) -> None:
 
     response = await client.get("/alerts/list?country=de&station=10147")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=60"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
     response = await client.get("/alerts/list?country=de&station=10147&station=P0201")
     assert response.status_code == 200

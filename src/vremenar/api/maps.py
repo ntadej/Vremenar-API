@@ -1,6 +1,6 @@
 """Weather map layers API."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from vremenar.definitions import CountryID
 from vremenar.models.maps import MapLayersList, MapLegend, MapType, SupportedMapType
@@ -11,6 +11,12 @@ from vremenar.sources import (
     get_map_legend,
 )
 
+from .cache import (
+    CACHE_1MIN,
+    CACHE_15MIN,
+    CACHE_HOUR,
+    cache_dependency,
+)
 from .config import defaults
 
 router = APIRouter()
@@ -20,6 +26,7 @@ router = APIRouter()
     "/maps/types",
     tags=["maps"],
     response_description="Get the supported map types",
+    dependencies=[Depends(cache_dependency(CACHE_HOUR))],
     **defaults,
 )
 async def supported_map_types(country: CountryID) -> list[SupportedMapType]:
@@ -31,6 +38,7 @@ async def supported_map_types(country: CountryID) -> list[SupportedMapType]:
     "/maps/list/{map_type}",
     tags=["maps"],
     response_description="Get list of maps per type",
+    dependencies=[Depends(cache_dependency(CACHE_1MIN))],
     **defaults,
 )
 async def map_layers(country: CountryID, map_type: MapType) -> MapLayersList:
@@ -43,6 +51,7 @@ async def map_layers(country: CountryID, map_type: MapType) -> MapLayersList:
     "/maps/legend",
     tags=["maps"],
     response_description="Get the legend for all map types",
+    dependencies=[Depends(cache_dependency(CACHE_15MIN))],
     **defaults,
 )
 async def all_map_legends(country: CountryID) -> list[MapLegend]:
@@ -54,6 +63,7 @@ async def all_map_legends(country: CountryID) -> list[MapLegend]:
     "/maps/legend/{map_type}",
     tags=["maps"],
     response_description="Get the legend for a map type",
+    dependencies=[Depends(cache_dependency(CACHE_15MIN))],
     **defaults,
 )
 async def map_legend(country: CountryID, map_type: MapType) -> MapLegend:

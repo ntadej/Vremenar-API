@@ -5,10 +5,12 @@ from pathlib import Path
 from typing import cast
 
 from anyio import Path as AsyncPath
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, ConfigDict
 
 from vremenar import __version__
+
+from .cache import CACHE_HOUR, cache_dependency
 
 router = APIRouter()
 VERSION_INFO: AsyncPath = AsyncPath(Path.cwd() / "version.json")
@@ -39,6 +41,7 @@ class VersionInfo(BaseModel):
     "/version",
     tags=["version"],
     response_description="Get Vremenar versions",
+    dependencies=[Depends(cache_dependency(CACHE_HOUR))],
 )
 async def version() -> VersionInfo:
     """Get app and server versions."""

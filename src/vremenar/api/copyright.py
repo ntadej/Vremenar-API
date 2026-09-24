@@ -1,12 +1,14 @@
 """Copyright API."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, ConfigDict
 
 from vremenar.definitions import CountryID
 from vremenar.sources.arso import ARSO_NAME, ARSO_URL
 from vremenar.sources.dwd import DWD_NAME, DWD_URL
 from vremenar.sources.librewxr import LIBREWXR_NAME, LIBREWXR_URL
+
+from .cache import CACHE_HOUR, cache_dependency
 
 router = APIRouter()
 
@@ -34,6 +36,7 @@ class CopyrightInfo(BaseModel):
     "/copyright",
     tags=["copyright"],
     response_description="Get data copyright",
+    dependencies=[Depends(cache_dependency(CACHE_HOUR))],
 )
 async def copyright() -> dict[str, list[CopyrightInfo]]:  # ruff: ignore[builtin-variable-shadowing]
     """Get data copyright."""

@@ -17,6 +17,8 @@ async def test_maps_types(client: AsyncClient) -> None:
     """Test maps types."""
     response = await client.get("/maps/types?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=3600"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=3600"
 
     response = await client.get("/maps/types?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
@@ -30,6 +32,8 @@ async def test_maps_list_condition(client: AsyncClient) -> None:
     """Test maps list - condition."""
     response = await client.get("/maps/list/condition?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=60"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=60"
 
     response = await client.get("/maps/list/condition?country=de", timeout=TIMEOUT)
     assert response.status_code == 200
@@ -190,6 +194,8 @@ async def test_maps_all_legends(client: AsyncClient) -> None:
     """Test maps legends - all."""
     response = await client.get("/maps/legend?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=900"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=900"
 
     response = await client.get("/maps/legend?country=de")
     assert response.status_code == 200
@@ -207,6 +213,8 @@ async def test_maps_legends(client: AsyncClient) -> None:
 
     response = await client.get("/maps/legend/precipitation?country=si")
     assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=900"
+    assert response.headers["CDN-Cache-Control"] == "public, max-age=900"
 
     response = await client.get("/maps/legend/precipitation?country=de")
     assert response.status_code == 200
