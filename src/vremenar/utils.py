@@ -1,7 +1,5 @@
 """Helper utilities."""
 
-from __future__ import annotations
-
 from datetime import UTC, date, datetime
 from functools import lru_cache
 from logging import Logger, getLogger

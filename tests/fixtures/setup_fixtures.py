@@ -1,8 +1,6 @@
 # mypy: disable-error-code="arg-type,import-untyped"
 """Setup test database."""
 
-from __future__ import annotations
-
 from asyncio import run
 from datetime import UTC, datetime, timedelta
 

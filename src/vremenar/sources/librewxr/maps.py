@@ -1,7 +1,5 @@
 """LibreWXR weather maps."""
 
-from __future__ import annotations
-
 from typing import Any, cast
 
 from httpx2 import AsyncClient

@@ -1,7 +1,5 @@
 """Vremenar models."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING, Any, cast
 
 if TYPE_CHECKING:

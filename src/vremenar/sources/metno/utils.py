@@ -1,7 +1,5 @@
 """MET.no weather utils."""
 
-from __future__ import annotations
-
 from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from typing import TYPE_CHECKING, Any, cast

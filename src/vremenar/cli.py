@@ -1,7 +1,5 @@
 """Simple development CLI."""
 
-from __future__ import annotations
-
 from argparse import ArgumentParser
 
 import uvicorn

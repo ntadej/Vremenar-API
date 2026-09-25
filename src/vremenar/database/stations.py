@@ -1,18 +1,14 @@
 """Stations database helpers."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, TypedDict, cast
+from typing import TypedDict, cast
 
 from async_lru import alru_cache
 
+from vremenar.definitions import CountryID
 from vremenar.models.common import Coordinate
 from vremenar.models.stations import StationInfoExtended
 
 from .redis import redis
-
-if TYPE_CHECKING:
-    from vremenar.definitions import CountryID
 
 STATION_BASE_KEYS: set[str] = {
     "id",

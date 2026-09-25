@@ -1,7 +1,5 @@
 """DWD weather utils."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING, Any
 
 from vremenar.database.redis import redis

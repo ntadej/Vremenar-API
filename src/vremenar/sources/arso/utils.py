@@ -1,7 +1,5 @@
 """ARSO weather utils."""
 
-from __future__ import annotations
-
 from datetime import UTC, datetime, timedelta
 from statistics import mean
 from typing import TYPE_CHECKING, Any

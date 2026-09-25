@@ -1,7 +1,5 @@
 """ARSO weather maps."""
 
-from __future__ import annotations
-
 import operator
 
 from vremenar.definitions import ObservationType

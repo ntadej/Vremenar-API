@@ -1,7 +1,5 @@
 """Vremenar backend main application."""
 
-from __future__ import annotations
-
 from fastapi import Depends, FastAPI
 
 from . import __version__

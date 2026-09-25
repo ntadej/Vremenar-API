@@ -1,7 +1,5 @@
 """ARSO weather stations."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
 from vremenar.database.stations import get_stations, search_stations

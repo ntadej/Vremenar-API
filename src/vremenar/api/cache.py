@@ -1,10 +1,8 @@
 """API response caching."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
-from fastapi import Response  # ruff: ignore[typing-only-third-party-import]
+from fastapi import Response
 
 if TYPE_CHECKING:
     from collections.abc import Callable

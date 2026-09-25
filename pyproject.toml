@@ -8,14 +8,13 @@ description = ""
 dynamic = ["version"]
 license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Tadej Novak", email = "tadej@tano.si" }]
-requires-python = ">= 3.13"
+requires-python = ">= 3.14"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Web Environment",
   "Framework :: FastAPI",
   "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
@@ -72,7 +71,7 @@ omit = ["tests/*"]
 
 [tool.ruff]
 src = ["src"]
-target-version = "py313"
+target-version = "py314"
 line-length = 88
 
 [tool.ruff.lint]
@@ -95,7 +94,6 @@ select = [
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
   "FIX",   # flake8-fixme
-  "FA",    # flake8-future-annotations
   "ISC",   # flake8-implicit-str-concat
   "ICN",   # flake8-import-conventions
   "LOG",   # flake8-logging
@@ -145,8 +143,17 @@ ignore = [
   "magic-value-comparison",
 ]
 
+[tool.ruff.lint.flake8-type-checking]
+exempt-modules = ["typing", "typing_extensions", "fastapi"]
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+runtime-evaluated-decorators = [
+  "async_lru.alru_cache",
+  "fastapi.APIRouter.get",
+  "fastapi.APIRouter.post",
+]
+
 [tool.ty.environment]
-python-version = "3.13"
+python-version = "3.14"
 
 [tool.ty.rules]
 all = "error"

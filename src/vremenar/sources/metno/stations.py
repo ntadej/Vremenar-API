@@ -1,7 +1,5 @@
 """MET.no weather stations."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
 from vremenar.exceptions import (

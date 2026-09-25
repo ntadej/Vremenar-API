@@ -1,7 +1,5 @@
 """DWD weather maps."""
 
-from __future__ import annotations
-
 from datetime import UTC, datetime, timedelta
 
 from httpx2 import AsyncClient

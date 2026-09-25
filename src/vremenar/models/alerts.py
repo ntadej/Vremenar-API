@@ -1,7 +1,5 @@
 """Alerts models."""
 
-from __future__ import annotations
-
 import re
 from enum import StrEnum
 from typing import Any

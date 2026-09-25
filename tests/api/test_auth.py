@@ -1,7 +1,5 @@
 """API key authentication tests."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING
 
 from fastapi.testclient import TestClient
