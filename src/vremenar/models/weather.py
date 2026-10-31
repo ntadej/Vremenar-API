@@ -72,7 +72,7 @@ class WeatherInfo(BaseModel):
 class WeatherInfoExtended(WeatherInfo):
     """Weather extended info model."""
 
-    station: StationInfo
+    station: StationInfo  # ty: ignore[invalid-mutable-override]
 
     def base(self) -> WeatherInfo:
         """Return an instance of WeatherInfo."""

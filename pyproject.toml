@@ -19,9 +19,9 @@ classifiers = [
   "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
-  "fastapi == 0.141.*",
+  "fastapi == 0.162.*",
   "redis[hiredis] == 8.1.*",
-  "httpx2 ==2.13.*",
+  "httpx2 ==2.16.*",
   "astral == 3.2.*",
   "anyio",
   "async-lru",
@@ -34,17 +34,17 @@ dependencies = [
 dev = [
   "coverage",
   "gevent",
-  "mypy == 2.3.1",
+  "mypy == 2.4.1",
   "pre-commit",
   "pre-commit-hooks == 6.0.*",
   "pytest >= 8.0",
   "pytest-asyncio",
   "pytest-cov",
   "requests",
-  "ruff ==0.16.9",
+  "ruff ==0.17.3",
   "types-python-dateutil",
   "types-redis",
-  "ty == 0.0.84",
+  "ty == 0.0.95",
 ]
 
 [project.scripts]
@@ -158,6 +158,7 @@ python-version = "3.14"
 
 [tool.ty.rules]
 all = "error"
+truthiness-test-of-none-union = "ignore"
 
 [tool.mypy]
 plugins = "pydantic.mypy"

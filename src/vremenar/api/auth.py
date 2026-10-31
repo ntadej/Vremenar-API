@@ -2,12 +2,15 @@
 
 from os import getenv
 from secrets import compare_digest
-from typing import Annotated, override
+from typing import TYPE_CHECKING, Annotated, override
 
-from fastapi import Request, Security
+from fastapi import Security
 from fastapi.security import APIKeyHeader
 
 from vremenar.exceptions import InvalidAPIKeyException
+
+if TYPE_CHECKING:
+    from starlette.requests import HTTPConnection
 
 api_key: str = getenv("VREMENAR_API_KEY", "")
 
@@ -16,7 +19,7 @@ class RawAPIKeyHeader(APIKeyHeader):
     """API key header that tells an empty header apart from a missing one."""
 
     @override
-    async def __call__(self, request: Request) -> str | None:
+    async def __call__(self, request: HTTPConnection) -> str | None:
         """Return the raw header value, or `None` if the header is absent."""
         return request.headers.get(self.model.name)
 
